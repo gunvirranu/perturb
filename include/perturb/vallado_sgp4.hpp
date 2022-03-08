@@ -1,5 +1,5 @@
-#ifndef _SGP4h_
-#define _SGP4h_
+#ifndef PERTURB_VALLADO_SGP4_HPP
+#define PERTURB_VALLADO_SGP4_HPP
 /*     ----------------------------------------------------------------
 *
 *                                 SGP4.h
@@ -48,14 +48,10 @@
 *                           original baseline
 *       ----------------------------------------------------------------      */
 
-#pragma once
+#define PERTURB_VALLADO_SGP4_SGP4Version  "SGP4 Version 2020-07-13"
 
-#include <math.h>
-#include <stdio.h>
-#include <string.h>
-#include <iostream>
-
-#define SGP4Version  "SGP4 Version 2020-07-13"
+namespace perturb {
+namespace vallado_sgp4 {
 
 // -------------------------- structure declarations ----------------------------
 typedef enum
@@ -113,8 +109,8 @@ typedef struct elsetrec
 } elsetrec;
 
 
-namespace SGP4Funcs
-{
+// namespace SGP4Funcs
+// {
 
     //	public class SGP4Class
     //	{
@@ -227,6 +223,9 @@ namespace SGP4Funcs
         );
 
 
-}  // namespace
+// }  // namespace
 
-#endif
+}  // namespace vallado_sgp4
+}  // namespace perturb
+
+#endif  // PERTURB_VALLADO_SGP4_HPP

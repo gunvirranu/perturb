@@ -55,7 +55,12 @@
 *                           original baseline
 *       ----------------------------------------------------------------      */
 
-#include "SGP4.h"
+#include "perturb/vallado_sgp4.hpp"
+
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <iostream>
 
 #define pi 3.14159265358979323846
 
@@ -63,6 +68,9 @@
 // use extern in main
 char help = 'n';
 FILE *dbgfile;
+
+namespace perturb {
+namespace vallado_sgp4 {
 
 /* ----------- local functions - only ever used internally by sgp4 ---------- */
 static void dpper
@@ -152,8 +160,8 @@ double& cosio2, double& eccsq, double& omeosq, double& posq,
 double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
 );
 
-namespace SGP4Funcs
-{
+// namespace SGP4Funcs
+// {
 
     /* -----------------------------------------------------------------------------
     *
@@ -3240,6 +3248,7 @@ namespace SGP4Funcs
     }  // invjday
 
 
-} // namespace SGP4Funcs
+// } // namespace SGP4Funcs
 
-
+}  // namesapce vallado_sgp4
+}  // namespace perturb
