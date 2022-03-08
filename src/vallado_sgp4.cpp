@@ -60,14 +60,8 @@
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
-#include <iostream>
 
 #define pi 3.14159265358979323846
-
-// define global variables here, not in .h
-// use extern in main
-char help = 'n';
-FILE *dbgfile;
 
 namespace perturb {
 namespace vallado_sgp4 {
@@ -1438,6 +1432,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
 
         satrec.error = 0;
         satrec.operationmode = opsmode;
+        // FIXME: Figure out better way to do this string copy
         // new alpha5 or 9-digit number
         #ifdef _MSC_VER
                            strcpy_s(satrec.satnum, 6 * sizeof(char), satn);
@@ -2130,7 +2125,9 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
             j3oj2 = j3 / j2;
             break;
         default:
-            fprintf(stderr, "unknown gravity option (%d)\n", whichconst);
+            #if PERTURB_VALLADO_SGP4_ENABLE_DEBUG
+                fprintf(stderr, "unknown gravity option (%d)\n", whichconst);
+            #endif
             break;
         }
 
@@ -2234,6 +2231,9 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
             longstr1[62] = '0';
         if (longstr1[68] == ' ')
             longstr1[68] = '0';
+
+        // FIXME: Find better way to do this scanf business
+
 #ifdef _MSC_VER // chk if compiling in MSVS c++
         sscanf_s(longstr1, "%2d %5s %1c %10s %2d %12lf %11lf %7lf %2d %7lf %2d %2d %6ld ",
             &cardnumb, &satrec.satnum, 6 * sizeof(char), &satrec.classification, sizeof(char), &satrec.intldesg, 11 * sizeof(char), &satrec.epochyr,
@@ -2246,6 +2246,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
 #endif
         if (typerun == 'v')  // run for specified times from the file
         {
+#if PERTURB_VALLADO_SGP4_ENABLE_DEBUG
             if (longstr2[52] == ' ')
             {
 #ifdef _MSC_VER
@@ -2274,6 +2275,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
                     &satrec.revnum, &startmfe, &stopmfe, &deltamin);
 #endif
             }
+#endif  // PERTURB_VALLADO_SGP4_ENABLE_DEBUG
         }
         else  // simply run -1 day to +1 day or user input times
         {
@@ -2343,6 +2345,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
         days2mdhms_SGP4(year, satrec.epochdays, mon, day, hr, minute, sec);
         jday_SGP4(year, mon, day, hr, minute, sec, satrec.jdsatepoch, satrec.jdsatepochF);
 
+#if PERTURB_VALLADO_SGP4_ENABLE_DEBUG
         // ---- input start stop times manually
         if ((typerun != 'v') && (typerun != 'c'))
         {
@@ -2438,6 +2441,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
             stopmfe = 1440.0;
             deltamin = 10.0;
         }
+#endif  // PERTURB_VALLADO_SGP4_ENABLE_DEBUG
 
         // ---------------- initialize the orbit at sgp4epoch -------------------
         sgp4init(whichconst, opsmode, satrec.satnum, (satrec.jdsatepoch + satrec.jdsatepochF) - 2433281.5, satrec.bstar,

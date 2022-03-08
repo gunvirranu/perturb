@@ -50,6 +50,12 @@
 
 #define PERTURB_VALLADO_SGP4_SGP4Version  "SGP4 Version 2020-07-13"
 
+// Use this preprocessor flag to conditionally compile debugging stuff.
+// Generally, this is unwanted. Default is disabled.
+#ifndef PERTURB_VALLADO_SGP4_ENABLE_DEBUG
+#define PERTURB_VALLADO_SGP4_ENABLE_DEBUG false
+#endif
+
 namespace perturb {
 namespace vallado_sgp4 {
 
