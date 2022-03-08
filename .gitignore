@@ -1,0 +1,21 @@
+### C+++ ###
+*.o
+*.obj
+*.a
+*.lib
+*.exe
+*.out
+
+build/
+cmake-build-*/
+
+### CMake ###
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+Makefile
+
+# IDEs
+.idea/
+.vs/
+.vscode/
