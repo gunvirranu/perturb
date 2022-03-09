@@ -1,5 +1,7 @@
 #include "perturb/perturb.hpp"
 
+#include <cstring>
+
 #include "perturb/vallado_sgp4.hpp"
 
 namespace perturb {
@@ -27,4 +29,36 @@ void JulianDate::to_datetime(
     vallado_sgp4::invjday_SGP4(jd, 0.0, year, month, day, hour, min, sec);
 }
 
+Satellite::Satellite(const vallado_sgp4::elsetrec sat_rec) : sat_rec(sat_rec) {}
+
+Satellite Satellite::from_tle(
+    const std::array<char, TLE_LINE_LEN> &line_1,
+    const std::array<char, TLE_LINE_LEN> &line_2
+) {
+    char line_buf_1[130], line_buf_2[130];
+    std::memcpy(line_buf_1, line_1.data(), TLE_LINE_LEN);
+    std::memcpy(line_buf_2, line_2.data(), TLE_LINE_LEN);
+    double _startmfe, _stopmfe, _deltamin;
+    vallado_sgp4::elsetrec sat_rec;
+    vallado_sgp4::twoline2rv(
+        line_buf_1, line_buf_2, ' ', ' ', 'i',
+        vallado_sgp4::wgs72, _startmfe, _stopmfe, _deltamin, sat_rec
+    );
+    return Satellite(sat_rec);
+}
+
+Sgp4Error Satellite::propogate_from_epoch(double mins_from_epoch, Vec3 &pos, Vec3 &vel) {
+    const bool is_valid = vallado_sgp4::sgp4(sat_rec, mins_from_epoch, pos.data(), vel.data());
+    if (!is_valid) {
+        return convert_sgp4_error_code(sat_rec.error);
+    }
+    return Sgp4Error::NONE;
+}
+
+Sgp4Error Satellite::propogate(const JulianDate jd, Vec3 &pos, Vec3 &vel) {
+    constexpr double MINS_PER_DAY = 24 * 60;
+    const double delta_jd = jd.jd - sat_rec.jdsatepoch - sat_rec.jdsatepochF;
+    const double mins_from_epoch = delta_jd * MINS_PER_DAY;
+    return propogate_from_epoch(mins_from_epoch, pos, vel);
+}
 }  // namespace perturb
