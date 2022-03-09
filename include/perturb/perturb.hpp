@@ -14,6 +14,14 @@ enum class Sgp4Error : int {
     UNKNOWN
 };
 
+struct JulianDate {
+    double jd;
+
+    static JulianDate from_datetime(int year, int month, int day, int hour, int min, double sec);
+
+    void to_datetime(int &year, int &month, int &day, int &hour, int &min, double &sec) const;
+};
+
 }  // namespace perturb
 
 #endif  // PERTURB_PERTURB_HPP
