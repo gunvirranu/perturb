@@ -23,12 +23,19 @@ enum class Sgp4Error : int {
     UNKNOWN
 };
 
+struct YMDhms {
+    int year, month, day, hour, min;
+    double sec;
+};
+
 struct JulianDate {
     double jd;
 
-    static JulianDate from_datetime(int year, int month, int day, int hour, int min, double sec);
+    explicit JulianDate(double jd);
 
-    void to_datetime(int &year, int &month, int &day, int &hour, int &min, double &sec) const;
+    explicit JulianDate(YMDhms t);
+
+    YMDhms to_datetime() const;
 };
 
 class Satellite {

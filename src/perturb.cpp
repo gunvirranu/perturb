@@ -13,20 +13,18 @@ Sgp4Error convert_sgp4_error_code(const int error_code) {
     return static_cast<Sgp4Error>(error_code);
 }
 
-JulianDate JulianDate::from_datetime(
-    const int year, const int month, const int day,
-    const int hour, const int min, const double sec
-) {
+JulianDate::JulianDate(double jd) : jd(jd) {}
+
+JulianDate::JulianDate(YMDhms t) {
     double tmp_jd, tmp_jd_frac;
-    vallado_sgp4::jday_SGP4(year, month, day, hour, min, sec, tmp_jd, tmp_jd_frac);
-    double jd = tmp_jd + tmp_jd_frac;
-    return JulianDate { jd };
+    vallado_sgp4::jday_SGP4(t.year, t.month, t.day, t.hour, t.min, t.sec, tmp_jd, tmp_jd_frac);
+    jd = tmp_jd + tmp_jd_frac;
 }
 
-void JulianDate::to_datetime(
-    int &year, int &month, int &day, int &hour, int &min, double &sec
-) const {
-    vallado_sgp4::invjday_SGP4(jd, 0.0, year, month, day, hour, min, sec);
+YMDhms JulianDate::to_datetime() const {
+    YMDhms t {};
+    vallado_sgp4::invjday_SGP4(jd, 0.0, t.year, t.month, t.day, t.hour, t.min, t.sec);
+    return t;
 }
 
 Satellite::Satellite(const vallado_sgp4::elsetrec sat_rec) : sat_rec(sat_rec) {}
