@@ -15,6 +15,8 @@ Sgp4Error convert_sgp4_error_code(const int error_code) {
 
 JulianDate::JulianDate(double jd) : jd(jd) {}
 
+JulianDate::JulianDate(double jd, double jd_frac) : jd(jd + jd_frac) {}
+
 JulianDate::JulianDate(YMDhms t) {
     double tmp_jd, tmp_jd_frac;
     vallado_sgp4::jday_SGP4(t.year, t.month, t.day, t.hour, t.min, t.sec, tmp_jd, tmp_jd_frac);
@@ -25,6 +27,10 @@ YMDhms JulianDate::to_datetime() const {
     YMDhms t {};
     vallado_sgp4::invjday_SGP4(jd, 0.0, t.year, t.month, t.day, t.hour, t.min, t.sec);
     return t;
+}
+
+double JulianDate::operator-(const JulianDate &rhs) const {
+    return this->jd - rhs.jd;
 }
 
 Satellite::Satellite(const vallado_sgp4::elsetrec sat_rec) : sat_rec(sat_rec) {}
@@ -45,6 +51,10 @@ Satellite Satellite::from_tle(
     return Satellite(sat_rec);
 }
 
+JulianDate Satellite::epoch() const {
+    return JulianDate(sat_rec.jdsatepoch, sat_rec.jdsatepochF);
+}
+
 Sgp4Error Satellite::propogate_from_epoch(double mins_from_epoch, Vec3 &pos, Vec3 &vel) {
     const bool is_valid = vallado_sgp4::sgp4(sat_rec, mins_from_epoch, pos.data(), vel.data());
     if (!is_valid) {
@@ -55,7 +65,7 @@ Sgp4Error Satellite::propogate_from_epoch(double mins_from_epoch, Vec3 &pos, Vec
 
 Sgp4Error Satellite::propogate(const JulianDate jd, Vec3 &pos, Vec3 &vel) {
     constexpr double MINS_PER_DAY = 24 * 60;
-    const double delta_jd = jd.jd - sat_rec.jdsatepoch - sat_rec.jdsatepochF;
+    const double delta_jd = jd - epoch();
     const double mins_from_epoch = delta_jd * MINS_PER_DAY;
     return propogate_from_epoch(mins_from_epoch, pos, vel);
 }

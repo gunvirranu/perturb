@@ -33,9 +33,13 @@ struct JulianDate {
 
     explicit JulianDate(double jd);
 
+    explicit JulianDate(double jd, double jd_frac);
+
     explicit JulianDate(YMDhms t);
 
     YMDhms to_datetime() const;
+
+    double operator-(const JulianDate &rhs) const;
 };
 
 class Satellite {
@@ -48,6 +52,8 @@ public:
         const std::array<char, TLE_LINE_LEN> &line_1,
         const std::array<char, TLE_LINE_LEN> &line_2
     );
+
+    JulianDate epoch() const;
 
     Sgp4Error propogate_from_epoch(double mins_from_epoch, Vec3 &pos, Vec3 &vel);
 
