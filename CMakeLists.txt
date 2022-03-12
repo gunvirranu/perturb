@@ -77,3 +77,9 @@ if(NOT perturb_DEVELOPER_MODE)
 elseif(NOT PROJECT_IS_TOP_LEVEL)
     message(AUTHOR_WARNING "Developer mode enabled")
 endif()
+# Anything below here is purely for developer mode
+
+include(CTest)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
