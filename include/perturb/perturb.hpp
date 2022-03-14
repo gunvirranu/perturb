@@ -5,6 +5,7 @@
 
 #include <array>
 #include <cstddef>
+#include <string>
 
 namespace perturb {
 
@@ -20,6 +21,7 @@ enum class Sgp4Error : int {
     SEMI_LATUS_RECTUM,
     EPOCH_ELEMENTS_SUB_ORBITAL,
     DECAYED,
+    INVALID_TLE,  // Not from base impl, added in
     UNKNOWN
 };
 
@@ -52,10 +54,9 @@ public:
 
     explicit Satellite(vallado_sgp4::elsetrec sat_rec);
 
-    static Satellite from_tle(
-        const std::array<char, TLE_LINE_LEN> &line_1,
-        const std::array<char, TLE_LINE_LEN> &line_2
-    );
+    static Satellite from_tle(char *line_1, char *line_2);
+
+    static Satellite from_tle(std::string &line_1, std::string &line_2);
 
     Sgp4Error last_error() const;
 

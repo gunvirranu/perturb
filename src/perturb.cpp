@@ -43,26 +43,33 @@ JulianDate &JulianDate::operator+=(const double &delta_jd) {
 
 Satellite::Satellite(const vallado_sgp4::elsetrec sat_rec) : sat_rec(sat_rec) {}
 
-Satellite Satellite::from_tle(
-    const std::array<char, TLE_LINE_LEN> &line_1,
-    const std::array<char, TLE_LINE_LEN> &line_2
-) {
-    char line_buf_1[130], line_buf_2[130];
-    std::memcpy(line_buf_1, line_1.data(), TLE_LINE_LEN);
-    std::memcpy(line_buf_2, line_2.data(), TLE_LINE_LEN);
+Satellite Satellite::from_tle(char *line_1, char *line_2) {
     double _startmfe, _stopmfe, _deltamin;
-    vallado_sgp4::elsetrec sat_rec;
-    vallado_sgp4::twoline2rv(
-        line_buf_1, line_buf_2, ' ', ' ', 'i',
-        vallado_sgp4::wgs72, _startmfe, _stopmfe, _deltamin, sat_rec
-    );
+    vallado_sgp4::elsetrec sat_rec {};
+    const bool bad_ptrs = !line_1 || !line_2;
+    if (bad_ptrs || std::strlen(line_1) < TLE_LINE_LEN || std::strlen(line_2) < TLE_LINE_LEN) {
+        sat_rec.error = static_cast<int>(Sgp4Error::INVALID_TLE);
+    } else {
+        vallado_sgp4::twoline2rv(
+            line_1, line_2, ' ', ' ', 'i',
+            vallado_sgp4::wgs72, _startmfe, _stopmfe, _deltamin, sat_rec
+        );
+    }
     return Satellite(sat_rec);
+}
+
+Satellite Satellite::from_tle(std::string &line_1, std::string &line_2) {
+    if (line_1.length() < TLE_LINE_LEN || line_2.length() < TLE_LINE_LEN) {
+        vallado_sgp4::elsetrec sat_rec;
+        sat_rec.error = static_cast<int>(Sgp4Error::INVALID_TLE);
+        return Satellite(sat_rec);
+    }
+    return from_tle(&line_1[0], &line_2[0]);
 }
 
 Sgp4Error Satellite::last_error() const {
     return convert_sgp4_error_code(sat_rec.error);
 }
-
 
 JulianDate Satellite::epoch() const {
     return JulianDate(sat_rec.jdsatepoch, sat_rec.jdsatepochF);
