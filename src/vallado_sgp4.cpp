@@ -2126,7 +2126,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
             break;
         default:
             #if PERTURB_VALLADO_SGP4_ENABLE_DEBUG
-                fprintf(stderr, "unknown gravity option (%d)\n", whichconst);
+            fprintf(stderr, "unknown gravity option (%d)\n", whichconst);
             #endif
             break;
         }
@@ -2174,6 +2174,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
     *    vallado, crawford, hujsak, kelso  2006
     --------------------------------------------------------------------------- */
 
+#ifndef PERTURB_DISABLE_IO
     void twoline2rv
         (
         char longstr1[130], char longstr2[130],
@@ -2448,6 +2449,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
             satrec.ndot, satrec.nddot, satrec.ecco, satrec.argpo, satrec.inclo, satrec.mo, satrec.no_kozai,
             satrec.nodeo, satrec);
     } // twoline2rv
+#endif  // PERTURB_DISABLE_IO
 
 
     // older sgp4ext methods

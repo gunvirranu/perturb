@@ -48,13 +48,19 @@
 *                           original baseline
 *       ----------------------------------------------------------------      */
 
-#define PERTURB_VALLADO_SGP4_SGP4Version  "SGP4 Version 2020-07-13"
-
 // Use this preprocessor flag to conditionally compile debugging stuff.
 // Generally, this is unwanted. Default is disabled.
 #ifndef PERTURB_VALLADO_SGP4_ENABLE_DEBUG
 #define PERTURB_VALLADO_SGP4_ENABLE_DEBUG false
 #endif
+
+#if (PERTURB_VALLADO_SGP4_ENABLE_DEBUG)
+#ifdef PERTURB_DISABLE_IO
+#error "Cannot enable SGP4 debug without I/O functionality"
+#endif
+#endif
+
+#define PERTURB_VALLADO_SGP4_SGP4Version  "SGP4 Version 2020-07-13"
 
 namespace perturb {
 namespace vallado_sgp4 {
@@ -149,6 +155,7 @@ typedef struct elsetrec
         double& j3oj2
         );
 
+#ifndef PERTURB_DISABLE_IO
     // older sgp4io methods
     void twoline2rv
         (
@@ -158,6 +165,7 @@ typedef struct elsetrec
         double& startmfe, double& stopmfe, double& deltamin,
         elsetrec& satrec
         );
+#endif  // PERTURB_DISABLE_IO
 
     // older sgp4ext methods
     double  gstime_SGP4

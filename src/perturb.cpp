@@ -1,6 +1,8 @@
 #include "perturb/perturb.hpp"
 
+#ifndef PERTURB_DISABLE_IO
 #include <cstring>
+#endif
 
 #include "perturb/vallado_sgp4.hpp"
 
@@ -43,6 +45,7 @@ JulianDate &JulianDate::operator+=(const double &delta_jd) {
 
 Satellite::Satellite(const vallado_sgp4::elsetrec sat_rec) : sat_rec(sat_rec) {}
 
+#ifndef PERTURB_DISABLE_IO
 Satellite Satellite::from_tle(char *line_1, char *line_2) {
     double _startmfe, _stopmfe, _deltamin;
     vallado_sgp4::elsetrec sat_rec {};
@@ -57,7 +60,9 @@ Satellite Satellite::from_tle(char *line_1, char *line_2) {
     }
     return Satellite(sat_rec);
 }
+#endif  // PERTURB_DISABLE_IO
 
+#ifndef PERTURB_DISABLE_IO
 Satellite Satellite::from_tle(std::string &line_1, std::string &line_2) {
     if (line_1.length() < TLE_LINE_LEN || line_2.length() < TLE_LINE_LEN) {
         vallado_sgp4::elsetrec sat_rec;
@@ -66,6 +71,7 @@ Satellite Satellite::from_tle(std::string &line_1, std::string &line_2) {
     }
     return from_tle(&line_1[0], &line_2[0]);
 }
+#endif  // PERTURB_DISABLE_IO
 
 Sgp4Error Satellite::last_error() const {
     return convert_sgp4_error_code(sat_rec.error);

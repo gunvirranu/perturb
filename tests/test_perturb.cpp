@@ -11,16 +11,7 @@
 
 using namespace perturb;
 
-constexpr double PI = 3.14159265358979323846;
-constexpr double RAD_TO_DEG = 180 / PI;
-constexpr double DEG_TO_RAD = PI / 180;
-
-std::array<char, TLE_LINE_LEN> str_to_arr(const char *str) {
-    std::array<char, TLE_LINE_LEN> line;
-    std::memcpy(line.data(), str, TLE_LINE_LEN);
-    return line;
-}
-
+#ifndef PERTURB_DISABLE_IO
 Satellite sat_from_verif_tle(
     std::string &line_1, std::string &line_2,
     double &startmfe, double &stopmfe, double &deltamin
@@ -35,6 +26,7 @@ Satellite sat_from_verif_tle(
     );
     return Satellite(sat_rec);
 }
+#endif  // PERTURB_DISABLE_IO
 
 double norm(const Vec3 &v) {
     return std::sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
@@ -79,6 +71,7 @@ TEST_CASE(
     }
 }
 
+#ifndef PERTURB_DISABLE_IO
 TEST_CASE("test_sgp4_iss_tle") {
     // Pulled sometime around 2022-03-12
     std::string ISS_TLE_1("1 25544U 98067A   22071.78032407  .00021395  00000-0  39008-3 0  9996");
@@ -142,7 +135,7 @@ TEST_CASE("test_sgp4_iss_tle") {
     SUBCASE("test_half_orbit") {
         constexpr double AVG_ISS_ORBITAL = 92.8;    // minutes
         constexpr double EPS = 0.05;                // Acceptable relative delta
-        constexpr int CHECK_N_ORBITS = 1000;           // Number of consecutive orbits
+        constexpr int CHECK_N_ORBITS = 1000;        // Number of consecutive orbits
         Vec3 pos_1, vel_1, pos_2, vel_2;
         for (int i = 0; i < CHECK_N_ORBITS; ++i) {
             const auto t = i * AVG_ISS_ORBITAL;
@@ -157,13 +150,19 @@ TEST_CASE("test_sgp4_iss_tle") {
         }
     }
 }
+#endif  // PERTURB_DISABLE_IO
 
+#ifndef PERTURB_DISABLE_IO
 TEST_CASE(
     "test_sgp4_verification_mode"
     // Can't run verification mode without debug mode
     * doctest::skip(!PERTURB_VALLADO_SGP4_ENABLE_DEBUG)
     * doctest::description("Run verification mode based off Vallado's test code")
 ) {
+    constexpr double PI = 3.14159265358979323846;
+    constexpr double RAD_TO_DEG = 180 / PI;
+    constexpr double DEG_TO_RAD = PI / 180;
+
     std::ifstream in_file("SGP4-VER.TLE");
     REQUIRE(in_file.is_open());
     FILE *out_file = std::fopen("generated-tcppver.out", "w");
@@ -287,3 +286,4 @@ TEST_CASE(
     }
     std::fclose(out_file);
 }
+#endif  // PERTURB_DISABLE_IO

@@ -1,16 +1,26 @@
 #ifndef PERTURB_PERTURB_HPP
 #define PERTURB_PERTURB_HPP
 
+// Defining preprocessor flag `PERTURB_DISABLE_IO` across the entire lib.
+// Setting it removes all I/O and string related functionality.
+// This may be desired if targeting for embedded. Majors impact are:
+//   1. Removes TLE constructor since it relies on C-style strings and sscanf
+//   2. Removes std::string helper constructor as well
+
 #include "perturb/vallado_sgp4.hpp"
 
 #include <array>
 #include <cstddef>
+#ifndef PERTURB_DISABLE_IO
 #include <string>
+#endif
 
 namespace perturb {
 
 using Vec3 = std::array<double, 3>;
 
+// The two lines of the TLE *must* be this length as the memory is accessed.
+// TLE lines are only greater for verification mode, but that's internal.
 constexpr std::size_t TLE_LINE_LEN = 69;
 
 enum class Sgp4Error : int {
@@ -54,9 +64,11 @@ public:
 
     explicit Satellite(vallado_sgp4::elsetrec sat_rec);
 
+#ifndef PERTURB_DISABLE_IO
     static Satellite from_tle(char *line_1, char *line_2);
 
     static Satellite from_tle(std::string &line_1, std::string &line_2);
+#endif  // PERTURB_ENABLE_IO
 
     Sgp4Error last_error() const;
 

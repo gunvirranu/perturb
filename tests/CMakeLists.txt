@@ -37,6 +37,7 @@ endif()
 target_compile_definitions(
     perturb
     PUBLIC
+        # PERTURB_DISABLE_IO
         PERTURB_VALLADO_SGP4_ENABLE_DEBUG=true
 )
 
