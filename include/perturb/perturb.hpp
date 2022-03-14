@@ -53,6 +53,8 @@ public:
         const std::array<char, TLE_LINE_LEN> &line_2
     );
 
+    Sgp4Error last_error() const;
+
     JulianDate epoch() const;
 
     Sgp4Error propogate_from_epoch(double mins_from_epoch, Vec3 &pos, Vec3 &vel);

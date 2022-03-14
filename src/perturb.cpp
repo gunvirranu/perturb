@@ -6,7 +6,7 @@
 
 namespace perturb {
 
-Sgp4Error convert_sgp4_error_code(const int error_code) {
+static Sgp4Error convert_sgp4_error_code(const int error_code) {
     if (error_code < 0 || error_code >= static_cast<int>(Sgp4Error::UNKNOWN)) {
         return Sgp4Error::UNKNOWN;
     }
@@ -51,16 +51,19 @@ Satellite Satellite::from_tle(
     return Satellite(sat_rec);
 }
 
+Sgp4Error Satellite::last_error() const {
+    return convert_sgp4_error_code(sat_rec.error);
+}
+
+
 JulianDate Satellite::epoch() const {
     return JulianDate(sat_rec.jdsatepoch, sat_rec.jdsatepochF);
 }
 
 Sgp4Error Satellite::propogate_from_epoch(double mins_from_epoch, Vec3 &pos, Vec3 &vel) {
     const bool is_valid = vallado_sgp4::sgp4(sat_rec, mins_from_epoch, pos.data(), vel.data());
-    if (!is_valid) {
-        return convert_sgp4_error_code(sat_rec.error);
-    }
-    return Sgp4Error::NONE;
+    (void) is_valid;  // Unused because it is consistent with error code
+    return last_error();
 }
 
 Sgp4Error Satellite::propogate(const JulianDate jd, Vec3 &pos, Vec3 &vel) {
