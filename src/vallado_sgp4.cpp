@@ -2125,7 +2125,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
             j3oj2 = j3 / j2;
             break;
         default:
-            #if PERTURB_VALLADO_SGP4_ENABLE_DEBUG
+            #ifdef PERTURB_VALLADO_SGP4_ENABLE_DEBUG
             fprintf(stderr, "unknown gravity option (%d)\n", whichconst);
             #endif
             break;
@@ -2247,7 +2247,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
 #endif
         if (typerun == 'v')  // run for specified times from the file
         {
-#if PERTURB_VALLADO_SGP4_ENABLE_DEBUG
+#ifdef PERTURB_VALLADO_SGP4_ENABLE_DEBUG
             if (longstr2[52] == ' ')
             {
 #ifdef _MSC_VER
@@ -2346,7 +2346,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
         days2mdhms_SGP4(year, satrec.epochdays, mon, day, hr, minute, sec);
         jday_SGP4(year, mon, day, hr, minute, sec, satrec.jdsatepoch, satrec.jdsatepochF);
 
-#if PERTURB_VALLADO_SGP4_ENABLE_DEBUG
+#ifdef PERTURB_VALLADO_SGP4_ENABLE_DEBUG
         // ---- input start stop times manually
         if ((typerun != 'v') && (typerun != 'c'))
         {

@@ -152,11 +152,10 @@ TEST_CASE("test_sgp4_iss_tle") {
 }
 #endif  // PERTURB_DISABLE_IO
 
-#ifndef PERTURB_DISABLE_IO
+// Can't run verification mode without debug mode
+#ifdef PERTURB_VALLADO_SGP4_ENABLE_DEBUG
 TEST_CASE(
     "test_sgp4_verification_mode"
-    // Can't run verification mode without debug mode
-    * doctest::skip(!PERTURB_VALLADO_SGP4_ENABLE_DEBUG)
     * doctest::description("Run verification mode based off Vallado's test code")
 ) {
     constexpr double PI = 3.14159265358979323846;
@@ -286,4 +285,4 @@ TEST_CASE(
     }
     std::fclose(out_file);
 }
-#endif  // PERTURB_DISABLE_IO
+#endif  // PERTURB_VALLADO_SGP4_ENABLE_DEBUG

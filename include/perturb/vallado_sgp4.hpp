@@ -48,16 +48,11 @@
 *                           original baseline
 *       ----------------------------------------------------------------      */
 
-// Use this preprocessor flag to conditionally compile debugging stuff.
-// Generally, this is unwanted. Default is disabled.
-#ifndef PERTURB_VALLADO_SGP4_ENABLE_DEBUG
-#define PERTURB_VALLADO_SGP4_ENABLE_DEBUG false
-#endif
+// Define `PERTURB_VALLADO_SGP4_ENABLE_DEBUG` to enable Vallado's verification mode.
+// Generally, this is unwanted. Only enabled for tests.
 
-#if (PERTURB_VALLADO_SGP4_ENABLE_DEBUG)
-#ifdef PERTURB_DISABLE_IO
+#if (defined(PERTURB_VALLADO_SGP4_ENABLE_DEBUG) && defined(PERTURB_DISABLE_IO))
 #error "Cannot enable SGP4 debug without I/O functionality"
-#endif
 #endif
 
 #define PERTURB_VALLADO_SGP4_SGP4Version  "SGP4 Version 2020-07-13"
