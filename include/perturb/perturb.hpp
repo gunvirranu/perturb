@@ -62,9 +62,9 @@ public:
 
     JulianDate epoch() const;
 
-    Sgp4Error propogate_from_epoch(double mins_from_epoch, Vec3 &pos, Vec3 &vel);
+    Sgp4Error propagate_from_epoch(double mins_from_epoch, Vec3 &pos, Vec3 &vel);
 
-    Sgp4Error propogate(JulianDate jd, Vec3 &pos, Vec3 &vel);
+    Sgp4Error propagate(JulianDate jd, Vec3 &pos, Vec3 &vel);
 };
 }  // namespace perturb
 

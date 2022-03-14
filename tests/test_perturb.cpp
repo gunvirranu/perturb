@@ -109,7 +109,7 @@ TEST_CASE("test_sgp4_iss_tle") {
         double mins = 0;
         while (mins < CHECK_FOR_MINS) {
             Vec3 pos, vel;
-            const auto err = sat.propogate_from_epoch(mins, pos, vel);
+            const auto err = sat.propagate_from_epoch(mins, pos, vel);
             CHECK(err == Sgp4Error::NONE);
             const double dist = norm(pos) - AVG_EARTH_RADIUS;
             const double speed = norm(vel);
@@ -127,8 +127,8 @@ TEST_CASE("test_sgp4_iss_tle") {
         Vec3 pos_1, vel_1, pos_2, vel_2;
         for (int i = 0; i < CHECK_N_ORBITS; ++i) {
             const double t = i * AVG_ISS_ORBITAL;
-            sat.propogate_from_epoch(t, pos_1, vel_1);
-            sat.propogate_from_epoch(t + AVG_ISS_ORBITAL, pos_2, vel_2);
+            sat.propagate_from_epoch(t, pos_1, vel_1);
+            sat.propagate_from_epoch(t + AVG_ISS_ORBITAL, pos_2, vel_2);
             CHECK(vel_1[0] == doctest::Approx(vel_2[0]).epsilon(EPS));
             CHECK(vel_1[1] == doctest::Approx(vel_2[1]).epsilon(EPS));
             CHECK(vel_1[2] == doctest::Approx(vel_2[2]).epsilon(EPS));
@@ -146,8 +146,8 @@ TEST_CASE("test_sgp4_iss_tle") {
         Vec3 pos_1, vel_1, pos_2, vel_2;
         for (int i = 0; i < CHECK_N_ORBITS; ++i) {
             const auto t = i * AVG_ISS_ORBITAL;
-            sat.propogate_from_epoch(t, pos_1, vel_1);
-            sat.propogate_from_epoch(t + AVG_ISS_ORBITAL / 2.0, pos_2, vel_2);
+            sat.propagate_from_epoch(t, pos_1, vel_1);
+            sat.propagate_from_epoch(t + AVG_ISS_ORBITAL / 2.0, pos_2, vel_2);
             CHECK(vel_1[0] == doctest::Approx(-vel_2[0]).epsilon(EPS));
             CHECK(vel_1[1] == doctest::Approx(-vel_2[1]).epsilon(EPS));
             CHECK(vel_1[2] == doctest::Approx(-vel_2[2]).epsilon(EPS));
@@ -180,7 +180,7 @@ TEST_CASE(
         double startmfe, stopmfe, deltamin;
         auto sat = sat_from_verif_tle(line_1, line_2, startmfe, stopmfe, deltamin);
 
-        sat.propogate_from_epoch(0.0, pos, vel);  // Initialize maybe??
+        sat.propagate_from_epoch(0.0, pos, vel);  // Initialize maybe??
         std::fprintf(out_file, "%s xx\n", sat.sat_rec.satnum);
         std::fprintf(
             out_file,
@@ -195,7 +195,7 @@ TEST_CASE(
 
         while ((tsince < stopmfe) && sat.last_error() == Sgp4Error::NONE) {
             tsince = std::min(tsince + deltamin, stopmfe);
-            if (sat.propogate_from_epoch(tsince, pos, vel) != Sgp4Error::NONE) {
+            if (sat.propagate_from_epoch(tsince, pos, vel) != Sgp4Error::NONE) {
                 continue;
             }
 
@@ -277,7 +277,7 @@ TEST_CASE(
         double tsince = startmfe;
         while ((tsince < stopmfe) && sat.last_error() == Sgp4Error::NONE) {
             tsince = std::min(tsince + deltamin, stopmfe);
-            CHECK(sat.propogate_from_epoch(tsince, pos, vel) == Sgp4Error::NONE);
+            CHECK(sat.propagate_from_epoch(tsince, pos, vel) == Sgp4Error::NONE);
             std::fprintf(
                 out_file,
                 " %16.8f %16.8f %16.8f %16.8f %12.9f %12.9f %12.9f",

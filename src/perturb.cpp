@@ -75,16 +75,16 @@ JulianDate Satellite::epoch() const {
     return JulianDate(sat_rec.jdsatepoch, sat_rec.jdsatepochF);
 }
 
-Sgp4Error Satellite::propogate_from_epoch(double mins_from_epoch, Vec3 &pos, Vec3 &vel) {
+Sgp4Error Satellite::propagate_from_epoch(double mins_from_epoch, Vec3 &pos, Vec3 &vel) {
     const bool is_valid = vallado_sgp4::sgp4(sat_rec, mins_from_epoch, pos.data(), vel.data());
     (void) is_valid;  // Unused because it is consistent with error code
     return last_error();
 }
 
-Sgp4Error Satellite::propogate(const JulianDate jd, Vec3 &pos, Vec3 &vel) {
+Sgp4Error Satellite::propagate(const JulianDate jd, Vec3 &pos, Vec3 &vel) {
     constexpr double MINS_PER_DAY = 24 * 60;
     const double delta_jd = jd - epoch();
     const double mins_from_epoch = delta_jd * MINS_PER_DAY;
-    return propogate_from_epoch(mins_from_epoch, pos, vel);
+    return propagate_from_epoch(mins_from_epoch, pos, vel);
 }
 }  // namespace perturb
