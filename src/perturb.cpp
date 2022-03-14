@@ -33,6 +33,14 @@ double JulianDate::operator-(const JulianDate &rhs) const {
     return this->jd - rhs.jd;
 }
 
+JulianDate JulianDate::operator+(const double &delta_jd) const {
+    return JulianDate(jd, 0.0 + delta_jd);
+}
+
+JulianDate &JulianDate::operator+=(const double &delta_jd) {
+    return *this = *this + delta_jd;
+}
+
 Satellite::Satellite(const vallado_sgp4::elsetrec sat_rec) : sat_rec(sat_rec) {}
 
 Satellite Satellite::from_tle(

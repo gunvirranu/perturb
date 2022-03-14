@@ -19,17 +19,37 @@ double norm(const Vec3 &v) {
     return std::sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
 }
 
+TEST_CASE("test_julian_date_type") {
+    const auto t = YMDhms { 2022, 3, 14, 0, 31, 19.3 };
+    const auto jd = JulianDate(t);
+    auto t2 = t;
+    t2.day = 17;
+    t2.hour = 15;
+    t2.min = 45;
+    const auto jd2 = JulianDate(t2);
+    const double dt = jd2 - jd;
+    const double EXPECTED_DT = (t2.day - t.day) + ((t2.hour - t.hour) + (t2.min - t.min) / 60.0) / 24.0;
+    CHECK(dt == doctest::Approx(EXPECTED_DT).epsilon(1e-8));
+
+    const auto jd3 = jd + dt;
+    CHECK(jd2.jd == jd3.jd);
+
+    auto jd4 = jd;
+    jd4 += dt;
+    CHECK(jd3.jd == jd4.jd);
+}
+
 TEST_CASE(
-    "test_julian_date"
+    "test_julian_date_conversions"
     * doctest::description("Check julian date conversions from 1901 to 2099")
 ) {
-    const auto JD_START = JulianDate(2415750.5);
-    const auto JD_END = JulianDate(2488068.5);
+    const auto JD_START = JulianDate(2415750.5);    // Around start of 1901
+    const auto JD_END = JulianDate(2488068.5);      // Around end of 2099
     constexpr int N_CHECKS = 123479;  // Shouldn't evenly divide range
     const double DELTA_JD = (JD_END - JD_START) / N_CHECKS;
 
     for (int i = 0; i < N_CHECKS; ++i) {
-        const auto jd = JulianDate(JD_START.jd + i * DELTA_JD);
+        const auto jd = JD_START + i * DELTA_JD;
         const YMDhms t = jd.to_datetime();
         CHECK_MESSAGE(
             jd.jd == JulianDate(t).jd,

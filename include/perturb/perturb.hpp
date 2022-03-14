@@ -40,6 +40,10 @@ struct JulianDate {
     YMDhms to_datetime() const;
 
     double operator-(const JulianDate &rhs) const;
+
+    JulianDate operator+(const double &delta_jd) const;
+
+    JulianDate& operator+=(const double &delta_jd);
 };
 
 class Satellite {
