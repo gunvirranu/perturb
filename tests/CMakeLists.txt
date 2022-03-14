@@ -34,6 +34,12 @@ elseif(MSVC)
     target_compile_definitions(test_perturb PUBLIC DOCTEST_CONFIG_USE_STD_HEADERS)
 endif()
 
+target_compile_definitions(
+    perturb
+    PUBLIC
+        PERTURB_VALLADO_SGP4_ENABLE_DEBUG=true
+)
+
 enable_testing()
 include(${doctest_SOURCE_DIR}/scripts/cmake/doctest.cmake)
 doctest_discover_tests(test_perturb)
