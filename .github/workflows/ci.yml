@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - '[0-9]+.*'
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  test:
+    name: Test
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+        disable_io: [ OFF, ON ]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Get latest CMake and ninja
+        uses: lukka/get-cmake@latest
+
+      - name: Configure
+        run: cmake -S . -B build -Dperturb_DEVELOPER_MODE=ON -Dperturb_DISABLE_IO=${{ matrix.disable_io }}
+
+      - name: Build
+        run: cmake --build build
+
+      - name: Test
+        working-directory: tests
+        run: ../build/tests/test_perturb
