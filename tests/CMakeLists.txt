@@ -34,12 +34,13 @@ elseif(MSVC)
     target_compile_definitions(test_perturb PUBLIC DOCTEST_CONFIG_USE_STD_HEADERS)
 endif()
 
-target_compile_definitions(
-    perturb
-    PUBLIC
-        # PERTURB_DISABLE_IO
-        PERTURB_VALLADO_SGP4_ENABLE_DEBUG
-)
+if(NOT perturb_DISABLE_IO)
+    target_compile_definitions(
+        perturb
+        PUBLIC
+            PERTURB_VALLADO_SGP4_ENABLE_DEBUG
+    )
+endif()
 
 enable_testing()
 include(${doctest_SOURCE_DIR}/scripts/cmake/doctest.cmake)
