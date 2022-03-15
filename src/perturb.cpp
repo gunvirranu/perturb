@@ -26,6 +26,15 @@ static Sgp4Error convert_sgp4_error_code(const int error_code) {
     return static_cast<Sgp4Error>(error_code);
 }
 
+static vallado_sgp4::gravconsttype convert_grav_model(const GravModel model) {
+    switch (model) {
+        case GravModel::WGS72_OLD: return vallado_sgp4::wgs72old;
+        case GravModel::WGS72: return vallado_sgp4::wgs72;
+        case GravModel::WGS84: return vallado_sgp4::wgs84;
+        default: return vallado_sgp4::wgs72;
+    }
+}
+
 JulianDate::JulianDate(double jd) : jd(jd) {}
 
 JulianDate::JulianDate(double jd, double jd_frac) : jd(jd + jd_frac) {}
@@ -57,7 +66,7 @@ JulianDate &JulianDate::operator+=(const double &delta_jd) {
 Satellite::Satellite(const vallado_sgp4::elsetrec sat_rec) : sat_rec(sat_rec) {}
 
 #ifndef PERTURB_DISABLE_IO
-Satellite Satellite::from_tle(char *line_1, char *line_2) {
+Satellite Satellite::from_tle(char *line_1, char *line_2, GravModel grav_model) {
     double _startmfe, _stopmfe, _deltamin;
     vallado_sgp4::elsetrec sat_rec {};
     const bool bad_ptrs = !line_1 || !line_2;
@@ -66,7 +75,7 @@ Satellite Satellite::from_tle(char *line_1, char *line_2) {
     } else {
         vallado_sgp4::twoline2rv(
             line_1, line_2, ' ', ' ', 'i',
-            vallado_sgp4::wgs72, _startmfe, _stopmfe, _deltamin, sat_rec
+            convert_grav_model(grav_model), _startmfe, _stopmfe, _deltamin, sat_rec
         );
     }
     return Satellite(sat_rec);
@@ -76,9 +85,7 @@ Satellite Satellite::from_tle(char *line_1, char *line_2) {
 #ifndef PERTURB_DISABLE_IO
 Satellite Satellite::from_tle(std::string &line_1, std::string &line_2) {
     if (line_1.length() < TLE_LINE_LEN || line_2.length() < TLE_LINE_LEN) {
-        vallado_sgp4::elsetrec sat_rec;
-        sat_rec.error = static_cast<int>(Sgp4Error::INVALID_TLE);
-        return Satellite(sat_rec);
+        return from_tle(nullptr, nullptr);
     }
     return from_tle(&line_1[0], &line_2[0]);
 }
