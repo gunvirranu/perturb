@@ -46,6 +46,12 @@ enum class Sgp4Error : int {
     UNKNOWN
 };
 
+enum class GravModel {
+    WGS72_OLD,
+    WGS72,
+    WGS84
+};
+
 struct YMDhms {
     int year, month, day, hour, min;
     double sec;
@@ -76,7 +82,9 @@ public:
     explicit Satellite(vallado_sgp4::elsetrec sat_rec);
 
 #ifndef PERTURB_DISABLE_IO
-    static Satellite from_tle(char *line_1, char *line_2);
+    static Satellite from_tle(
+        char *line_1, char *line_2, GravModel grav_model = GravModel::WGS72
+    );
 
     static Satellite from_tle(std::string &line_1, std::string &line_2);
 #endif  // PERTURB_ENABLE_IO
