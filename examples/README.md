@@ -16,7 +16,8 @@ This example is if you prefer to have CMake download and checkout this repositor
 ## How to Run
 
 1. Requirements are a recent-ish version of CMake and a C++11 compiler
-2. Navigate to the desired example directory: `cd examples/cmake-local`
+2. `git clone https://github.com/gunvirranu/perturb.git`
+3. `cd perturb/examples/cmake-local`
 3. `cmake -S . -B build`
 4. `cmake --build build`
 5. `./build/VeryCoolProject`

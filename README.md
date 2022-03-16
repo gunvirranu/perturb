@@ -26,6 +26,7 @@ Don't you just hate that awkward moment when you need to propagate Earth-centred
 See the [`examples`](examples) directory to see how you can try out this exact code snippet.
 
 ```cpp
+#include <cassert>
 #include <iostream>
 
 #include <perturb/perturb.hpp>

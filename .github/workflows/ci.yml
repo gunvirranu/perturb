@@ -36,3 +36,30 @@ jobs:
       - name: Test
         working-directory: tests
         run: ../build/tests/test_perturb
+
+  examples:
+    name: Examples
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Get latest CMake and ninja
+      uses: lukka/get-cmake@latest
+
+    - name: Configure example
+      working-directory: examples/cmake-local
+      run: cmake -S . -B build
+
+    - name: Build example
+      working-directory: examples/cmake-local
+      run: cmake --build build
+
+    - name: Run example
+      working-directory: examples/cmake-local/build
+      run: ./VeryCoolProject
