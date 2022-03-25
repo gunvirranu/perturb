@@ -83,11 +83,11 @@ Satellite Satellite::from_tle(char *line_1, char *line_2, GravModel grav_model) 
 #endif  // PERTURB_DISABLE_IO
 
 #ifndef PERTURB_DISABLE_IO
-Satellite Satellite::from_tle(std::string &line_1, std::string &line_2) {
+Satellite Satellite::from_tle(std::string &line_1, std::string &line_2, GravModel grav_model) {
     if (line_1.length() < TLE_LINE_LEN || line_2.length() < TLE_LINE_LEN) {
         return from_tle(nullptr, nullptr);
     }
-    return from_tle(&line_1[0], &line_2[0]);
+    return from_tle(&line_1[0], &line_2[0], grav_model);
 }
 #endif  // PERTURB_DISABLE_IO
 

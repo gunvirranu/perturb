@@ -86,7 +86,11 @@ public:
         char *line_1, char *line_2, GravModel grav_model = GravModel::WGS72
     );
 
-    static Satellite from_tle(std::string &line_1, std::string &line_2);
+    static Satellite from_tle(
+        std::string &line_1,
+        std::string &line_2,
+        GravModel grav_model = GravModel::WGS72
+    );
 #endif  // PERTURB_ENABLE_IO
 
     Sgp4Error last_error() const;
