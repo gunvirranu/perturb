@@ -27,5 +27,5 @@ int main() {
 
     // Conclusion: The ISS is going pretty fast (~8 km/s)
     std::cout << "Position [km]: { " << pos[0] << ", " << pos[1] << ", " << pos[2] << " }\n";
-    std::cout << "Velocity [km]: { " << vel[0] << ", " << vel[1] << ", " << vel[2] << " }\n";
+    std::cout << "Velocity [km/s]: { " << vel[0] << ", " << vel[1] << ", " << vel[2] << " }\n";
 }
