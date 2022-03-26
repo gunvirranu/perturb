@@ -48,9 +48,15 @@
 *                           original baseline
 *       ----------------------------------------------------------------      */
 
+//! @file
+//! Primary header file for the perturb library
+//! @author David Vallado
+//! @author Gunvir Ranu
+//! @version SGP4 Version 2020-07-13
+//! @date 2022-07-13
+
 // Define `PERTURB_VALLADO_SGP4_ENABLE_DEBUG` to enable Vallado's verification mode.
 // Generally, this is unwanted. Only enabled for tests.
-
 #if (defined(PERTURB_VALLADO_SGP4_ENABLE_DEBUG) && defined(PERTURB_DISABLE_IO))
 #error "Cannot enable SGP4 debug without I/O functionality"
 #endif
@@ -58,6 +64,13 @@
 #define PERTURB_VALLADO_SGP4_SGP4Version  "SGP4 Version 2020-07-13"
 
 namespace perturb {
+
+/// An internal namespace containing the underlying SGP4 implementation.
+///
+/// If you need some deeper functionality, feel free to dig into this. However,
+/// the whole goal of this library is to avoid the need to do that. If you find
+/// yourself needing some functionality that perturb's interface doesn't offer,
+/// please open an issue as others may have similar thoughts / needs.
 namespace vallado_sgp4 {
 
 // -------------------------- structure declarations ----------------------------

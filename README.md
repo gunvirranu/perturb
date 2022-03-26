@@ -113,6 +113,8 @@ You can also just download the headers from [`include/perturb`](include/perturb)
 
 ## Basic Usage
 
+Everything in this library is in the `perturb::` namespace. Here's a quick intro to the typical "usage flow".
+
 I won't cover the details of [SGP4][SGP4], but in brief, it's a very popular orbit propagator for Earth-centered spacecraft. Usually, the input orbit ephemeris is through a [TLE][TLE], such as the ones provided by [Celestrek][Celestrek]. These TLE inputs can be used to construct a `perturb::Satellite` object.
 
 A specific point in time is represented as a `perturb::JulianDate`. You can either construct one from a specific date and time via `perturb::YMDhms` or offset a number of days from the `epoch()` of a satellite.
@@ -124,9 +126,13 @@ TODO: (#7) Link to docs (when written lol)
 
 ## Build Options
 
-In most cases, you don't need to configure anything. However, the TLE parsing code (which accepts a `char *` or `std::string`) may be unwanted for certain embedded applications. I doubt the generated code from `sscanf` is very efficient. To strip out all I/O and string related functionality, define the `PERTURB_DISABLE_IO` preprocessor flag in your build system. It's not defined by default, so the functionality is usually included.
+You *probably* don't need to configure anything.
 
-In CMake for example, once you have the `perturb` target initialized, you can do:
+### Disabling I/O
+
+The TLE parsing code (which accepts a `char *` or `std::string`) may be undesired for embedded applications, either due to inefficient codegen from `sscanf` (which is used for parsing) or to avoid dynamic memory. This I/O functionality can be disabled by defining the `PERTURB_DISABLE_IO` preprocessor flag in your build system, which will strip out any mentions of I/O and strings. It is not defined by default, so the functionality is usually included.
+
+In CMake, once you have the `perturb` target initialized, you can do:
 
 ```cmake
 target_compile_definitions(perturb PRIVATE PERTURB_DISABLE_IO)
@@ -134,7 +140,7 @@ target_compile_definitions(perturb PRIVATE PERTURB_DISABLE_IO)
 
 You could also set the `perturb_DISABLE_IO` option in CMake to `ON` before initializing the `perturb` target. This is also by default `OFF`. Setting this option will handle defining the `PERTURB_DISABLE_IO` preprocessor flag.
 
-Note, this will leave you with no way of parsing TLEs. You may need to pre-parse the TLE and initialize the propagator using numerical values directly. This functionality doesn't currently exist, but tracking issue #5 exists for this feature.
+Do note, this will leave you with no way of parsing TLEs. You may need to pre-parse the TLE and initialize the propagator using numerical values directly. This functionality doesn't currently exist, but tracking issue #5 exists for this feature.
 
 ## License
 

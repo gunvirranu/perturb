@@ -1,4 +1,4 @@
-/**
+/*
  * perturb -- A modern C++11 wrapper for the SGP4 orbit propagator
  * Version 0.0.0
  * https://github.com/gunvirranu/perturb
