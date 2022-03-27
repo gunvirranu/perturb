@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ ubuntu-latest ]
+        os: [ ubuntu-latest, macos-latest, windows-2022 ]
         disable_io: [ OFF, ON ]
 
     runs-on: ${{ matrix.os }}
@@ -28,14 +28,18 @@ jobs:
         uses: lukka/get-cmake@latest
 
       - name: Configure
-        run: cmake -S . -B build -Dperturb_DEVELOPER_MODE=ON -Dperturb_DISABLE_IO=${{ matrix.disable_io }}
+        shell: pwsh
+        run: cmake "--preset=ci-$("${{ matrix.os }}".split("-")[0])" -Dperturb_DISABLE_IO=${{ matrix.disable_io }}
 
       - name: Build
-        run: cmake --build build
+        run: cmake --build build --config Release
+
+      - name: Install
+        run: cmake --install build --config Release --prefix prefix
 
       - name: Test
-        working-directory: tests
-        run: ../build/tests/test_perturb
+        working-directory: build
+        run: ctest --output-on-failure -C Release
 
   examples:
     name: Examples
