@@ -17,11 +17,6 @@ install(
 install(
     TARGETS perturb
     EXPORT perturbTargets
-    RUNTIME #
-    COMPONENT perturb_Runtime
-    LIBRARY #
-    COMPONENT perturb_Runtime
-    NAMELINK_COMPONENT perturb_Development
     ARCHIVE #
     COMPONENT perturb_Development
     INCLUDES #
@@ -55,6 +50,11 @@ install(
 
 install(
     EXPORT perturbTargets
+    NAMESPACE perturb::
     DESTINATION "${perturb_INSTALL_CMAKEDIR}"
     COMPONENT perturb_Development
 )
+
+if(PROJECT_IS_TOP_LEVEL)
+    include(CPack)
+endif()
