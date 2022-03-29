@@ -43,12 +43,7 @@ jobs:
 
   examples:
     name: Examples
-
-    strategy:
-      matrix:
-        os: [ ubuntu-latest ]
-
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -56,14 +51,26 @@ jobs:
     - name: Get latest CMake and ninja
       uses: lukka/get-cmake@latest
 
-    - name: Configure example
+    - name: Configure local example
       working-directory: examples/cmake-local
       run: cmake -S . -B build
 
-    - name: Build example
+    - name: Build local example
       working-directory: examples/cmake-local
       run: cmake --build build
 
-    - name: Run example
+    - name: Run local example
       working-directory: examples/cmake-local/build
+      run: ./VeryCoolProject
+
+    - name: Configure fetch-content example
+      working-directory: examples/cmake-fetch-content
+      run: cmake -S . -B build
+
+    - name: Build fetch-content example
+      working-directory: examples/cmake-fetch-content
+      run: cmake --build build
+
+    - name: Run fetch-content example
+      working-directory: examples/cmake-fetch-content/build
       run: ./VeryCoolProject
