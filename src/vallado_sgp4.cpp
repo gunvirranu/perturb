@@ -1,3 +1,4 @@
+// clang-format off
 /*     ----------------------------------------------------------------
 *
 *                               sgp4unit.cpp
@@ -3286,3 +3287,4 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
 }  // namespace perturb
 
 // NOLINTEND(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers)
+// clang-format on

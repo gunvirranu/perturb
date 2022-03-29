@@ -1,5 +1,6 @@
 #ifndef PERTURB_VALLADO_SGP4_HPP
 #define PERTURB_VALLADO_SGP4_HPP
+// clang-format off
 /*     ----------------------------------------------------------------
 *
 *                                 SGP4.h
@@ -256,5 +257,6 @@ typedef struct elsetrec  // NOLINT(modernize-use-using,altera-struct-pack-align)
 
 // NOLINTEND(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers
 // NOLINTEND(readability-avoid-const-params-in-decls)
+// clang-format on
 
 #endif  // PERTURB_VALLADO_SGP4_HPP
