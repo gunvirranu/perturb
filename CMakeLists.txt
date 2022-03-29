@@ -61,10 +61,7 @@ add_library(
 target_include_directories(
     perturb ${warning_guard}
     PUBLIC
-        $<INSTALL_INTERFACE:include>
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-    PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
 target_compile_features(perturb PUBLIC cxx_std_11)
