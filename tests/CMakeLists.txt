@@ -27,10 +27,8 @@ set_target_properties(
 )
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-    # TODO: Add -Werror once Vallado code is cleaned up
-    target_compile_options(perturb PUBLIC -Wall -Wpedantic -Wextra)
+    # Do nothing
 elseif(MSVC)
-    target_compile_options(perturb PUBLIC /W4 /WX)
     target_compile_definitions(test_perturb PUBLIC DOCTEST_CONFIG_USE_STD_HEADERS)
 endif()
 

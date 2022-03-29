@@ -53,7 +53,10 @@ endif()
 
 # ---- Declare library ----
 
-add_library(perturb src/perturb.cpp src/vallado_sgp4.cpp)
+add_library(
+    perturb
+    src/perturb.cpp src/vallado_sgp4.cpp
+)
 
 target_include_directories(
     perturb ${warning_guard}

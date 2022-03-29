@@ -163,7 +163,6 @@ TEST_CASE(
     constexpr double DEG_TO_RAD = PI / 180;
 
     std::ifstream in_file("SGP4-VER.TLE");
-    REQUIRE(in_file.is_open());
     FILE *out_file = std::fopen("generated-tcppver.out", "w");
     REQUIRE(out_file != nullptr);
 

@@ -6,10 +6,10 @@
 *.exe
 *.out
 
+### CMake ###
 build/
 cmake-build-*/
-
-### CMake ###
+CMakeUserPresets.json
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
