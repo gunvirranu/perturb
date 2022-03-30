@@ -19,3 +19,6 @@ Makefile
 .idea/
 .vs/
 .vscode/
+
+# Project
+docs/html
