@@ -11,8 +11,43 @@ on:
       - master
 
 jobs:
+  examples:
+    name: Examples
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Get latest CMake and ninja
+        uses: lukka/get-cmake@latest
+
+      - name: Configure local example
+        working-directory: examples/cmake-local
+        run: cmake -S . -B build
+
+      - name: Build local example
+        working-directory: examples/cmake-local
+        run: cmake --build build
+
+      - name: Run local example
+        working-directory: examples/cmake-local/build
+        run: ./VeryCoolProject
+
+      - name: Configure fetch-content example
+        working-directory: examples/cmake-fetch-content
+        run: cmake -S . -B build
+
+      - name: Build fetch-content example
+        working-directory: examples/cmake-fetch-content
+        run: cmake --build build
+
+      - name: Run fetch-content example
+        working-directory: examples/cmake-fetch-content/build
+        run: ./VeryCoolProject
+
   test:
     name: Test
+    needs: [ examples ]
 
     strategy:
       matrix:
@@ -40,37 +75,3 @@ jobs:
       - name: Test
         working-directory: build
         run: ctest --output-on-failure -C Release
-
-  examples:
-    name: Examples
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Get latest CMake and ninja
-      uses: lukka/get-cmake@latest
-
-    - name: Configure local example
-      working-directory: examples/cmake-local
-      run: cmake -S . -B build
-
-    - name: Build local example
-      working-directory: examples/cmake-local
-      run: cmake --build build
-
-    - name: Run local example
-      working-directory: examples/cmake-local/build
-      run: ./VeryCoolProject
-
-    - name: Configure fetch-content example
-      working-directory: examples/cmake-fetch-content
-      run: cmake -S . -B build
-
-    - name: Build fetch-content example
-      working-directory: examples/cmake-fetch-content
-      run: cmake --build build
-
-    - name: Run fetch-content example
-      working-directory: examples/cmake-fetch-content/build
-      run: ./VeryCoolProject
