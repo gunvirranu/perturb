@@ -1,0 +1,15 @@
+# Doxyfile 1.9.3
+
+PROJECT_NAME           = "perturb"
+PROJECT_BRIEF          = "A modern C++11 wrapper for the SGP4 orbit propagator"
+PROJECT_NUMBER         = 0.0.0
+
+INPUT                  = ../include/perturb, ../src, index.md
+JAVADOC_AUTOBRIEF      = YES
+USE_MDFILE_AS_MAINPAGE = index.md
+
+GENERATE_HTML          = YES
+GENERATE_LATEX         = NO
+HTML_OUTPUT            = html
+GENERATE_TREEVIEW      = YES
+HTML_EXTRA_STYLESHEET  = doxygen-awesome.css

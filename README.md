@@ -4,8 +4,9 @@
 
 #### A modern C++11 wrapper for the SGP4 orbit propagator
 
-[![License][license_badge]][license]
+[![Docs][docs_badge]][docs]
 [![CI][ci_badge]][ci]
+[![License][license_badge]][license]
 
 </div>
 
@@ -121,8 +122,7 @@ A specific point in time is represented as a `perturb::JulianDate`. You can eith
 
 Passing in a time point to the `propagate(...)` method of a satellite yields a position and velocity vector, which are both just a `std::array<double, 3>`. These vectors are in kilometres and are represented in the [TEME][ECI-TEME] coordinate reference frame. The details of this frame can get a bit annoying, so this library does _not_ handle converting it to others. For handling Earth-centered reference frames such as TEME and transformations between them, you may be interested in the [`gelocus`][gelocus] library.
 
-Check out [this non-existent page] for some slightly more detailed documentation of the code.
-TODO: (#7) Link to docs (when written lol)
+Check out [this page][perturb-docs] for some slightly more detailed documentation of the interface.
 
 ## Build Options
 
@@ -155,9 +155,12 @@ Do note, this will leave you with no way of parsing TLEs. You may need to pre-pa
 [Celestrek]: https://celestrak.com
 [ECI-TEME]: https://en.wikipedia.org/wiki/Earth-centered_inertial
 [gelocus]: https://github.com/gunvirranu/gelocus
+[perturb-docs]: https://gunvirranu.github.io/perturb
 
 <!-- Badges -->
 [ci]: https://github.com/gunvirranu/perturb/actions "Github Actions"
 [ci_badge]: https://github.com/gunvirranu/perturb/workflows/CI/badge.svg?branch=master "Github Actions"
 [license]: #license "License"
 [license_badge]: https://img.shields.io/badge/license-MIT-blue.svg "License"
+[docs]: https://gunvirranu.github.io/perturb "Docs"
+[docs_badge]: https://img.shields.io/badge/docs-passing-success "Docs"

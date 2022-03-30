@@ -11,8 +11,43 @@ on:
       - master
 
 jobs:
+  examples:
+    name: Examples
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Get latest CMake and ninja
+        uses: lukka/get-cmake@latest
+
+      - name: Configure local example
+        working-directory: examples/cmake-local
+        run: cmake -S . -B build
+
+      - name: Build local example
+        working-directory: examples/cmake-local
+        run: cmake --build build
+
+      - name: Run local example
+        working-directory: examples/cmake-local/build
+        run: ./VeryCoolProject
+
+      - name: Configure fetch-content example
+        working-directory: examples/cmake-fetch-content
+        run: cmake -S . -B build
+
+      - name: Build fetch-content example
+        working-directory: examples/cmake-fetch-content
+        run: cmake --build build
+
+      - name: Run fetch-content example
+        working-directory: examples/cmake-fetch-content/build
+        run: ./VeryCoolProject
+
   test:
     name: Test
+    needs: [ examples ]
 
     strategy:
       matrix:
@@ -41,36 +76,24 @@ jobs:
         working-directory: build
         run: ctest --output-on-failure -C Release
 
-  examples:
-    name: Examples
+  docs:
+    name: Docs
+    needs: [ examples, test ]
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Get latest CMake and ninja
-      uses: lukka/get-cmake@latest
+      - name: Build docs with Doxygen
+        uses: mattnotmitt/doxygen-action@1.9.3
+        with:
+          working-directory: docs
 
-    - name: Configure local example
-      working-directory: examples/cmake-local
-      run: cmake -S . -B build
-
-    - name: Build local example
-      working-directory: examples/cmake-local
-      run: cmake --build build
-
-    - name: Run local example
-      working-directory: examples/cmake-local/build
-      run: ./VeryCoolProject
-
-    - name: Configure fetch-content example
-      working-directory: examples/cmake-fetch-content
-      run: cmake -S . -B build
-
-    - name: Build fetch-content example
-      working-directory: examples/cmake-fetch-content
-      run: cmake --build build
-
-    - name: Run fetch-content example
-      working-directory: examples/cmake-fetch-content/build
-      run: ./VeryCoolProject
+      - name: Deploy docs to Github pages
+        if: github.ref == 'refs/heads/master'
+          && github.event_name == 'push'
+          && github.repository_owner == 'gunvirranu'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/html
