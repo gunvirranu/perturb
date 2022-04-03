@@ -11,6 +11,7 @@
 
 #include "perturb/perturb.hpp"
 
+#include <cmath>
 #ifndef PERTURB_DISABLE_IO
 #include <cstring>
 #endif
@@ -35,32 +36,65 @@ static vallado_sgp4::gravconsttype convert_grav_model(const GravModel model) {
     }
 }
 
-JulianDate::JulianDate(double jd) : jd(jd) {}
+JulianDate::JulianDate(double jd) : jd(jd), jd_frac(0) {}
 
-JulianDate::JulianDate(double jd, double jd_frac) : jd(jd + jd_frac) {}
+JulianDate::JulianDate(double jd, double jd_frac) : jd(jd), jd_frac(jd_frac) {}
 
 JulianDate::JulianDate(YMDhms t) {
     double tmp_jd, tmp_jd_frac;
     vallado_sgp4::jday_SGP4(t.year, t.month, t.day, t.hour, t.min, t.sec, tmp_jd, tmp_jd_frac);
-    jd = tmp_jd + tmp_jd_frac;
+    jd = tmp_jd;
+    jd_frac = tmp_jd_frac;
 }
 
 YMDhms JulianDate::to_datetime() const {
     YMDhms t {};
-    vallado_sgp4::invjday_SGP4(jd, 0.0, t.year, t.month, t.day, t.hour, t.min, t.sec);
+    vallado_sgp4::invjday_SGP4(jd, jd_frac, t.year, t.month, t.day, t.hour, t.min, t.sec);
     return t;
 }
 
+void JulianDate::normalize() {
+    // Check for fractional days included in `jd` and put them in `jd`
+    const double frac_days = jd - std::floor(jd) - 0.5;
+    if (std::abs(frac_days) > 1e-12) {
+        jd -= frac_days;
+        jd_frac += frac_days;
+    }
+    // Check for whole days in `jd_frac` and put them in `jd`
+    if (std::abs(jd_frac) >= 1.0) {
+        const double whole_days = std::floor(jd_frac);
+        jd += whole_days;
+        jd_frac -= whole_days;
+    }
+}
+
+JulianDate JulianDate::normalized() const {
+    JulianDate other = *this;
+    other.normalize();
+    return other;
+}
+
 double JulianDate::operator-(const JulianDate &rhs) const {
-    return this->jd - rhs.jd;
+    // Grouping here is very important to preserve precision
+    return (this->jd - rhs.jd) + (this->jd_frac - rhs.jd_frac);
 }
 
 JulianDate JulianDate::operator+(const double &delta_jd) const {
-    return JulianDate(jd, 0.0 + delta_jd);
+    // Just add entire offset to fractional value
+    // Can be normalized later explicitly if needed
+    return JulianDate(jd, jd_frac + delta_jd);
 }
 
 JulianDate &JulianDate::operator+=(const double &delta_jd) {
     return *this = *this + delta_jd;
+}
+
+JulianDate JulianDate::operator-(const double &delta_jd) const {
+    return *this + (-delta_jd);
+}
+
+JulianDate &JulianDate::operator-=(const double &delta_jd) {
+    return *this = *this - delta_jd;
 }
 
 Satellite::Satellite(const vallado_sgp4::elsetrec sat_rec) : sat_rec(sat_rec) {}

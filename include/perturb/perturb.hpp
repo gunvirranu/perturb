@@ -120,9 +120,18 @@ struct YMDhms {
 /// or from `Satellite::epoch`. Supports some basic manipulation operations.
 /// For a human readable representation, can be converted back to `YMDhms`.
 /// As for what time point this represents, see the comment on `YMDhms`.
+///
+/// Internally, this is represented as the "theoretical" sum of two double
+/// precision floats. This is to preserve as much time accuracy as possible,
+/// since many bits are lost due to storing the number of the day. The smaller
+/// value is used to represent a more accurate time offset from that day. The
+/// "normalized" value restricts the larger value to entire days and the
+/// smaller to a [0.0, 1.0) time offset.
 struct JulianDate {
     /// Fractional number of days since the epoch (4713 B.C.)
     double jd;
+    /// Smaller fractional number of days
+    double jd_frac;
 
     /// Construct from a Julian number of days since epoch (4713 B.C.)
     explicit JulianDate(double jd);
@@ -140,6 +149,7 @@ struct JulianDate {
     ///
     /// @pre Only years from 1900 to 2100 are supported.
     /// @warning The date and time are assumed to be valid, with no checks.
+    ///
     /// @param t Time point, must be from 1900 to 2100
     explicit JulianDate(YMDhms t);
 
@@ -148,14 +158,40 @@ struct JulianDate {
     /// @return Same time point converted to a human readable representation
     YMDhms to_datetime() const;
 
+    /// Normalizes a Julian date representation to a canonical representation.
+    ///
+    /// Modifies the two julian day values to restric the larger value to whole
+    /// days and the smaller value to a [0.0, 1.0) time offset. This is *not*
+    /// needed for the conversions as they will automatically normalize, but
+    /// you may want to do this for other reasons.
+    void normalize();
+
+    /// Get a normalized copy of a julian date
+    JulianDate normalized() const;
+
     /// Returns the difference/delta in times as a fractional number of days
     double operator-(const JulianDate &rhs) const;
 
-    /// Returns another time point offset by a number of days
+    /// Returns another time point offset by a number of days.
+    ///
+    /// Offset is *only* added to `jd_frac`, so the returned value may not be
+    /// "normalized". This needs to be done explicitly if desired. This could
+    /// split `delta_jd` into a whole and fractional part and then add each
+    /// accordingly, but I defaulted to the former method for performance. If
+    /// you think this wasn't the right move, lemme know.
+    ///
+    /// @param delta_jd Number of fractional days to add
+    /// @return Sum of a time point and offset, *not* normalized
     JulianDate operator+(const double &delta_jd) const;
 
     /// Add a delta number of days offset to this time point
     JulianDate& operator+=(const double &delta_jd);
+
+    /// Returns another time point offset backwards by a number of days
+    JulianDate operator-(const double &delta_jd) const;
+
+    /// Subtracts a delta number of days offset to this time point
+    JulianDate& operator-=(const double &delta_jd);
 };
 
 /// Represents a specific orbital ephemeris for an Earth-centered trajectory.

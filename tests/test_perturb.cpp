@@ -33,23 +33,43 @@ double norm(const Vec3 &v) {
 }
 
 TEST_CASE("test_julian_date_type") {
+    constexpr double EPS = 1e-10;
     const auto t = YMDhms { 2022, 3, 14, 0, 31, 19.3 };
     const auto jd = JulianDate(t);
+
+    // Check subtraction of two JDs
     auto t2 = t;
     t2.day = 17;
     t2.hour = 15;
     t2.min = 45;
     const auto jd2 = JulianDate(t2);
     const double dt = jd2 - jd;
-    const double EXPECTED_DT = (t2.day - t.day) + ((t2.hour - t.hour) + (t2.min - t.min) / 60.0) / 24.0;
-    CHECK(dt == doctest::Approx(EXPECTED_DT).epsilon(1e-8));
+    const double expected_dt = (t2.day - t.day) + ((t2.hour - t.hour) + (t2.min - t.min) / 60.0) / 24.0;
+    CHECK(dt == doctest::Approx(expected_dt).epsilon(EPS));
 
-    const auto jd3 = jd + dt;
+    // Check that normalization works
+    const auto jd_unnorm = jd + dt;
+    const auto jd_norm = jd_unnorm.normalized();
+    CHECK(jd_norm.jd - 0.5 == std::floor(jd_norm.jd));
+    CHECK(0 <= jd_norm.jd_frac);
+    CHECK(jd_norm.jd_frac < 1);
+
+    // Check addition of JD and offset
+    const auto jd3 = (jd + dt).normalized();
     CHECK(jd2.jd == jd3.jd);
+    CHECK(jd2.jd_frac == doctest::Approx(jd3.jd_frac).epsilon(EPS));
 
+    // Check addition assignment
     auto jd4 = jd;
     jd4 += dt;
+    jd4.normalize();
     CHECK(jd3.jd == jd4.jd);
+    CHECK(jd3.jd_frac == jd4.jd_frac);
+
+    // Check subtraction of JD and offset
+    const auto jd5 = (jd3 - dt).normalized();
+    CHECK(jd5.jd == jd.jd);
+    CHECK(jd5.jd_frac == doctest::Approx(jd.jd_frac).epsilon(EPS));
 }
 
 TEST_CASE(
@@ -62,11 +82,16 @@ TEST_CASE(
     const double DELTA_JD = (JD_END - JD_START) / N_CHECKS;
 
     for (int i = 0; i < N_CHECKS; ++i) {
-        const auto jd = JD_START + i * DELTA_JD;
+        const auto jd = (JD_START + i * DELTA_JD).normalized();
         const YMDhms t = jd.to_datetime();
+        const auto jd_conv = JulianDate(t);
         CHECK_MESSAGE(
-            jd.jd == JulianDate(t).jd,
-            t.year, "-", t.month, "-", t.day, " ", t.hour, ":", t.min, ":", t.sec
+            jd.jd == jd_conv.jd,
+            t.year, "-", t.month, "-", t.day
+        );
+        CHECK_MESSAGE(
+            jd.jd_frac == doctest::Approx(jd_conv.jd_frac).epsilon(1e-12),
+            t.hour, ":", t.min, ":", t.sec
         );
     }
 }
@@ -196,20 +221,8 @@ TEST_CASE(
                 continue;
             }
 
-            // FIXME: Change to this when fractional JD added to `JulianDate`
-            // const auto jd = sat.epoch() + tsince / 1440.0;
-            // const auto ymdhms = jd.to_datetime();
-
-            int year, mon, day, hr, min;
-            double sec;
-            double jd = sat.sat_rec.jdsatepoch;
-            double jd_frac = sat.sat_rec.jdsatepochF + tsince / 1440.0;
-            if (jd_frac < 0) {
-                jd -= 1;
-                jd_frac += 1;
-            }
-            vallado_sgp4::invjday_SGP4(jd, jd_frac, year, mon, day, hr, min, sec);
-            const YMDhms ymdhms { year, mon, day, hr, min, sec };
+            const auto jd = (sat.epoch() + tsince / 1440.0).normalized();
+            const auto ymdhms = jd.to_datetime();
 
             std::fprintf(
                 out_file,
