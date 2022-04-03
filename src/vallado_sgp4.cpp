@@ -57,11 +57,15 @@
 
 #include "perturb/vallado_sgp4.hpp"
 
+// NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers)
+
+// NOLINTBEGIN(hicpp-deprecated-headers, modernize-deprecated-headers)
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
+// NOLINTEND(hicpp-deprecated-headers, modernize-deprecated-headers)
 
-#define pi 3.14159265358979323846
+#define pi 3.14159265358979323846  // NOLINT(cppcoreguidelines-macro-usage)
 
 namespace perturb {
 namespace vallado_sgp4 {
@@ -1282,7 +1286,10 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
         c1p2p = c1 + twopi;
         double gsto1 = fmod(thgr70 + c1*ds70 + c1p2p*tfrac + ts70*ts70*fk5r, twopi);
         if (gsto1 < 0.0)
+        {
             gsto1 = gsto1 + twopi;
+        }
+        (void) gsto1;  // Seems like most of the above isn't even used lol
         //    }
         //    else
         gsto = gstime_SGP4(epoch + 2433281.5);
@@ -1877,6 +1884,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
         xlm = mm + argpm + nodem;
         emsq = em * em;
         temp = 1.0 - emsq;
+        (void) temp;
 
         nodem = fmod(nodem, twopi);
         argpm = fmod(argpm, twopi);
@@ -1958,6 +1966,8 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
         eo1 = u;
         tem5 = 9999.9;
         ktr = 1;
+        coseo1 = 1;  // To shut up clang's static analyzer
+        sineo1 = 1;
         //   sgp4fix for kepler iteration
         //   the following iteration needs better limits on corrections
         while ((fabs(tem5) >= 1.0e-12) && (ktr <= 10))
@@ -3271,3 +3281,5 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
 
 }  // namesapce vallado_sgp4
 }  // namespace perturb
+
+// NOLINTEND(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers)

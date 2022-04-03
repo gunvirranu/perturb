@@ -61,6 +61,10 @@
 #error "Cannot enable SGP4 debug without I/O functionality"
 #endif
 
+// NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers
+// NOLINTBEGIN(readability-avoid-const-params-in-decls)
+
+// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define PERTURB_VALLADO_SGP4_SGP4Version  "SGP4 Version 2020-07-13"
 
 namespace perturb {
@@ -74,14 +78,14 @@ namespace perturb {
 namespace vallado_sgp4 {
 
 // -------------------------- structure declarations ----------------------------
-typedef enum
+typedef enum   // NOLINT(modernize-use-using)
 {
   wgs72old,
   wgs72,
   wgs84
 } gravconsttype;
 
-typedef struct elsetrec
+typedef struct elsetrec  // NOLINT(modernize-use-using,altera-struct-pack-align)
 {
   char      satnum[6];
   int       epochyr, epochtynumrev;
@@ -249,5 +253,8 @@ typedef struct elsetrec
 
 }  // namespace vallado_sgp4
 }  // namespace perturb
+
+// NOLINTEND(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers
+// NOLINTEND(readability-avoid-const-params-in-decls)
 
 #endif  // PERTURB_VALLADO_SGP4_HPP
