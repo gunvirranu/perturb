@@ -103,7 +103,7 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>JulianDate</b> (double <a class="el" href="structperturb_1_1JulianDate.html#af6dfe1205752e795dd152858cd73c38c">jd</a>)</td></tr>
 <tr class="memdesc:afc00ab4a32010f724a61f9b3d0852ba8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct from a Julian number of days since epoch (4713 B.C.) <br /></td></tr>
 <tr class="separator:afc00ab4a32010f724a61f9b3d0852ba8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af077559d4314096e4748786fecc19ebd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structperturb_1_1JulianDate.html#af077559d4314096e4748786fecc19ebd">JulianDate</a> (double <a class="el" href="structperturb_1_1JulianDate.html#af6dfe1205752e795dd152858cd73c38c">jd</a>, double jd_frac)</td></tr>
+<tr class="memitem:af077559d4314096e4748786fecc19ebd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structperturb_1_1JulianDate.html#af077559d4314096e4748786fecc19ebd">JulianDate</a> (double <a class="el" href="structperturb_1_1JulianDate.html#af6dfe1205752e795dd152858cd73c38c">jd</a>, double <a class="el" href="structperturb_1_1JulianDate.html#af3daf860049de78416698815d5ff5a0c">jd_frac</a>)</td></tr>
 <tr class="memdesc:af077559d4314096e4748786fecc19ebd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct from a Julian day number and fractional day.  <a href="structperturb_1_1JulianDate.html#af077559d4314096e4748786fecc19ebd">More...</a><br /></td></tr>
 <tr class="separator:af077559d4314096e4748786fecc19ebd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a905163ce7901df90c48c9d87f431f467"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structperturb_1_1JulianDate.html#a905163ce7901df90c48c9d87f431f467">JulianDate</a> (<a class="el" href="structperturb_1_1YMDhms.html">YMDhms</a> t)</td></tr>
@@ -112,18 +112,32 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:afe37ff1c30711cb1afb536a4cdc16bd5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structperturb_1_1YMDhms.html">YMDhms</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structperturb_1_1JulianDate.html#afe37ff1c30711cb1afb536a4cdc16bd5">to_datetime</a> () const</td></tr>
 <tr class="memdesc:afe37ff1c30711cb1afb536a4cdc16bd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert to a <code><a class="el" href="structperturb_1_1YMDhms.html" title="A basic and human readable representation of a point in time.">YMDhms</a></code> representing the same time point.  <a href="structperturb_1_1JulianDate.html#afe37ff1c30711cb1afb536a4cdc16bd5">More...</a><br /></td></tr>
 <tr class="separator:afe37ff1c30711cb1afb536a4cdc16bd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ea22238cfbaaef061497770020a4b1d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structperturb_1_1JulianDate.html#a5ea22238cfbaaef061497770020a4b1d">normalize</a> ()</td></tr>
+<tr class="memdesc:a5ea22238cfbaaef061497770020a4b1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Normalizes a Julian date representation to a canonical representation.  <a href="structperturb_1_1JulianDate.html#a5ea22238cfbaaef061497770020a4b1d">More...</a><br /></td></tr>
+<tr class="separator:a5ea22238cfbaaef061497770020a4b1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef91414492db47b0f0017a3d17b41060"><td class="memItemLeft" align="right" valign="top"><a id="aef91414492db47b0f0017a3d17b41060" name="aef91414492db47b0f0017a3d17b41060"></a>
+<a class="el" href="structperturb_1_1JulianDate.html">JulianDate</a>&#160;</td><td class="memItemRight" valign="bottom"><b>normalized</b> () const</td></tr>
+<tr class="memdesc:aef91414492db47b0f0017a3d17b41060"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a normalized copy of a julian date. <br /></td></tr>
+<tr class="separator:aef91414492db47b0f0017a3d17b41060"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e15aa199ffe05e88982cd5b9cc1b1f4"><td class="memItemLeft" align="right" valign="top"><a id="a8e15aa199ffe05e88982cd5b9cc1b1f4" name="a8e15aa199ffe05e88982cd5b9cc1b1f4"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>operator-</b> (const <a class="el" href="structperturb_1_1JulianDate.html">JulianDate</a> &amp;rhs) const</td></tr>
 <tr class="memdesc:a8e15aa199ffe05e88982cd5b9cc1b1f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the difference/delta in times as a fractional number of days. <br /></td></tr>
 <tr class="separator:a8e15aa199ffe05e88982cd5b9cc1b1f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7d161bfd2393f2cbf5b96b26844d30f9"><td class="memItemLeft" align="right" valign="top"><a id="a7d161bfd2393f2cbf5b96b26844d30f9" name="a7d161bfd2393f2cbf5b96b26844d30f9"></a>
-<a class="el" href="structperturb_1_1JulianDate.html">JulianDate</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator+</b> (const double &amp;delta_jd) const</td></tr>
-<tr class="memdesc:a7d161bfd2393f2cbf5b96b26844d30f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns another time point offset by a number of days. <br /></td></tr>
+<tr class="memitem:a7d161bfd2393f2cbf5b96b26844d30f9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structperturb_1_1JulianDate.html">JulianDate</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structperturb_1_1JulianDate.html#a7d161bfd2393f2cbf5b96b26844d30f9">operator+</a> (const double &amp;delta_jd) const</td></tr>
+<tr class="memdesc:a7d161bfd2393f2cbf5b96b26844d30f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns another time point offset by a number of days.  <a href="structperturb_1_1JulianDate.html#a7d161bfd2393f2cbf5b96b26844d30f9">More...</a><br /></td></tr>
 <tr class="separator:a7d161bfd2393f2cbf5b96b26844d30f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a088fd5400a3f142026d0047990596e11"><td class="memItemLeft" align="right" valign="top"><a id="a088fd5400a3f142026d0047990596e11" name="a088fd5400a3f142026d0047990596e11"></a>
 <a class="el" href="structperturb_1_1JulianDate.html">JulianDate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator+=</b> (const double &amp;delta_jd)</td></tr>
 <tr class="memdesc:a088fd5400a3f142026d0047990596e11"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a delta number of days offset to this time point. <br /></td></tr>
 <tr class="separator:a088fd5400a3f142026d0047990596e11"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0005c019cb0e4855bb81fc62d0586d3"><td class="memItemLeft" align="right" valign="top"><a id="ac0005c019cb0e4855bb81fc62d0586d3" name="ac0005c019cb0e4855bb81fc62d0586d3"></a>
+<a class="el" href="structperturb_1_1JulianDate.html">JulianDate</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator-</b> (const double &amp;delta_jd) const</td></tr>
+<tr class="memdesc:ac0005c019cb0e4855bb81fc62d0586d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns another time point offset backwards by a number of days. <br /></td></tr>
+<tr class="separator:ac0005c019cb0e4855bb81fc62d0586d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0351484b098f3d37a77ace8dd779310"><td class="memItemLeft" align="right" valign="top"><a id="af0351484b098f3d37a77ace8dd779310" name="af0351484b098f3d37a77ace8dd779310"></a>
+<a class="el" href="structperturb_1_1JulianDate.html">JulianDate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator-=</b> (const double &amp;delta_jd)</td></tr>
+<tr class="memdesc:af0351484b098f3d37a77ace8dd779310"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subtracts a delta number of days offset to this time point. <br /></td></tr>
+<tr class="separator:af0351484b098f3d37a77ace8dd779310"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -131,10 +145,15 @@ Public Attributes</h2></td></tr>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>jd</b></td></tr>
 <tr class="memdesc:af6dfe1205752e795dd152858cd73c38c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fractional number of days since the epoch (4713 B.C.) <br /></td></tr>
 <tr class="separator:af6dfe1205752e795dd152858cd73c38c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3daf860049de78416698815d5ff5a0c"><td class="memItemLeft" align="right" valign="top"><a id="af3daf860049de78416698815d5ff5a0c" name="af3daf860049de78416698815d5ff5a0c"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>jd_frac</b></td></tr>
+<tr class="memdesc:af3daf860049de78416698815d5ff5a0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Smaller fractional number of days. <br /></td></tr>
+<tr class="separator:af3daf860049de78416698815d5ff5a0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Represents a specific point in time on the Julian calendar. </p>
-<p >Generally not constructed manually, but instead converted from a <code><a class="el" href="structperturb_1_1YMDhms.html" title="A basic and human readable representation of a point in time.">YMDhms</a></code> or from <code><a class="el" href="classperturb_1_1Satellite.html#aa2a4e8642762b12bf3a87795d1ddea34" title="Return the epoch of the orbital ephemeris, likely from a TLE.">Satellite::epoch</a></code>. Supports some basic manipulation operations. For a human readable representation, can be converted back to <code><a class="el" href="structperturb_1_1YMDhms.html" title="A basic and human readable representation of a point in time.">YMDhms</a></code>. As for what time point this represents, see the comment on <code><a class="el" href="structperturb_1_1YMDhms.html" title="A basic and human readable representation of a point in time.">YMDhms</a></code>. </p>
+<p >Generally not constructed manually, but instead converted from a <code><a class="el" href="structperturb_1_1YMDhms.html" title="A basic and human readable representation of a point in time.">YMDhms</a></code> or from <code><a class="el" href="classperturb_1_1Satellite.html#aa2a4e8642762b12bf3a87795d1ddea34" title="Return the epoch of the orbital ephemeris, likely from a TLE.">Satellite::epoch</a></code>. Supports some basic manipulation operations. For a human readable representation, can be converted back to <code><a class="el" href="structperturb_1_1YMDhms.html" title="A basic and human readable representation of a point in time.">YMDhms</a></code>. As for what time point this represents, see the comment on <code><a class="el" href="structperturb_1_1YMDhms.html" title="A basic and human readable representation of a point in time.">YMDhms</a></code>.</p>
+<p >Internally, this is represented as the "theoretical" sum of two double precision floats. This is to preserve as much time accuracy as possible, since many bits are lost due to storing the number of the day. The smaller value is used to represent a more accurate time offset from that day. The "normalized" value restricts the larger value to entire days and the smaller to a [0.0, 1.0) time offset. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="af077559d4314096e4748786fecc19ebd" name="af077559d4314096e4748786fecc19ebd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af077559d4314096e4748786fecc19ebd">&#9670;&nbsp;</a></span>JulianDate() <span class="overload">[1/2]</span></h2>
@@ -208,7 +227,7 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>jd</b></td></tr>
 
 <p>Construct from a <code><a class="el" href="structperturb_1_1YMDhms.html" title="A basic and human readable representation of a point in time.">YMDhms</a></code> time point. </p>
 <dl class="section pre"><dt>Precondition</dt><dd>Only years from 1900 to 2100 are supported. </dd></dl>
-<dl class="section warning"><dt>Warning</dt><dd>The date and time are assumed to be valid, with no checks. </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>The date and time are assumed to be valid, with no checks.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">t</td><td>Time point, must be from 1900 to 2100 </td></tr>
@@ -219,6 +238,54 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>jd</b></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a5ea22238cfbaaef061497770020a4b1d" name="a5ea22238cfbaaef061497770020a4b1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ea22238cfbaaef061497770020a4b1d">&#9670;&nbsp;</a></span>normalize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void perturb::JulianDate::normalize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Normalizes a Julian date representation to a canonical representation. </p>
+<p >Modifies the two julian day values to restric the larger value to whole days and the smaller value to a [0.0, 1.0) time offset. This is <em>not</em> needed for the conversions as they will automatically normalize, but you may want to do this for other reasons. </p>
+
+</div>
+</div>
+<a id="a7d161bfd2393f2cbf5b96b26844d30f9" name="a7d161bfd2393f2cbf5b96b26844d30f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d161bfd2393f2cbf5b96b26844d30f9">&#9670;&nbsp;</a></span>operator+()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structperturb_1_1JulianDate.html">JulianDate</a> perturb::JulianDate::operator+ </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>delta_jd</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns another time point offset by a number of days. </p>
+<p >Offset is <em>only</em> added to <code>jd_frac</code>, so the returned value may not be "normalized". This needs to be done explicitly if desired. This could split <code>delta_jd</code> into a whole and fractional part and then add each accordingly, but I defaulted to the former method for performance. If you think this wasn't the right move, lemme know.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">delta_jd</td><td>Number of fractional days to add </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Sum of a time point and offset, <em>not</em> normalized </dd></dl>
+
+</div>
+</div>
 <a id="afe37ff1c30711cb1afb536a4cdc16bd5" name="afe37ff1c30711cb1afb536a4cdc16bd5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afe37ff1c30711cb1afb536a4cdc16bd5">&#9670;&nbsp;</a></span>to_datetime()</h2>
 

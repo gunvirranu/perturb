@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['to_5fdatetime_0',['to_datetime',['../structperturb_1_1JulianDate.html#afe37ff1c30711cb1afb536a4cdc16bd5',1,'perturb::JulianDate']]]
+  ['satellite_0',['Satellite',['../classperturb_1_1Satellite.html#ab91e00375f5882fe7ed7d4edcd70d5bb',1,'perturb::Satellite']]]
 ];

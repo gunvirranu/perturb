@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['tle_5fline_5flen_0',['TLE_LINE_LEN',['../namespaceperturb.html#a8bf99fd90789ad2f69e7ac1bab8832ef',1,'perturb']]],
-  ['to_5fdatetime_1',['to_datetime',['../structperturb_1_1JulianDate.html#afe37ff1c30711cb1afb536a4cdc16bd5',1,'perturb::JulianDate']]]
+  ['sat_5frec_0',['sat_rec',['../classperturb_1_1Satellite.html#afeb1a19e6293c2254a071e194e6d3938',1,'perturb::Satellite']]],
+  ['satellite_1',['Satellite',['../classperturb_1_1Satellite.html',1,'perturb::Satellite'],['../classperturb_1_1Satellite.html#ab91e00375f5882fe7ed7d4edcd70d5bb',1,'perturb::Satellite::Satellite()']]],
+  ['sec_2',['sec',['../structperturb_1_1YMDhms.html#a2869c787bf9d9fdeb65d6831960c8ca2',1,'perturb::YMDhms']]],
+  ['sgp4error_3',['Sgp4Error',['../namespaceperturb.html#ac7ee004d313c675e4b824fc592e7454f',1,'perturb']]]
 ];

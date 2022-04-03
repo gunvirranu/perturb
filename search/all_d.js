@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['year_0',['year',['../structperturb_1_1YMDhms.html#a5a3af6ff98f99603099e5b2a3dece220',1,'perturb::YMDhms']]],
-  ['ymdhms_1',['YMDhms',['../structperturb_1_1YMDhms.html',1,'perturb']]]
+  ['vallado_5fsgp4_2ehpp_0',['vallado_sgp4.hpp',['../vallado__sgp4_8hpp.html',1,'']]],
+  ['vec3_1',['Vec3',['../namespaceperturb.html#a24e2b6a2c7eafb6ad3c612227ab56227',1,'perturb']]]
 ];
