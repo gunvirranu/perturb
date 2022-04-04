@@ -5,14 +5,36 @@ on:
     branches:
       - master
     tags:
-      - '[0-9]+.*'
+      - 'v[0-9]+.*'
   pull_request:
     branches:
       - master
 
 jobs:
+  lint:
+    name: Lint
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Get latest CMake and ninja
+        uses: lukka/get-cmake@latest
+
+      - name: Install clang-tidy
+        run: sudo apt-get install clang-tidy -y -q
+
+      - name: Configure
+        shell: pwsh
+        run: cmake --preset=ci-lint
+
+      - name: Build
+        run: cmake --build build
+
   examples:
     name: Examples
+    needs: [ lint ]
     runs-on: ubuntu-latest
 
     steps:

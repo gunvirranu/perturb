@@ -30,6 +30,13 @@
       }
     },
     {
+      "name": "clang-tidy",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_CXX_CLANG_TIDY": "clang-tidy;--header-filter=${sourceDir}/*"
+      }
+    },
+    {
       "name": "ci-std",
       "description": "This preset makes sure perturb actually builds with C++11",
       "hidden": true,
@@ -87,9 +94,16 @@
       "inherits": ["ci-build", "ci-win64", "dev-mode"]
     },
     {
+      "name": "ci-lint",
+      "inherits": ["ci-build", "ci-unix", "dev-mode", "clang-tidy"],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
       "name": "dev-unix",
       "binaryDir": "${sourceDir}/build/dev-unix",
-      "inherits": ["dev-mode", "ci-unix"],
+      "inherits": ["dev-mode", "clang-tidy", "ci-unix"],
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug"
       }
@@ -97,7 +111,7 @@
     {
       "name": "dev-win64",
       "binaryDir": "${sourceDir}/build/dev-win64",
-      "inherits": ["dev-mode", "ci-win64"]
+      "inherits": ["dev-mode", "clang-tidy", "ci-win64"]
     }
   ]
 }

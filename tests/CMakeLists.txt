@@ -6,6 +6,12 @@ endif()
 
 project(test_perturb LANGUAGES CXX)
 
+# A hack to disable warnings for any targets except perturb
+if(DEFINED CMAKE_CXX_CLANG_TIDY)
+    set(CMAKE_CXX_CLANG_TIDY_save "${CMAKE_CXX_CLANG_TIDY}")
+    set(CMAKE_CXX_CLANG_TIDY "")
+endif()
+
 include(FetchContent)
 FetchContent_Declare(
     doctest
@@ -16,6 +22,11 @@ FetchContent_MakeAvailable(doctest)
 
 add_executable(test_perturb test_perturb.cpp)
 target_link_libraries(test_perturb PRIVATE perturb doctest)
+
+# Restore previous
+if(DEFINED CMAKE_CXX_CLANG_TIDY_save)
+    set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY_save}")
+endif()
 
 target_compile_features(test_perturb PRIVATE cxx_std_11)
 set_target_properties(

@@ -1,0 +1,8 @@
+---
+Checks: '*\
+-cppcoreguidelines-avoid-c-arrays,-hicpp-avoid-c-arrays,-modernize-avoid-c-arrays,\
+-google-runtime-int,\
+-modernize-use-trailing-return-type,\
+'
+WarningsAsErrors: '*'
+...
