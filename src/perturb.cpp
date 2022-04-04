@@ -36,9 +36,9 @@ static vallado_sgp4::gravconsttype convert_grav_model(const GravModel model) {
     }
 }
 
-JulianDate::JulianDate(double jd) : jd(jd), jd_frac(0) {}
+JulianDate::JulianDate(double _jd) : jd(_jd), jd_frac(0) {}
 
-JulianDate::JulianDate(double jd, double jd_frac) : jd(jd), jd_frac(jd_frac) {}
+JulianDate::JulianDate(double _jd, double _jd_frac) : jd(_jd), jd_frac(_jd_frac) {}
 
 JulianDate::JulianDate(YMDhms t) {
     double tmp_jd, tmp_jd_frac;
@@ -97,7 +97,7 @@ JulianDate &JulianDate::operator-=(const double &delta_jd) {
     return *this = *this - delta_jd;
 }
 
-Satellite::Satellite(const vallado_sgp4::elsetrec sat_rec) : sat_rec(sat_rec) {}
+Satellite::Satellite(const vallado_sgp4::elsetrec _sat_rec) : sat_rec(_sat_rec) {}
 
 #ifndef PERTURB_DISABLE_IO
 Satellite Satellite::from_tle(char *line_1, char *line_2, GravModel grav_model) {
