@@ -32,6 +32,18 @@ jobs:
       - name: Build
         run: cmake --build build
 
+      - name: Check header formatting
+        uses: jidicula/clang-format-action@v4.6.2
+        with:
+          clang-format-version: '14'
+          check-path: 'include/perturb'
+
+      - name: Check source formatting
+        uses: jidicula/clang-format-action@v4.6.2
+        with:
+          clang-format-version: '14'
+          check-path: 'src'
+
   examples:
     name: Examples
     needs: [ lint ]
@@ -74,7 +86,10 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-latest, macos-latest, windows-2022 ]
-        disable_io: [ OFF, ON ]
+        disable_io: [ OFF ]
+        include:
+          - os: ubuntu-latest
+            disable_io: ON
 
     runs-on: ${{ matrix.os }}
 
