@@ -86,7 +86,10 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-latest, macos-latest, windows-2022 ]
-        disable_io: [ OFF, ON ]
+        disable_io: [ OFF ]
+        include:
+          - os: ubuntu-latest
+            disable_io: ON
 
     runs-on: ${{ matrix.os }}
 
