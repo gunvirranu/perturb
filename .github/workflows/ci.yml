@@ -22,8 +22,8 @@ jobs:
       - name: Get latest CMake and ninja
         uses: lukka/get-cmake@latest
 
-      - name: Install clang-tidy
-        run: sudo apt-get install clang-tidy -y -q
+      - name: Install static analyzers
+        run: sudo apt-get install clang-tidy cppcheck -y -q
 
       - name: Configure
         shell: pwsh
