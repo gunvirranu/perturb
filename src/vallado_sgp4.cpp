@@ -140,6 +140,8 @@ double& atime, double& em, double& argpm, double& inclm, double& xli,
 double& mm, double& xni, double& nodem, double& dndt, double& nm
 );
 
+// Unused
+#if 0
 static void initl
 (
 // not needeed. included in satrec if needed later
@@ -153,6 +155,7 @@ double& ainv, double& ao, double& con41, double& con42, double& cosio,
 double& cosio2, double& eccsq, double& omeosq, double& posq,
 double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
 );
+#endif
 
 // namespace SGP4Funcs
 // {
@@ -238,6 +241,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
         char opsmode
         )
     {
+        (void) inclo;
         /* --------------------- local variables ------------------------ */
         const double twopi = 2.0 * pi;
         double alfdp, betdp, cosip, cosop, dalf, dbet, dls,
@@ -337,12 +341,19 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
                 //  sgp4fix for afspc written intrinsic functions
                 // nodep used without a trigonometric function ahead
                 if ((nodep < 0.0) && (opsmode == 'a'))
+                {
                     nodep = nodep + twopi;
-                if (fabs(xnoh - nodep) > pi)
+                }
+                if (fabs(xnoh - nodep) > pi) {
                     if (nodep < xnoh)
+                    {
                         nodep = nodep + twopi;
+                    }
                     else
+                    {
                         nodep = nodep - twopi;
+                    }
+                }
                 mp = mp + pl;
                 argpp = xls - mp - cosip * nodep;
             }
@@ -1129,6 +1140,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
                     atime = atime + delt;
                 }
             }  // while iretn = 381
+            (void) iret;  // Probably some old variable not used anymore
 
             nm = xni + xndt * ft + xnddt * ft * ft * 0.5;
             xl = xli + xldot * ft + xndt * ft * ft * 0.5;
@@ -1214,6 +1226,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
         double& rp, double& rteosq, double& sinio, double& gsto, double& no_unkozai
         )
     {
+        (void) opsmode;
         /* --------------------- local variables ------------------------ */
         double ak, d1, del, adel, po, x2o3;
 
@@ -2241,7 +2254,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
             &satrec.epochdays, &satrec.ndot, &satrec.nddot, &nexp, &satrec.bstar, &ibexp, &satrec.ephtype, &satrec.elnum);
 #else
         sscanf(longstr1, "%2d %5s %1c %10s %2d %12lf %11lf %7lf %2d %7lf %2d %2d %6ld ",
-            &cardnumb, &satrec.satnum, &satrec.classification, &satrec.intldesg, &satrec.epochyr,
+            &cardnumb, satrec.satnum, &satrec.classification, satrec.intldesg, &satrec.epochyr,
             &satrec.epochdays, &satrec.ndot, &satrec.nddot, &nexp, &satrec.bstar,
             &ibexp, &satrec.ephtype, &satrec.elnum);
 #endif
@@ -2257,7 +2270,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
                     &satrec.revnum, &startmfe, &stopmfe, &deltamin);
 #else
                 sscanf(longstr2, "%2d %5s %9lf %9lf %8lf %9lf %9lf %10lf %6ld %lf %lf %lf \n",
-                    &cardnumb, &satrec.satnum, &satrec.inclo,
+                    &cardnumb, satrec.satnum, &satrec.inclo,
                     &satrec.nodeo, &satrec.ecco, &satrec.argpo, &satrec.mo, &satrec.no_kozai,
                     &satrec.revnum, &startmfe, &stopmfe, &deltamin);
 #endif
@@ -2271,7 +2284,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
                     &satrec.revnum, &startmfe, &stopmfe, &deltamin);
 #else
                 sscanf(longstr2, "%2d %5s %9lf %9lf %8lf %9lf %9lf %11lf %6ld %lf %lf %lf \n",
-                    &cardnumb, &satrec.satnum, &satrec.inclo,
+                    &cardnumb, satrec.satnum, &satrec.inclo,
                     &satrec.nodeo, &satrec.ecco, &satrec.argpo, &satrec.mo, &satrec.no_kozai,
                     &satrec.revnum, &startmfe, &stopmfe, &deltamin);
 #endif
@@ -2289,7 +2302,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
                     &satrec.revnum);
 #else
                 sscanf(longstr2, "%2d %5s %9lf %9lf %8lf %9lf %9lf %10lf %6ld \n",
-                    &cardnumb, &satrec.satnum, &satrec.inclo,
+                    &cardnumb, satrec.satnum, &satrec.inclo,
                     &satrec.nodeo, &satrec.ecco, &satrec.argpo, &satrec.mo, &satrec.no_kozai,
                     &satrec.revnum);
 #endif
@@ -2303,7 +2316,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
                     &satrec.revnum);
 #else
                 sscanf(longstr2, "%2d %5s %9lf %9lf %8lf %9lf %9lf %11lf %6ld \n",
-                    &cardnumb, &satrec.satnum, &satrec.inclo,
+                    &cardnumb, satrec.satnum, &satrec.inclo,
                     &satrec.nodeo, &satrec.ecco, &satrec.argpo, &satrec.mo, &satrec.no_kozai,
                     &satrec.revnum);
 #endif
