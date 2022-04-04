@@ -23,7 +23,7 @@
 #include <array>
 #include <cstddef>
 #ifndef PERTURB_DISABLE_IO
-#include <string>
+#  include <string>
 #endif
 
 /// Primary namespace for the perturb library, everything is in here.
@@ -185,13 +185,13 @@ struct JulianDate {
     JulianDate operator+(const double &delta_jd) const;
 
     /// Add a delta number of days offset to this time point
-    JulianDate& operator+=(const double &delta_jd);
+    JulianDate &operator+=(const double &delta_jd);
 
     /// Returns another time point offset backwards by a number of days
     JulianDate operator-(const double &delta_jd) const;
 
     /// Subtracts a delta number of days offset to this time point
-    JulianDate& operator-=(const double &delta_jd);
+    JulianDate &operator-=(const double &delta_jd);
 };
 
 /// Represents a specific orbital ephemeris for an Earth-centered trajectory.
@@ -237,9 +237,7 @@ public:
     /// @param grav_model Gravity constants to use (default `GravModel::WGS72`)
     /// @return An initialized `Satellite`
     static Satellite from_tle(
-        std::string &line_1,
-        std::string &line_2,
-        GravModel grav_model = GravModel::WGS72
+        std::string &line_1, std::string &line_2, GravModel grav_model = GravModel::WGS72
     );
 #endif  // PERTURB_ENABLE_IO
 
