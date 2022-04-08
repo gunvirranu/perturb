@@ -1454,15 +1454,11 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
         satrec.error = 0;
         satrec.operationmode = opsmode;
         // new alpha5 or 9-digit number
-        #ifdef _MSC_VER
-                           strcpy_s(satrec.satnum, 6 * sizeof(char), satn);
-        #else
-                           // If `satn` is shorter than five, NUL appears earlier.
-                           // Otherwise, `satn` is truncated to first five chars.
-                           // In all cases, `satrec.satnum` is a valid string after.
-                           memcpy(satrec.satnum, satn, 5 * sizeof(char));
-                           satrec.satnum[5] = '\0';
-        #endif
+        // If `satn` is shorter than five, NUL appears earlier.
+        // Otherwise, `satn` is truncated to first five chars.
+        // In all cases, `satrec.satnum` is a valid string after.
+        memcpy(satrec.satnum, satn, 5 * sizeof(char));
+        satrec.satnum[5] = '\0';
 
         // sgp4fix - note the following variables are also passed directly via satrec.
         // it is possible to streamline the sgp4init call by deleting the "x"
