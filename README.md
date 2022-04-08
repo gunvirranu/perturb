@@ -17,7 +17,7 @@ Don't you just hate that awkward moment when you need to propagate Earth-centred
 ## Features
 
 - [Uses Vallado's latest and greatest de-facto standard SGP4 implementation](original)
-- ~~Strictly standards compliant C++11~~ with no dependencies (technically not yet, but soon: #2)
+- ~~Strictly standards compliant C++11~~ with no dependencies
 - [Embedded support](#build-options) (i.e. no dynamic memory, no recursion, no exceptions, no virtual, no RTTI, none of that runtime funny business)
 - [Built with modern CMake](#install) with a relatively standard library layout
 - Has tests and CI, which is more than I can say for most of my code
@@ -35,6 +35,7 @@ See the [`examples`](examples) directory to see how you can try out this exact c
 using namespace perturb;  // I know, I know. I promise it's only for examples!
 
 int main() {
+    // Let try simulating the orbit of the International Space Station
     // Got TLE from Celestrak sometime around 2022-03-12
     std::string ISS_TLE_1 = "1 25544U 98067A   22071.78032407  .00021395  00000-0  39008-3 0  9996";
     std::string ISS_TLE_2 = "2 25544  51.6424  94.0370 0004047 256.5103  89.8846 15.49386383330227";
@@ -50,9 +51,10 @@ int main() {
     assert(1 < delta_days && delta_days < 3);  // It's been ~2 days since the epoch
 
     // Calculate the position and velocity at the chosen time
-    Vec3 pos, vel;
-    const auto err = sat.propagate(t, pos, vel);
+    StateVector sv;
+    const auto err = sat.propagate(t, sv);
     assert(err == Sgp4Error::NONE);
+    const auto &pos = sv.position, &vel = sv.velocity;
 
     // Conclusion: The ISS is going pretty fast (~8 km/s)
     std::cout << "Position [km]: { " << pos[0] << ", " << pos[1] << ", " << pos[2] << " }\n";
@@ -120,7 +122,7 @@ I won't cover the details of [SGP4][SGP4], but in brief, it's a very popular orb
 
 A specific point in time is represented as a `perturb::JulianDate`. You can either construct one from a specific date and time via `perturb::YMDhms` or offset a number of days from the `epoch()` of a satellite.
 
-Passing in a time point to the `propagate(...)` method of a satellite yields a position and velocity vector, which are both just a `std::array<double, 3>`. These vectors are in kilometres and are represented in the [TEME][ECI-TEME] coordinate reference frame. The details of this frame can get a bit annoying, so this library does _not_ handle converting it to others. For handling Earth-centered reference frames such as TEME and transformations between them, you may be interested in the [`gelocus`][gelocus] library.
+Passing in a time point to the `propagate(...)` method of a satellite yields a `StateVector`, which contains a time-stamp, and a position and velocity vector. These vectors are just a `std::array<double, 3>`, measured in kilometres, and are represented in the [TEME][ECI-TEME] coordinate reference frame. The details of this frame can get a bit annoying, so this library does _not_ handle converting it to others. For handling Earth-centered reference frames such as TEME and transformations between them, you may be interested in the [`gelocus`][gelocus] library.
 
 Check out [this page][perturb-docs] for some slightly more detailed documentation of the interface.
 

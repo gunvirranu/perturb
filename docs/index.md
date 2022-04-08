@@ -13,7 +13,7 @@ I won't cover the details of [SGP4][SGP4], but in brief, it's a very popular orb
 
 A specific point in time is represented as a `perturb::JulianDate`. You can either construct one from a specific date and time via `perturb::YMDhms` or offset a number of days from the `perturb::Satellite::epoch()` of a satellite.
 
-Passing in a `perturb::JulianDate` time point to the `perturb::Satellite::propagate` method of a satellite yields a position and velocity `perturb::Vec3`, which are both just a `std::array<double, 3>`. These vectors are in kilometres and are represented in the [TEME][ECI-TEME] coordinate reference frame. The details of this frame can get a bit annoying, so this library does _not_ handle converting it to others. For handling Earth-centered reference frames such as TEME and transformations between them, you may be interested in the [`gelocus`][gelocus] library.
+Passing in a `perturb::JulianDate` time point to the `perturb::Satellite::propagate` method of a satellite yields a `perturb::StateVector`, which contains a time-stamp, and a position and velocity `perturb::Vec3`. The vectors are just a `std::array<double, 3>`, measured in kilometres, and are represented in the [TEME][ECI-TEME] coordinate reference frame. The details of this frame can get a bit annoying, so this library does _not_ handle converting it to others. For handling Earth-centered reference frames such as TEME and transformations between them, you may be interested in the [`gelocus`][gelocus] library.
 
 ## Build Options
 
