@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['min_0',['min',['../structperturb_1_1YMDhms.html#ac1a577a621bcec70056a6929359bb195',1,'perturb::YMDhms']]],
-  ['month_1',['month',['../structperturb_1_1YMDhms.html#a6d66d6a9e6cfe8adefa30f0c963dc76d',1,'perturb::YMDhms']]]
+  ['hour_0',['hour',['../structperturb_1_1YMDhms.html#a9fd6c6abad053e976d12dfc45e74d789',1,'perturb::YMDhms']]]
 ];

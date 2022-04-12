@@ -111,12 +111,12 @@ Public Member Functions</h2></td></tr>
 <a class="el" href="structperturb_1_1JulianDate.html">JulianDate</a>&#160;</td><td class="memItemRight" valign="bottom"><b>epoch</b> () const</td></tr>
 <tr class="memdesc:aa2a4e8642762b12bf3a87795d1ddea34"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the epoch of the orbital ephemeris, likely from a TLE. <br /></td></tr>
 <tr class="separator:aa2a4e8642762b12bf3a87795d1ddea34"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a57814b3862d3c95141256a198bc00231"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceperturb.html#ac7ee004d313c675e4b824fc592e7454f">Sgp4Error</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classperturb_1_1Satellite.html#a57814b3862d3c95141256a198bc00231">propagate_from_epoch</a> (double mins_from_epoch, <a class="el" href="namespaceperturb.html#a24e2b6a2c7eafb6ad3c612227ab56227">Vec3</a> &amp;pos, <a class="el" href="namespaceperturb.html#a24e2b6a2c7eafb6ad3c612227ab56227">Vec3</a> &amp;vel)</td></tr>
-<tr class="memdesc:a57814b3862d3c95141256a198bc00231"><td class="mdescLeft">&#160;</td><td class="mdescRight">Propagate the SGP4 model based on time around the epoch.  <a href="classperturb_1_1Satellite.html#a57814b3862d3c95141256a198bc00231">More...</a><br /></td></tr>
-<tr class="separator:a57814b3862d3c95141256a198bc00231"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a71bc5d1a484283569499f344d97aa1eb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceperturb.html#ac7ee004d313c675e4b824fc592e7454f">Sgp4Error</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classperturb_1_1Satellite.html#a71bc5d1a484283569499f344d97aa1eb">propagate</a> (<a class="el" href="structperturb_1_1JulianDate.html">JulianDate</a> jd, <a class="el" href="namespaceperturb.html#a24e2b6a2c7eafb6ad3c612227ab56227">Vec3</a> &amp;pos, <a class="el" href="namespaceperturb.html#a24e2b6a2c7eafb6ad3c612227ab56227">Vec3</a> &amp;vel)</td></tr>
-<tr class="memdesc:a71bc5d1a484283569499f344d97aa1eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Propagate the SGP4 model to a specific time point.  <a href="classperturb_1_1Satellite.html#a71bc5d1a484283569499f344d97aa1eb">More...</a><br /></td></tr>
-<tr class="separator:a71bc5d1a484283569499f344d97aa1eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d3584980c8c4172897e35e964808327"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceperturb.html#ac7ee004d313c675e4b824fc592e7454f">Sgp4Error</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classperturb_1_1Satellite.html#a8d3584980c8c4172897e35e964808327">propagate_from_epoch</a> (double mins_from_epoch, <a class="el" href="structperturb_1_1StateVector.html">StateVector</a> &amp;sv)</td></tr>
+<tr class="memdesc:a8d3584980c8c4172897e35e964808327"><td class="mdescLeft">&#160;</td><td class="mdescRight">Propagate the SGP4 model based on time around the epoch.  <a href="classperturb_1_1Satellite.html#a8d3584980c8c4172897e35e964808327">More...</a><br /></td></tr>
+<tr class="separator:a8d3584980c8c4172897e35e964808327"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9316a14fcbc5157f6bf1893f06b43793"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceperturb.html#ac7ee004d313c675e4b824fc592e7454f">Sgp4Error</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classperturb_1_1Satellite.html#a9316a14fcbc5157f6bf1893f06b43793">propagate</a> (<a class="el" href="structperturb_1_1JulianDate.html">JulianDate</a> jd, <a class="el" href="structperturb_1_1StateVector.html">StateVector</a> &amp;sv)</td></tr>
+<tr class="memdesc:a9316a14fcbc5157f6bf1893f06b43793"><td class="mdescLeft">&#160;</td><td class="mdescRight">Propagate the SGP4 model to a specific time point.  <a href="classperturb_1_1Satellite.html#a9316a14fcbc5157f6bf1893f06b43793">More...</a><br /></td></tr>
+<tr class="separator:a9316a14fcbc5157f6bf1893f06b43793"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -136,7 +136,7 @@ Public Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Represents a specific orbital ephemeris for an Earth-centered trajectory. </p>
-<p >This is the primary type in this library. Wraps the internal SGP4 record type <code><a class="el" href="structperturb_1_1vallado__sgp4_1_1elsetrec.html">vallado_sgp4::elsetrec</a></code>. Generally constructed via TLEs through <code><a class="el" href="classperturb_1_1Satellite.html#a267ba5e892e29413313feb8896817553" title="Construct and initialize a Satellite from a TLE record.">Satellite::from_tle</a></code> constructors. Of particular importance is the <code><a class="el" href="classperturb_1_1Satellite.html#addff690305c8455e2f1522fbec79fde9" title="Return the last recorded error in the internal SGP4 record.">Satellite::last_error</a></code> method which you can check to determine if there were any issues with TLE initialization or propagation. The primary method of running the SGP4 algorithm is the <code><a class="el" href="classperturb_1_1Satellite.html#a71bc5d1a484283569499f344d97aa1eb" title="Propagate the SGP4 model to a specific time point.">Satellite::propagate</a></code> method. </p>
+<p >This is the primary type in this library. Wraps the internal SGP4 record type <code><a class="el" href="structperturb_1_1vallado__sgp4_1_1elsetrec.html">vallado_sgp4::elsetrec</a></code>. Generally constructed via TLEs through <code><a class="el" href="classperturb_1_1Satellite.html#a267ba5e892e29413313feb8896817553" title="Construct and initialize a Satellite from a TLE record.">Satellite::from_tle</a></code> constructors. Of particular importance is the <code><a class="el" href="classperturb_1_1Satellite.html#addff690305c8455e2f1522fbec79fde9" title="Return the last recorded error in the internal SGP4 record.">Satellite::last_error</a></code> method which you can check to determine if there were any issues with TLE initialization or propagation. The primary method of running the SGP4 algorithm is the <code><a class="el" href="classperturb_1_1Satellite.html#a9316a14fcbc5157f6bf1893f06b43793" title="Propagate the SGP4 model to a specific time point.">Satellite::propagate</a></code> method. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ab91e00375f5882fe7ed7d4edcd70d5bb" name="ab91e00375f5882fe7ed7d4edcd70d5bb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab91e00375f5882fe7ed7d4edcd70d5bb">&#9670;&nbsp;</a></span>Satellite()</h2>
@@ -280,8 +280,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a71bc5d1a484283569499f344d97aa1eb" name="a71bc5d1a484283569499f344d97aa1eb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a71bc5d1a484283569499f344d97aa1eb">&#9670;&nbsp;</a></span>propagate()</h2>
+<a id="a9316a14fcbc5157f6bf1893f06b43793" name="a9316a14fcbc5157f6bf1893f06b43793"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9316a14fcbc5157f6bf1893f06b43793">&#9670;&nbsp;</a></span>propagate()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -295,14 +295,8 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceperturb.html#a24e2b6a2c7eafb6ad3c612227ab56227">Vec3</a> &amp;&#160;</td>
-          <td class="paramname"><em>pos</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespaceperturb.html#a24e2b6a2c7eafb6ad3c612227ab56227">Vec3</a> &amp;&#160;</td>
-          <td class="paramname"><em>vel</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="structperturb_1_1StateVector.html">StateVector</a> &amp;&#160;</td>
+          <td class="paramname"><em>sv</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -316,8 +310,7 @@ Public Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">jd</td><td>Time point in UTC or UT1 </td></tr>
-    <tr><td class="paramname">pos</td><td>Returned position vector in km in the TEME frame </td></tr>
-    <tr><td class="paramname">vel</td><td>Returned velocity vector in km/s in the TEME frame </td></tr>
+    <tr><td class="paramname">posvel</td><td>Returned state vector in the TEME frame </td></tr>
   </table>
   </dd>
 </dl>
@@ -325,8 +318,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a57814b3862d3c95141256a198bc00231" name="a57814b3862d3c95141256a198bc00231"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a57814b3862d3c95141256a198bc00231">&#9670;&nbsp;</a></span>propagate_from_epoch()</h2>
+<a id="a8d3584980c8c4172897e35e964808327" name="a8d3584980c8c4172897e35e964808327"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d3584980c8c4172897e35e964808327">&#9670;&nbsp;</a></span>propagate_from_epoch()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -340,14 +333,8 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceperturb.html#a24e2b6a2c7eafb6ad3c612227ab56227">Vec3</a> &amp;&#160;</td>
-          <td class="paramname"><em>pos</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespaceperturb.html#a24e2b6a2c7eafb6ad3c612227ab56227">Vec3</a> &amp;&#160;</td>
-          <td class="paramname"><em>vel</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="structperturb_1_1StateVector.html">StateVector</a> &amp;&#160;</td>
+          <td class="paramname"><em>sv</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -361,8 +348,7 @@ Public Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">mins_from_epoch</td><td>Offset number of minutes around the epoch </td></tr>
-    <tr><td class="paramname">pos</td><td>Returned position vector in km in the TEME frame </td></tr>
-    <tr><td class="paramname">vel</td><td>Returned velocity vector in km/s in the TEME frame </td></tr>
+    <tr><td class="paramname">posvel</td><td>Returned state vector in the TEME frame </td></tr>
   </table>
   </dd>
 </dl>

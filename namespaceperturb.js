@@ -1,8 +1,10 @@
 var namespaceperturb =
 [
     [ "vallado_sgp4", "namespaceperturb_1_1vallado__sgp4.html", "namespaceperturb_1_1vallado__sgp4" ],
+    [ "ClassicalOrbitalElements", "structperturb_1_1ClassicalOrbitalElements.html", "structperturb_1_1ClassicalOrbitalElements" ],
     [ "JulianDate", "structperturb_1_1JulianDate.html", "structperturb_1_1JulianDate" ],
     [ "Satellite", "classperturb_1_1Satellite.html", "classperturb_1_1Satellite" ],
+    [ "StateVector", "structperturb_1_1StateVector.html", "structperturb_1_1StateVector" ],
     [ "YMDhms", "structperturb_1_1YMDhms.html", "structperturb_1_1YMDhms" ],
     [ "Vec3", "namespaceperturb.html#a24e2b6a2c7eafb6ad3c612227ab56227", null ],
     [ "GravModel", "namespaceperturb.html#a2903bdfd35b1a5eef9bb8a0b2bfa3a2c", [

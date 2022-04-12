@@ -2,6 +2,8 @@ var perturb_8hpp =
 [
     [ "perturb::YMDhms", "structperturb_1_1YMDhms.html", "structperturb_1_1YMDhms" ],
     [ "perturb::JulianDate", "structperturb_1_1JulianDate.html", "structperturb_1_1JulianDate" ],
+    [ "perturb::StateVector", "structperturb_1_1StateVector.html", "structperturb_1_1StateVector" ],
+    [ "perturb::ClassicalOrbitalElements", "structperturb_1_1ClassicalOrbitalElements.html", "structperturb_1_1ClassicalOrbitalElements" ],
     [ "perturb::Satellite", "classperturb_1_1Satellite.html", "classperturb_1_1Satellite" ],
     [ "Vec3", "perturb_8hpp.html#a24e2b6a2c7eafb6ad3c612227ab56227", null ],
     [ "GravModel", "perturb_8hpp.html#a2903bdfd35b1a5eef9bb8a0b2bfa3a2c", [

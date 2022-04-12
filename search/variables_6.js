@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['year_0',['year',['../structperturb_1_1YMDhms.html#a5a3af6ff98f99603099e5b2a3dece220',1,'perturb::YMDhms']]]
+  ['longitude_5fof_5fperiapsis_0',['longitude_of_periapsis',['../structperturb_1_1ClassicalOrbitalElements.html#a49632af3c22e695a59d1071e3869ebcd',1,'perturb::ClassicalOrbitalElements']]]
 ];

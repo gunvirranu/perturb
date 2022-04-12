@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['sat_5frec_0',['sat_rec',['../classperturb_1_1Satellite.html#afeb1a19e6293c2254a071e194e6d3938',1,'perturb::Satellite']]],
-  ['sec_1',['sec',['../structperturb_1_1YMDhms.html#a2869c787bf9d9fdeb65d6831960c8ca2',1,'perturb::YMDhms']]]
+  ['inclination_0',['inclination',['../structperturb_1_1ClassicalOrbitalElements.html#accec745d2fec194f43a765a6934bdf47',1,'perturb::ClassicalOrbitalElements']]]
 ];

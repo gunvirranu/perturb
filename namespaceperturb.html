@@ -105,11 +105,17 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structperturb_1_1ClassicalOrbitalElements.html">ClassicalOrbitalElements</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Classical Keplerian orbital elements.  <a href="structperturb_1_1ClassicalOrbitalElements.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structperturb_1_1JulianDate.html">JulianDate</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents a specific point in time on the Julian calendar.  <a href="structperturb_1_1JulianDate.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classperturb_1_1Satellite.html">Satellite</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents a specific orbital ephemeris for an Earth-centered trajectory.  <a href="classperturb_1_1Satellite.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structperturb_1_1StateVector.html">StateVector</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents the output prediction from SGP4.  <a href="structperturb_1_1StateVector.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structperturb_1_1YMDhms.html">YMDhms</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A basic and human readable representation of a point in time.  <a href="structperturb_1_1YMDhms.html#details">More...</a><br /></td></tr>
@@ -152,6 +158,9 @@ Variables</h2></td></tr>
 <tr class="memitem:a8bf99fd90789ad2f69e7ac1bab8832ef"><td class="memItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceperturb.html#a8bf99fd90789ad2f69e7ac1bab8832ef">TLE_LINE_LEN</a> = 69</td></tr>
 <tr class="memdesc:a8bf99fd90789ad2f69e7ac1bab8832ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Both lines of a TLE <b>must</b> be this length, for TLE constructors.  <a href="namespaceperturb.html#a8bf99fd90789ad2f69e7ac1bab8832ef">More...</a><br /></td></tr>
 <tr class="separator:a8bf99fd90789ad2f69e7ac1bab8832ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a646128b8a97b458cd183e00a08de9215"><td class="memItemLeft" align="right" valign="top"><a id="a646128b8a97b458cd183e00a08de9215" name="a646128b8a97b458cd183e00a08de9215"></a>
+constexpr double&#160;</td><td class="memItemRight" valign="bottom"><b>MINS_PER_DAY</b> = 24 * 60</td></tr>
+<tr class="separator:a646128b8a97b458cd183e00a08de9215"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Primary namespace for the perturb library, everything is in here. </p>
@@ -205,7 +214,7 @@ Variables</h2></td></tr>
 <p>Possible issues during SGP4 propagation or even TLE parsing. </p>
 <p >This is important in two places:</p><ol type="1">
 <li>After construction of a <code><a class="el" href="classperturb_1_1Satellite.html" title="Represents a specific orbital ephemeris for an Earth-centered trajectory.">Satellite</a></code>, check <code><a class="el" href="classperturb_1_1Satellite.html#addff690305c8455e2f1522fbec79fde9" title="Return the last recorded error in the internal SGP4 record.">Satellite::last_error</a></code> for any issues with TLE parsing or SGP4 initialization.</li>
-<li>Calling <code><a class="el" href="classperturb_1_1Satellite.html#a71bc5d1a484283569499f344d97aa1eb" title="Propagate the SGP4 model to a specific time point.">Satellite::propagate</a></code> returns a <code><a class="el" href="namespaceperturb.html#ac7ee004d313c675e4b824fc592e7454f" title="Possible issues during SGP4 propagation or even TLE parsing.">perturb::Sgp4Error</a></code>, indicating any possible issues with propagation.</li>
+<li>Calling <code><a class="el" href="classperturb_1_1Satellite.html#a9316a14fcbc5157f6bf1893f06b43793" title="Propagate the SGP4 model to a specific time point.">Satellite::propagate</a></code> returns a <code><a class="el" href="namespaceperturb.html#ac7ee004d313c675e4b824fc592e7454f" title="Possible issues during SGP4 propagation or even TLE parsing.">perturb::Sgp4Error</a></code>, indicating any possible issues with propagation.</li>
 </ol>
 <p >If everything is all good, the value should be <code>Sgp4Error::NONE</code>. The errors <code>Sgp4Error::MEAN_ELEMENTS</code> to <code>SGP4Error::DECAYED</code> directly correlate to errors in the underlying SGP4 impl, from the comments of <code>vallado_sgp4::sgp4</code>. The additional <code>Sgp4Error::INVALID_TLE</code> is for issues with reading the TLE strings. </p>
 

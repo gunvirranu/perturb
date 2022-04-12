@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['normalize_0',['normalize',['../structperturb_1_1JulianDate.html#a5ea22238cfbaaef061497770020a4b1d',1,'perturb::JulianDate']]],
-  ['normalized_1',['normalized',['../structperturb_1_1JulianDate.html#aef91414492db47b0f0017a3d17b41060',1,'perturb::JulianDate']]]
+  ['jd_0',['jd',['../structperturb_1_1JulianDate.html#af6dfe1205752e795dd152858cd73c38c',1,'perturb::JulianDate']]],
+  ['jd_5ffrac_1',['jd_frac',['../structperturb_1_1JulianDate.html#af3daf860049de78416698815d5ff5a0c',1,'perturb::JulianDate']]],
+  ['juliandate_2',['JulianDate',['../structperturb_1_1JulianDate.html#a6db945e1235ff74f002150af2050dd20',1,'perturb::JulianDate::JulianDate()'],['../structperturb_1_1JulianDate.html#afc00ab4a32010f724a61f9b3d0852ba8',1,'perturb::JulianDate::JulianDate(double jd)'],['../structperturb_1_1JulianDate.html#af077559d4314096e4748786fecc19ebd',1,'perturb::JulianDate::JulianDate(double jd, double jd_frac)'],['../structperturb_1_1JulianDate.html#a905163ce7901df90c48c9d87f431f467',1,'perturb::JulianDate::JulianDate(YMDhms t)'],['../structperturb_1_1JulianDate.html',1,'perturb::JulianDate']]]
 ];

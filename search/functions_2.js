@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['juliandate_0',['JulianDate',['../structperturb_1_1JulianDate.html#afc00ab4a32010f724a61f9b3d0852ba8',1,'perturb::JulianDate::JulianDate(double jd)'],['../structperturb_1_1JulianDate.html#af077559d4314096e4748786fecc19ebd',1,'perturb::JulianDate::JulianDate(double jd, double jd_frac)'],['../structperturb_1_1JulianDate.html#a905163ce7901df90c48c9d87f431f467',1,'perturb::JulianDate::JulianDate(YMDhms t)']]]
+  ['from_5ftle_0',['from_tle',['../classperturb_1_1Satellite.html#a267ba5e892e29413313feb8896817553',1,'perturb::Satellite::from_tle(char *line_1, char *line_2, GravModel grav_model=GravModel::WGS72)'],['../classperturb_1_1Satellite.html#a5b9a2c8dd4cefb172241d83ddca1738c',1,'perturb::Satellite::from_tle(std::string &amp;line_1, std::string &amp;line_2, GravModel grav_model=GravModel::WGS72)']]]
 ];

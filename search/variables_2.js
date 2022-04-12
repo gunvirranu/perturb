@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['jd_0',['jd',['../structperturb_1_1JulianDate.html#af6dfe1205752e795dd152858cd73c38c',1,'perturb::JulianDate']]],
-  ['jd_5ffrac_1',['jd_frac',['../structperturb_1_1JulianDate.html#af3daf860049de78416698815d5ff5a0c',1,'perturb::JulianDate']]]
+  ['eccentricity_0',['eccentricity',['../structperturb_1_1ClassicalOrbitalElements.html#a0a990e33def30f40b830bb81341f2c03',1,'perturb::ClassicalOrbitalElements']]],
+  ['epoch_1',['epoch',['../structperturb_1_1StateVector.html#a794f1086971960451fb59026d7f65f55',1,'perturb::StateVector']]]
 ];

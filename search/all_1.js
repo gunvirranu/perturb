@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['elsetrec_0',['elsetrec',['../structperturb_1_1vallado__sgp4_1_1elsetrec.html',1,'perturb::vallado_sgp4']]],
-  ['epoch_1',['epoch',['../classperturb_1_1Satellite.html#aa2a4e8642762b12bf3a87795d1ddea34',1,'perturb::Satellite']]]
+  ['classicalorbitalelements_0',['ClassicalOrbitalElements',['../structperturb_1_1ClassicalOrbitalElements.html#a1d46fa7fe48786091ef6ee2717440fa1',1,'perturb::ClassicalOrbitalElements::ClassicalOrbitalElements()'],['../structperturb_1_1ClassicalOrbitalElements.html',1,'perturb::ClassicalOrbitalElements']]]
 ];

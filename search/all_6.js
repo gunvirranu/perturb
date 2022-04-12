@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['last_5ferror_0',['last_error',['../classperturb_1_1Satellite.html#addff690305c8455e2f1522fbec79fde9',1,'perturb::Satellite']]]
+  ['hour_0',['hour',['../structperturb_1_1YMDhms.html#a9fd6c6abad053e976d12dfc45e74d789',1,'perturb::YMDhms']]]
 ];
