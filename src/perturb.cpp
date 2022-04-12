@@ -105,6 +105,20 @@ JulianDate &JulianDate::operator-=(const double &delta_jd) {
     return *this = *this - delta_jd;
 }
 
+ClassicalOrbitalElements::ClassicalOrbitalElements(
+    StateVector sv, GravModel grav_model
+) {
+    double mus, _tumin, _rekm, _xke, _j2, _j3, _j4, _j3oj2;
+    vallado_sgp4::getgravconst(
+        convert_grav_model(grav_model), _tumin, mus, _rekm, _xke, _j2, _j3, _j4, _j3oj2
+    );
+    vallado_sgp4::rv2coe_SGP4(
+        sv.position.data(), sv.velocity.data(), mus, semilatus_rectum, semimajor_axis,
+        eccentricity, inclination, raan, arg_of_perigee, true_anomaly, mean_anomaly,
+        arg_of_latitude, true_longitude, longitude_of_periapsis
+    );
+}
+
 Satellite::Satellite(const vallado_sgp4::elsetrec _sat_rec) : sat_rec(_sat_rec) {}
 
 #ifndef PERTURB_DISABLE_IO
