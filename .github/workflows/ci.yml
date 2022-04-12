@@ -67,16 +67,24 @@ jobs:
         working-directory: examples/cmake-local/build
         run: ./VeryCoolProject
 
+      - if: github.ref == 'refs/heads/master'
+          && github.event_name == 'push'
+          && github.repository_owner == 'gunvirranu'
+        run: echo "RUN_FETCH_EXAMPLE=true" >> $GITHUB_ENV
+
       - name: Configure fetch-content example
         working-directory: examples/cmake-fetch-content
+        if: env.RUN_FETCH_EXAMPLE == 'true'
         run: cmake -S . -B build
 
       - name: Build fetch-content example
         working-directory: examples/cmake-fetch-content
+        if: env.RUN_FETCH_EXAMPLE == 'true'
         run: cmake --build build
 
       - name: Run fetch-content example
         working-directory: examples/cmake-fetch-content/build
+        if: env.RUN_FETCH_EXAMPLE == 'true'
         run: ./VeryCoolProject
 
   test:
