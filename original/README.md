@@ -12,3 +12,5 @@ While I originally intended to wrap this source without _any_ modifications, I n
   - Removes `twoline2rv` TLE parsing method as it uses `sscanf(...)`
   - Remove debug printing via `fprintf(stderr, ...)`
 - Gate the verification mode by the `PERTURB_VALLADO_SGP4_ENABLE_DEBUG` flag
+- Some small refactoring to fix compiler warnings and lints
+- Refactor use of `strcpy` to `memcpy`

@@ -126,11 +126,11 @@ TEST_CASE("test_sgp4_iss_tle") {
         constexpr double CHECK_FOR_MINS = 7 * 24 * 60;  // For 1 week
         double mins = 0;
         while (mins < CHECK_FOR_MINS) {
-            Vec3 pos, vel;
-            const auto err = sat.propagate_from_epoch(mins, pos, vel);
+            StateVector sv;
+            const auto err = sat.propagate_from_epoch(mins, sv);
             CHECK(err == Sgp4Error::NONE);
-            const double dist = norm(pos) - AVG_EARTH_RADIUS;
-            const double speed = norm(vel);
+            const double dist = norm(sv.position) - AVG_EARTH_RADIUS;
+            const double speed = norm(sv.velocity);
             CHECK(dist == doctest::Approx(AVG_ISS_HEIGHT).epsilon(0.05));
             CHECK(speed == doctest::Approx(AVG_ISS_SPEED).epsilon(0.05));
             mins += CHECK_EVERY_MINS;
@@ -142,11 +142,13 @@ TEST_CASE("test_sgp4_iss_tle") {
         constexpr double AVG_ISS_ORBITAL = 92.8;    // minutes
         constexpr double EPS = 0.1;                 // Acceptable relative delta
         constexpr int CHECK_N_ORBITS = 1000;        // Number of consecutive orbits
-        Vec3 pos_1, vel_1, pos_2, vel_2;
+        StateVector sv_1, sv_2;
         for (int i = 0; i < CHECK_N_ORBITS; ++i) {
             const double t = i * AVG_ISS_ORBITAL;
-            sat.propagate_from_epoch(t, pos_1, vel_1);
-            sat.propagate_from_epoch(t + AVG_ISS_ORBITAL, pos_2, vel_2);
+            sat.propagate_from_epoch(t, sv_1);
+            sat.propagate_from_epoch(t + AVG_ISS_ORBITAL, sv_2);
+            const auto &vel_1 = sv_1.velocity;
+            const auto &vel_2 = sv_2.velocity;
             CHECK(vel_1[0] == doctest::Approx(vel_2[0]).epsilon(EPS));
             CHECK(vel_1[1] == doctest::Approx(vel_2[1]).epsilon(EPS));
             CHECK(vel_1[2] == doctest::Approx(vel_2[2]).epsilon(EPS));
@@ -161,11 +163,13 @@ TEST_CASE("test_sgp4_iss_tle") {
         constexpr double AVG_ISS_ORBITAL = 92.8;    // minutes
         constexpr double EPS = 0.05;                // Acceptable relative delta
         constexpr int CHECK_N_ORBITS = 1000;        // Number of consecutive orbits
-        Vec3 pos_1, vel_1, pos_2, vel_2;
+        StateVector sv_1, sv_2;
         for (int i = 0; i < CHECK_N_ORBITS; ++i) {
             const auto t = i * AVG_ISS_ORBITAL;
-            sat.propagate_from_epoch(t, pos_1, vel_1);
-            sat.propagate_from_epoch(t + AVG_ISS_ORBITAL / 2.0, pos_2, vel_2);
+            sat.propagate_from_epoch(t, sv_1);
+            sat.propagate_from_epoch(t + AVG_ISS_ORBITAL / 2.0, sv_2);
+            const auto &vel_1 = sv_1.velocity;
+            const auto &vel_2 = sv_2.velocity;
             CHECK(vel_1[0] == doctest::Approx(-vel_2[0]).epsilon(EPS));
             CHECK(vel_1[1] == doctest::Approx(-vel_2[1]).epsilon(EPS));
             CHECK(vel_1[2] == doctest::Approx(-vel_2[2]).epsilon(EPS));
@@ -191,7 +195,6 @@ TEST_CASE(
     FILE *out_file = std::fopen("generated-tcppver.out", "w");
     REQUIRE(out_file != nullptr);
 
-    Vec3 pos, vel;
     std::string line_1, line_2;
     while (std::getline(in_file, line_1)) {
         if (line_1[0] == '#') {
@@ -202,7 +205,11 @@ TEST_CASE(
         double startmfe, stopmfe, deltamin;
         auto sat = sat_from_verif_tle(line_1, line_2, startmfe, stopmfe, deltamin);
 
-        sat.propagate_from_epoch(0.0, pos, vel);  // Initialize maybe??
+        StateVector sv;
+        sat.propagate_from_epoch(0.0, sv);  // Initialize maybe??
+        auto pos = sv.position;
+        auto vel = sv.velocity;
+
         std::fprintf(out_file, "%s xx\n", sat.sat_rec.satnum);
         std::fprintf(
             out_file,
@@ -217,9 +224,11 @@ TEST_CASE(
 
         while ((tsince < stopmfe) && sat.last_error() == Sgp4Error::NONE) {
             tsince = std::min(tsince + deltamin, stopmfe);
-            if (sat.propagate_from_epoch(tsince, pos, vel) != Sgp4Error::NONE) {
+            if (sat.propagate_from_epoch(tsince, sv) != Sgp4Error::NONE) {
                 continue;
             }
+            pos = sv.position;
+            vel = sv.velocity;
 
             const auto jd = (sat.epoch() + tsince / 1440.0).normalized();
             const auto ymdhms = jd.to_datetime();
@@ -287,7 +296,10 @@ TEST_CASE(
         double tsince = startmfe;
         while ((tsince < stopmfe) && sat.last_error() == Sgp4Error::NONE) {
             tsince = std::min(tsince + deltamin, stopmfe);
-            CHECK(sat.propagate_from_epoch(tsince, pos, vel) == Sgp4Error::NONE);
+            StateVector sv;
+            CHECK(sat.propagate_from_epoch(tsince, sv) == Sgp4Error::NONE);
+            const auto &pos = sv.position;
+            const auto &vel = sv.velocity;
             std::fprintf(
                 out_file,
                 " %16.8f %16.8f %16.8f %16.8f %12.9f %12.9f %12.9f",

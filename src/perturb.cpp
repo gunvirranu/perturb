@@ -20,6 +20,8 @@
 
 namespace perturb {
 
+constexpr double MINS_PER_DAY = 24 * 60;
+
 static Sgp4Error convert_sgp4_error_code(const int error_code) {
     if (error_code < 0 || error_code >= static_cast<int>(Sgp4Error::UNKNOWN)) {
         return Sgp4Error::UNKNOWN;
@@ -35,6 +37,8 @@ static vallado_sgp4::gravconsttype convert_grav_model(const GravModel model) {
         default: return vallado_sgp4::wgs72;
     }
 }
+
+JulianDate::JulianDate() : jd(0), jd_frac(0) {}
 
 JulianDate::JulianDate(double _jd) : jd(_jd), jd_frac(0) {}
 
@@ -101,6 +105,20 @@ JulianDate &JulianDate::operator-=(const double &delta_jd) {
     return *this = *this - delta_jd;
 }
 
+ClassicalOrbitalElements::ClassicalOrbitalElements(
+    StateVector sv, GravModel grav_model
+) {
+    double mus, _tumin, _rekm, _xke, _j2, _j3, _j4, _j3oj2;
+    vallado_sgp4::getgravconst(
+        convert_grav_model(grav_model), _tumin, mus, _rekm, _xke, _j2, _j3, _j4, _j3oj2
+    );
+    vallado_sgp4::rv2coe_SGP4(
+        sv.position.data(), sv.velocity.data(), mus, semilatus_rectum, semimajor_axis,
+        eccentricity, inclination, raan, arg_of_perigee, true_anomaly, mean_anomaly,
+        arg_of_latitude, true_longitude, longitude_of_periapsis
+    );
+}
+
 Satellite::Satellite(const vallado_sgp4::elsetrec _sat_rec) : sat_rec(_sat_rec) {}
 
 #ifndef PERTURB_DISABLE_IO
@@ -140,17 +158,20 @@ JulianDate Satellite::epoch() const {
     return JulianDate(sat_rec.jdsatepoch, sat_rec.jdsatepochF);
 }
 
-Sgp4Error Satellite::propagate_from_epoch(double mins_from_epoch, Vec3 &pos, Vec3 &vel) {
-    const bool is_valid =
-        vallado_sgp4::sgp4(sat_rec, mins_from_epoch, pos.data(), vel.data());
+Sgp4Error Satellite::propagate_from_epoch(double mins_from_epoch, StateVector &sv) {
+    sv.epoch = epoch() + (mins_from_epoch / MINS_PER_DAY);
+    const bool is_valid = vallado_sgp4::sgp4(
+        sat_rec, mins_from_epoch, sv.position.data(), sv.velocity.data()
+    );
     (void) is_valid;  // Unused because it is consistent with error code
     return last_error();
 }
 
-Sgp4Error Satellite::propagate(const JulianDate jd, Vec3 &pos, Vec3 &vel) {
-    constexpr double MINS_PER_DAY = 24 * 60;
+Sgp4Error Satellite::propagate(const JulianDate jd, StateVector &sv) {
     const double delta_jd = jd - epoch();
     const double mins_from_epoch = delta_jd * MINS_PER_DAY;
-    return propagate_from_epoch(mins_from_epoch, pos, vel);
+    const auto err = propagate_from_epoch(mins_from_epoch, sv);
+    sv.epoch = jd;  // Can save some math, ignore value from `propagate_from_epoch`
+    return err;
 }
 }  // namespace perturb
