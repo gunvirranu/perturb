@@ -69,7 +69,7 @@ enum class Sgp4Error : int {
 /// Choice of gravity model / constants for the underlying SGP4 impl.
 ///
 /// Corresponds to the `gravconsttype` type in `perturb::sgp4`.
-/// Generally, WGS72 is the standard choice, despite WGS83 being the newer and
+/// Generally, WGS72 is the standard choice, despite WGS84 being the newer and
 /// more accurate model. What is most important is that this is the exact same
 /// as the gravity model used to generate the TLE ephemeris. This can be
 /// confirmed from the source of your TLE data.
