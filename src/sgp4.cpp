@@ -56,7 +56,7 @@
 *                           original baseline
 *       ----------------------------------------------------------------      */
 
-#include "perturb/vallado_sgp4.hpp"
+#include "perturb/sgp4.hpp"
 
 // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers)
 
@@ -69,7 +69,7 @@
 #define pi 3.14159265358979323846  // NOLINT(cppcoreguidelines-macro-usage)
 
 namespace perturb {
-namespace vallado_sgp4 {
+namespace sgp4 {
 
 /* ----------- local functions - only ever used internally by sgp4 ---------- */
 static void dpper
@@ -2148,7 +2148,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
             j3oj2 = j3 / j2;
             break;
         default:
-            #ifdef PERTURB_VALLADO_SGP4_ENABLE_DEBUG
+            #ifdef PERTURB_SGP4_ENABLE_DEBUG
             fprintf(stderr, "unknown gravity option (%d)\n", whichconst);
             #endif
             break;
@@ -2270,7 +2270,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
 #endif
         if (typerun == 'v')  // run for specified times from the file
         {
-#ifdef PERTURB_VALLADO_SGP4_ENABLE_DEBUG
+#ifdef PERTURB_SGP4_ENABLE_DEBUG
             if (longstr2[52] == ' ')
             {
 #ifdef _MSC_VER
@@ -2299,7 +2299,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
                     &satrec.revnum, &startmfe, &stopmfe, &deltamin);
 #endif
             }
-#endif  // PERTURB_VALLADO_SGP4_ENABLE_DEBUG
+#endif  // PERTURB_SGP4_ENABLE_DEBUG
         }
         else  // simply run -1 day to +1 day or user input times
         {
@@ -2369,7 +2369,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
         days2mdhms_SGP4(year, satrec.epochdays, mon, day, hr, minute, sec);
         jday_SGP4(year, mon, day, hr, minute, sec, satrec.jdsatepoch, satrec.jdsatepochF);
 
-#ifdef PERTURB_VALLADO_SGP4_ENABLE_DEBUG
+#ifdef PERTURB_SGP4_ENABLE_DEBUG
         // ---- input start stop times manually
         if ((typerun != 'v') && (typerun != 'c'))
         {
@@ -2465,7 +2465,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
             stopmfe = 1440.0;
             deltamin = 10.0;
         }
-#endif  // PERTURB_VALLADO_SGP4_ENABLE_DEBUG
+#endif  // PERTURB_SGP4_ENABLE_DEBUG
 
         // ---------------- initialize the orbit at sgp4epoch -------------------
         sgp4init(whichconst, opsmode, satrec.satnum, (satrec.jdsatepoch + satrec.jdsatepochF) - 2433281.5, satrec.bstar,
@@ -3279,7 +3279,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
 
 // } // namespace SGP4Funcs
 
-}  // namesapce vallado_sgp4
+}  // namesapce sgp4
 }  // namespace perturb
 
 // NOLINTEND(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers)

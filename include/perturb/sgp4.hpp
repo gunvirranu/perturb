@@ -1,5 +1,5 @@
-#ifndef PERTURB_VALLADO_SGP4_HPP
-#define PERTURB_VALLADO_SGP4_HPP
+#ifndef PERTURB_SGP4_HPP
+#define PERTURB_SGP4_HPP
 // clang-format off
 /*     ----------------------------------------------------------------
 *
@@ -50,15 +50,15 @@
 *       ----------------------------------------------------------------      */
 
 //! @file
-//! Primary header file for the perturb library
+//! Header for the internal SGP4 impl from Vallado
 //! @author David Vallado
 //! @author Gunvir Ranu
 //! @version SGP4 Version 2020-07-13
 //! @date 2022-07-13
 
-// Define `PERTURB_VALLADO_SGP4_ENABLE_DEBUG` to enable Vallado's verification mode.
+// Define `PERTURB_SGP4_ENABLE_DEBUG` to enable Vallado's verification mode.
 // Generally, this is unwanted. Only enabled for tests.
-#if (defined(PERTURB_VALLADO_SGP4_ENABLE_DEBUG) && defined(PERTURB_DISABLE_IO))
+#if (defined(PERTURB_SGP4_ENABLE_DEBUG) && defined(PERTURB_DISABLE_IO))
 #error "Cannot enable SGP4 debug without I/O functionality"
 #endif
 
@@ -66,7 +66,7 @@
 // NOLINTBEGIN(readability-avoid-const-params-in-decls)
 
 // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
-#define PERTURB_VALLADO_SGP4_SGP4Version  "SGP4 Version 2020-07-13"
+#define PERTURB_SGP4_SGP4Version  "SGP4 Version 2020-07-13"
 
 namespace perturb {
 
@@ -76,7 +76,7 @@ namespace perturb {
 /// the whole goal of this library is to avoid the need to do that. If you find
 /// yourself needing some functionality that perturb's interface doesn't offer,
 /// please open an issue as others may have similar thoughts / needs.
-namespace vallado_sgp4 {
+namespace sgp4 {
 
 // -------------------------- structure declarations ----------------------------
 typedef enum   // NOLINT(modernize-use-using)
@@ -252,11 +252,11 @@ typedef struct elsetrec  // NOLINT(modernize-use-using,altera-struct-pack-align)
 
 // }  // namespace
 
-}  // namespace vallado_sgp4
+}  // namespace sgp4
 }  // namespace perturb
 
 // NOLINTEND(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers
 // NOLINTEND(readability-avoid-const-params-in-decls)
 // clang-format on
 
-#endif  // PERTURB_VALLADO_SGP4_HPP
+#endif  // PERTURB_SGP4_HPP

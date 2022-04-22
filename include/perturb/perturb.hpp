@@ -18,7 +18,7 @@
 #ifndef PERTURB_PERTURB_HPP
 #define PERTURB_PERTURB_HPP
 
-#include "perturb/vallado_sgp4.hpp"
+#include "perturb/sgp4.hpp"
 
 #include <array>
 #include <cstddef>
@@ -52,7 +52,7 @@ constexpr std::size_t TLE_LINE_LEN = 69;
 /// If everything is all good, the value should be `Sgp4Error::NONE`.
 /// The errors `Sgp4Error::MEAN_ELEMENTS` to `SGP4Error::DECAYED` directly
 /// correlate to errors in the underlying SGP4 impl, from the comments of
-/// `vallado_sgp4::sgp4`. The additional `Sgp4Error::INVALID_TLE` is for issues
+/// `perturb::sgp4::sgp4`. The additional `Sgp4Error::INVALID_TLE` is for issues
 /// with reading the TLE strings.
 enum class Sgp4Error : int {
     NONE = 0,
@@ -68,7 +68,7 @@ enum class Sgp4Error : int {
 
 /// Choice of gravity model / constants for the underlying SGP4 impl.
 ///
-/// Corresponds to the `gravconsttype` type in `perturb::vallado_sgp4`.
+/// Corresponds to the `gravconsttype` type in `perturb::sgp4`.
 /// Generally, WGS72 is the standard choice, despite WGS83 being the newer and
 /// more accurate model. What is most important is that this is the exact same
 /// as the gravity model used to generate the TLE ephemeris. This can be
@@ -92,7 +92,7 @@ enum class GravModel {
 /// The question of what this time point represents gets complicated. In the
 /// "Revisiting Spacetrack Report #3" paper from Celestrak, it is discussed
 /// what this time represents. While UTC would make sense, the method
-/// `vallado_sgp4::gstime_SGP4` requires UT1 time to calculate GMST. This
+/// `perturb::sgp4::gstime_SGP4` requires UT1 time to calculate GMST. This
 /// library makes the same assumption that the paper concludes:
 ///
 /// @par
@@ -234,7 +234,7 @@ struct ClassicalOrbitalElements {
 /// Represents a specific orbital ephemeris for an Earth-centered trajectory.
 ///
 /// This is the primary type in this library. Wraps the internal SGP4 record
-/// type `vallado_sgp4::elsetrec`. Generally constructed via TLEs through
+/// type `perturb::sgp4::elsetrec`. Generally constructed via TLEs through
 /// `Satellite::from_tle` constructors. Of particular importance is the
 /// `Satellite::last_error` method which you can check to determine if there
 /// were any issues with TLE initialization or propagation. The primary method
@@ -242,18 +242,18 @@ struct ClassicalOrbitalElements {
 class Satellite {
 public:
     /// Internal SGP4 type
-    vallado_sgp4::elsetrec sat_rec;
+    sgp4::elsetrec sat_rec;
 
     /// Constructs from a raw SGP4 orbital record.
     ///
     /// @param sat_rec Pre-initialized SGP4 orbital record
-    explicit Satellite(vallado_sgp4::elsetrec sat_rec);
+    explicit Satellite(sgp4::elsetrec sat_rec);
 
 #ifndef PERTURB_DISABLE_IO
     /// Construct and initialize a `Satellite` from a TLE record.
     ///
     /// The strings are mutable because the underlying implementation in
-    /// `vallado_sgp4::twoline2rv` may modify the string during parsing.
+    /// `perturb::sgp4::twoline2rv` may modify the string during parsing.
     /// Left as mutable instead of internally copying for efficiency reasons as
     /// this may be okay for the caller.
     ///

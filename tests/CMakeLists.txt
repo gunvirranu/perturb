@@ -47,7 +47,7 @@ if(NOT perturb_DISABLE_IO)
     target_compile_definitions(
         perturb
         PUBLIC
-            PERTURB_VALLADO_SGP4_ENABLE_DEBUG
+            PERTURB_SGP4_ENABLE_DEBUG
     )
 endif()
 

@@ -16,7 +16,7 @@
 #  include <cstring>
 #endif
 
-#include "perturb/vallado_sgp4.hpp"
+#include "perturb/sgp4.hpp"
 
 namespace perturb {
 
@@ -29,12 +29,12 @@ static Sgp4Error convert_sgp4_error_code(const int error_code) {
     return static_cast<Sgp4Error>(error_code);
 }
 
-static vallado_sgp4::gravconsttype convert_grav_model(const GravModel model) {
+static sgp4::gravconsttype convert_grav_model(const GravModel model) {
     switch (model) {
-        case GravModel::WGS72_OLD: return vallado_sgp4::wgs72old;
-        case GravModel::WGS72: return vallado_sgp4::wgs72;
-        case GravModel::WGS84: return vallado_sgp4::wgs84;
-        default: return vallado_sgp4::wgs72;
+        case GravModel::WGS72_OLD: return sgp4::wgs72old;
+        case GravModel::WGS72: return sgp4::wgs72;
+        case GravModel::WGS84: return sgp4::wgs84;
+        default: return sgp4::wgs72;
     }
 }
 
@@ -46,18 +46,14 @@ JulianDate::JulianDate(double _jd, double _jd_frac) : jd(_jd), jd_frac(_jd_frac)
 
 JulianDate::JulianDate(YMDhms t) {
     double tmp_jd, tmp_jd_frac;
-    vallado_sgp4::jday_SGP4(
-        t.year, t.month, t.day, t.hour, t.min, t.sec, tmp_jd, tmp_jd_frac
-    );
+    sgp4::jday_SGP4(t.year, t.month, t.day, t.hour, t.min, t.sec, tmp_jd, tmp_jd_frac);
     jd = tmp_jd;
     jd_frac = tmp_jd_frac;
 }
 
 YMDhms JulianDate::to_datetime() const {
     YMDhms t {};
-    vallado_sgp4::invjday_SGP4(
-        jd, jd_frac, t.year, t.month, t.day, t.hour, t.min, t.sec
-    );
+    sgp4::invjday_SGP4(jd, jd_frac, t.year, t.month, t.day, t.hour, t.min, t.sec);
     return t;
 }
 
@@ -109,28 +105,28 @@ ClassicalOrbitalElements::ClassicalOrbitalElements(
     StateVector sv, GravModel grav_model
 ) {
     double mus, _tumin, _rekm, _xke, _j2, _j3, _j4, _j3oj2;
-    vallado_sgp4::getgravconst(
+    sgp4::getgravconst(
         convert_grav_model(grav_model), _tumin, mus, _rekm, _xke, _j2, _j3, _j4, _j3oj2
     );
-    vallado_sgp4::rv2coe_SGP4(
+    sgp4::rv2coe_SGP4(
         sv.position.data(), sv.velocity.data(), mus, semilatus_rectum, semimajor_axis,
         eccentricity, inclination, raan, arg_of_perigee, true_anomaly, mean_anomaly,
         arg_of_latitude, true_longitude, longitude_of_periapsis
     );
 }
 
-Satellite::Satellite(const vallado_sgp4::elsetrec _sat_rec) : sat_rec(_sat_rec) {}
+Satellite::Satellite(const sgp4::elsetrec _sat_rec) : sat_rec(_sat_rec) {}
 
 #ifndef PERTURB_DISABLE_IO
 Satellite Satellite::from_tle(char *line_1, char *line_2, GravModel grav_model) {
-    vallado_sgp4::elsetrec sat_rec {};
+    sgp4::elsetrec sat_rec {};
     const bool bad_ptrs = !line_1 || !line_2;
     if (bad_ptrs || std::strlen(line_1) < TLE_LINE_LEN
         || std::strlen(line_2) < TLE_LINE_LEN) {
         sat_rec.error = static_cast<int>(Sgp4Error::INVALID_TLE);
     } else {
         double _startmfe, _stopmfe, _deltamin;
-        vallado_sgp4::twoline2rv(
+        sgp4::twoline2rv(
             line_1, line_2, ' ', ' ', 'i', convert_grav_model(grav_model), _startmfe,
             _stopmfe, _deltamin, sat_rec
         );
@@ -160,9 +156,8 @@ JulianDate Satellite::epoch() const {
 
 Sgp4Error Satellite::propagate_from_epoch(double mins_from_epoch, StateVector &sv) {
     sv.epoch = epoch() + (mins_from_epoch / MINS_PER_DAY);
-    const bool is_valid = vallado_sgp4::sgp4(
-        sat_rec, mins_from_epoch, sv.position.data(), sv.velocity.data()
-    );
+    const bool is_valid =
+        sgp4::sgp4(sat_rec, mins_from_epoch, sv.position.data(), sv.velocity.data());
     (void) is_valid;  // Unused because it is consistent with error code
     return last_error();
 }
