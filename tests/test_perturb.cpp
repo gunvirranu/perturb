@@ -1,13 +1,13 @@
+#define DOCTEST_CONFIG_TREAT_CHAR_STAR_AS_STRING
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include <doctest/doctest.h>
 
 #include <array>
-#include <cstdio>
 #include <cmath>
-#include <cstring>
 #include <fstream>
 
 #include "perturb/perturb.hpp"
+#include "perturb/tle.hpp"
 
 using namespace perturb;
 
@@ -95,6 +95,96 @@ TEST_CASE(
         );
     }
 }
+
+#ifndef PERTURB_DISABLE_IO
+TEST_CASE("test_tle_parse") {
+    const char *TLE_1 = "1 25544U 98067A   22071.78032407  .00021395  00000-0  39008-3 0  9996";
+    const char *TLE_2 = "2 25544  51.6424  94.0370 0004047 256.5103  89.8846 15.49386383330227";
+
+    SUBCASE("test_standard") {
+        TLE tle {};
+        const auto err1 = tle.parse(TLE_1, TLE_2);
+        CHECK(err1 == TLEParseError::NONE);
+
+        CHECK(tle.catalog_number == "25544");
+        CHECK(tle.classification == 'U');
+        CHECK(tle.launch_year == 98U);
+        CHECK(tle.launch_number == 67U);
+        CHECK(tle.launch_piece == "A");
+        CHECK(tle.epoch_year == 22U);
+        CHECK(tle.epoch_day_of_year == 71.78032407);
+        CHECK(tle.n_dot == 0.00021395);
+        CHECK(tle.n_ddot == 0.0e0);
+        CHECK(tle.b_star == 0.39008e-3);
+        CHECK(tle.ephemeris_type == 0U);
+        CHECK(tle.element_set_number == 999U);
+        CHECK(tle.line_1_checksum == 6U);
+
+        CHECK(tle.inclination == 51.6424);
+        CHECK(tle.raan == 94.0370);
+        CHECK(tle.eccentricity == 0.0004047);
+        CHECK(tle.arg_of_perigee == 256.5103);
+        CHECK(tle.mean_anomaly == 89.8846);
+        CHECK(tle.mean_motion == 15.49386383);
+        CHECK(tle.revolution_number == 33022UL);
+        CHECK(tle.line_2_checksum == 7U);
+
+        const auto err2 = tle.parse(
+            "1 25544U 98067 BA 22071.78032407  .00021395 .00000-0 .39008-3 0 39999",
+            "2 25544  51.6424  94.0370 0004047 256.5103  89.8846  5.49386383 30223"
+        );
+        CHECK(err2 == TLEParseError::NONE);
+        CHECK(tle.launch_piece == "BA");
+        CHECK(tle.n_ddot == 0.0e0);
+        CHECK(tle.b_star == 0.39008e-3);
+        CHECK(tle.mean_motion == 5.49386383);
+        CHECK(tle.revolution_number == 3022UL);
+        CHECK(tle.line_2_checksum == 3U);
+    }
+
+    SUBCASE("test_line_1_errors") {
+        TLE tle {};
+        const auto err1 = tle.parse(
+            "1 25544U*98067A   22071.78032407  .00021395  00000-0  39008-3 0  9996",
+            TLE_2
+        );
+        CHECK(err1 == TLEParseError::SHOULD_BE_SPACE);
+
+        const auto err2 = tle.parse(
+            "1 25544U 98067A   22071.78032407  .00021395  00000-0  39008-3 0  9990",
+            TLE_2
+        );
+        CHECK(err2 == TLEParseError::CHECKSUM_MISMATCH);
+
+        const auto err3 = tle.parse(
+            "1 25544U 98067A   22071.78*32407  .00021395  00000-0  39008-3 0  9996",
+            TLE_2
+        );
+        CHECK(err3 == TLEParseError::INVALID_FORMAT);
+    }
+
+    SUBCASE("test_line_2_errors") {
+        TLE tle {};
+        const auto err1 = tle.parse(
+            TLE_1,
+            "2 25544  51.6424* 94.0370 0004047 256.5103  89.8846 15.49386383330227"
+        );
+        CHECK(err1 == TLEParseError::SHOULD_BE_SPACE);
+
+        const auto err2 = tle.parse(
+            TLE_1,
+            "2 25544  51.6424  94.0370 0004047 256.5103  89.8846 15.49386383330220"
+        );
+        CHECK(err2 == TLEParseError::CHECKSUM_MISMATCH);
+
+        const auto err3 = tle.parse(
+            TLE_1,
+            "2 25544  51.6424  94.0370 0004047 256.5103  89.8846 15.493*6383330227"
+        );
+        CHECK(err3 == TLEParseError::INVALID_FORMAT);
+    }
+}
+#endif  // PERTURB_DISABLE_IO
 
 #ifndef PERTURB_DISABLE_IO
 TEST_CASE("test_sgp4_iss_tle") {
