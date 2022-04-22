@@ -55,7 +55,7 @@ endif()
 
 add_library(
     perturb
-    src/perturb.cpp src/vallado_sgp4.cpp
+    src/perturb.cpp src/sgp4.cpp
 )
 
 target_include_directories(

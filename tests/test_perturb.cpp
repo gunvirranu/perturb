@@ -19,10 +19,10 @@ Satellite sat_from_verif_tle(
     constexpr char OPS_MODE = 'a';
     REQUIRE(line_1.length() >= TLE_LINE_LEN);
     REQUIRE(line_2.length() >= TLE_LINE_LEN);
-    vallado_sgp4::elsetrec sat_rec;
-    vallado_sgp4::twoline2rv(
+    sgp4::elsetrec sat_rec;
+    sgp4::twoline2rv(
         &line_1[0], &line_2[0], 'v', 'e', OPS_MODE,
-        vallado_sgp4::wgs72, startmfe, stopmfe, deltamin, sat_rec
+        sgp4::wgs72, startmfe, stopmfe, deltamin, sat_rec
     );
     return Satellite(sat_rec);
 }
@@ -182,7 +182,7 @@ TEST_CASE("test_sgp4_iss_tle") {
 #endif  // PERTURB_DISABLE_IO
 
 // Can't run verification mode without debug mode
-#ifdef PERTURB_VALLADO_SGP4_ENABLE_DEBUG
+#ifdef PERTURB_SGP4_ENABLE_DEBUG
 TEST_CASE(
     "test_sgp4_verification_mode"
     * doctest::description("Run verification mode based off Vallado's test code")
@@ -240,7 +240,7 @@ TEST_CASE(
             );
 
             double p, a, ecc, incl, node, argp, nu, m, arglat, truelon, lonper;
-            vallado_sgp4::rv2coe_SGP4(
+            sgp4::rv2coe_SGP4(
                 pos.data(), vel.data(), sat.sat_rec.mus,
                 p, a, ecc, incl, node, argp, nu, m, arglat, truelon, lonper
             );
@@ -255,7 +255,7 @@ TEST_CASE(
 
     // Useless scope so it can be visually folded
     {
-        vallado_sgp4::elsetrec sat_rec {};
+        sgp4::elsetrec sat_rec {};
         std::strcpy(sat_rec.satnum, "8195");
         sat_rec.jdsatepoch = 2453911.0;
         sat_rec.jdsatepochF = 0.8321544402;
@@ -286,8 +286,8 @@ TEST_CASE(
         double startmfe = 0;
         double stopmfe = 2880;
         double deltamin = 120;
-        vallado_sgp4::sgp4init(
-            vallado_sgp4::wgs72, 'a', sat_rec.satnum, sat_rec.jdsatepoch + sat_rec.jdsatepochF - 2433281.5,
+        sgp4::sgp4init(
+            sgp4::wgs72, 'a', sat_rec.satnum, sat_rec.jdsatepoch + sat_rec.jdsatepochF - 2433281.5,
             sat_rec.bstar, sat_rec.ndot, sat_rec.nddot, sat_rec.ecco, sat_rec.argpo, sat_rec.inclo,
             sat_rec.mo, sat_rec.no_kozai, sat_rec.nodeo, sat_rec
         );
@@ -309,4 +309,4 @@ TEST_CASE(
     }
     std::fclose(out_file);
 }
-#endif  // PERTURB_VALLADO_SGP4_ENABLE_DEBUG
+#endif  // PERTURB_SGP4_ENABLE_DEBUG
