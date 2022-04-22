@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>perturb: /github/workspace/include/perturb/vallado_sgp4.hpp Source File</title>
+<title>perturb: /github/workspace/include/perturb/sgp4.hpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -65,7 +65,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
-$(document).ready(function(){initNavTree('vallado__sgp4_8hpp_source.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('sgp4_8hpp_source.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -84,11 +84,11 @@ $(document).ready(function(){initNavTree('vallado__sgp4_8hpp_source.html',''); i
 </div>
 
 <div class="header">
-  <div class="headertitle"><div class="title">vallado_sgp4.hpp</div></div>
+  <div class="headertitle"><div class="title">sgp4.hpp</div></div>
 </div><!--header-->
 <div class="contents">
-<a href="vallado__sgp4_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#ifndef PERTURB_VALLADO_SGP4_HPP</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#define PERTURB_VALLADO_SGP4_HPP</span></div>
+<a href="sgp4_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#ifndef PERTURB_SGP4_HPP</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#define PERTURB_SGP4_HPP</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment">// clang-format off</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment">/*     ----------------------------------------------------------------</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment">*</span></div>
@@ -139,9 +139,9 @@ $(document).ready(function(){initNavTree('vallado__sgp4_8hpp_source.html',''); i
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="comment">*       ----------------------------------------------------------------      */</span></div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="comment">// Define `PERTURB_VALLADO_SGP4_ENABLE_DEBUG` to enable Vallado&#39;s verification mode.</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="comment">// Define `PERTURB_SGP4_ENABLE_DEBUG` to enable Vallado&#39;s verification mode.</span></div>
 <div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="comment">// Generally, this is unwanted. Only enabled for tests.</span></div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="preprocessor">#if (defined(PERTURB_VALLADO_SGP4_ENABLE_DEBUG) &amp;&amp; defined(PERTURB_DISABLE_IO))</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="preprocessor">#if (defined(PERTURB_SGP4_ENABLE_DEBUG) &amp;&amp; defined(PERTURB_DISABLE_IO))</span></div>
 <div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="preprocessor">#error &quot;Cannot enable SGP4 debug without I/O functionality&quot;</span></div>
 <div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span> </div>
@@ -149,11 +149,11 @@ $(document).ready(function(){initNavTree('vallado__sgp4_8hpp_source.html',''); i
 <div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="comment">// NOLINTBEGIN(readability-avoid-const-params-in-decls)</span></div>
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
 <div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="comment">// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)</span></div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><span class="preprocessor">#define PERTURB_VALLADO_SGP4_SGP4Version  &quot;SGP4 Version 2020-07-13&quot;</span></div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><span class="preprocessor">#define PERTURB_SGP4_SGP4Version  &quot;SGP4 Version 2020-07-13&quot;</span></div>
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
 <div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceperturb.html">perturb</a> {</div>
 <div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span> </div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno"><a class="line" href="namespaceperturb_1_1vallado__sgp4.html">   79</a></span><span class="keyword">namespace </span>vallado_sgp4 {</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno"><a class="line" href="namespaceperturb_1_1sgp4.html">   79</a></span><span class="keyword">namespace </span><a class="code hl_function" href="namespaceperturb_1_1sgp4.html#a20b46f8e119bc5ac9f2b02c003fa2fb4">sgp4</a> {</div>
 <div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span> </div>
 <div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="comment">// -------------------------- structure declarations ----------------------------</span></div>
 <div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span><span class="keyword">typedef</span> <span class="keyword">enum</span>   <span class="comment">// NOLINT(modernize-use-using)</span></div>
@@ -163,7 +163,7 @@ $(document).ready(function(){initNavTree('vallado__sgp4_8hpp_source.html',''); i
 <div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>  wgs84</div>
 <div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>} gravconsttype;</div>
 <div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span> </div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno"><a class="line" href="structperturb_1_1vallado__sgp4_1_1elsetrec.html">   89</a></span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="structperturb_1_1vallado__sgp4_1_1elsetrec.html">elsetrec</a>  <span class="comment">// NOLINT(modernize-use-using,altera-struct-pack-align)</span></div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno"><a class="line" href="structperturb_1_1sgp4_1_1elsetrec.html">   89</a></span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="structperturb_1_1sgp4_1_1elsetrec.html">elsetrec</a>  <span class="comment">// NOLINT(modernize-use-using,altera-struct-pack-align)</span></div>
 <div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>{</div>
 <div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>  <span class="keywordtype">char</span>      satnum[6];</div>
 <div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>  <span class="keywordtype">int</span>       epochyr, epochtynumrev;</div>
@@ -208,7 +208,7 @@ $(document).ready(function(){initNavTree('vallado__sgp4_8hpp_source.html',''); i
 <div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>  <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> not_orbital; <span class="comment">// &quot;Orbiting S/C&quot; flag (0=n, 1=y)</span></div>
 <div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>  <span class="keywordtype">double</span> rcs_m2; <span class="comment">// &quot;RCS (m^2)&quot; storage</span></div>
 <div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span> </div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>} <a class="code hl_struct" href="structperturb_1_1vallado__sgp4_1_1elsetrec.html">elsetrec</a>;</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>} <a class="code hl_struct" href="structperturb_1_1sgp4_1_1elsetrec.html">elsetrec</a>;</div>
 <div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span> </div>
 <div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span> </div>
 <div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span><span class="comment">// namespace SGP4Funcs</span></div>
@@ -222,17 +222,17 @@ $(document).ready(function(){initNavTree('vallado__sgp4_8hpp_source.html',''); i
 <div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>        gravconsttype whichconst, <span class="keywordtype">char</span> opsmode, <span class="keyword">const</span> <span class="keywordtype">char</span> satn[9], <span class="keyword">const</span> <span class="keywordtype">double</span> epoch,</div>
 <div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>        <span class="keyword">const</span> <span class="keywordtype">double</span> xbstar, <span class="keyword">const</span> <span class="keywordtype">double</span> xndot, <span class="keyword">const</span> <span class="keywordtype">double</span> xnddot, <span class="keyword">const</span> <span class="keywordtype">double</span> xecco, <span class="keyword">const</span> <span class="keywordtype">double</span> xargpo,</div>
 <div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>        <span class="keyword">const</span> <span class="keywordtype">double</span> xinclo, <span class="keyword">const</span> <span class="keywordtype">double</span> xmo, <span class="keyword">const</span> <span class="keywordtype">double</span> xno,</div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>        <span class="keyword">const</span> <span class="keywordtype">double</span> xnodeo, <a class="code hl_struct" href="structperturb_1_1vallado__sgp4_1_1elsetrec.html">elsetrec</a>&amp; satrec</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>        <span class="keyword">const</span> <span class="keywordtype">double</span> xnodeo, <a class="code hl_struct" href="structperturb_1_1sgp4_1_1elsetrec.html">elsetrec</a>&amp; satrec</div>
 <div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>        );</div>
 <div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span> </div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>    <span class="keywordtype">bool</span> sgp4</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="namespaceperturb_1_1sgp4.html#a20b46f8e119bc5ac9f2b02c003fa2fb4">sgp4</a></div>
 <div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>        (</div>
 <div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>        <span class="comment">// no longer need gravconsttype whichconst, all data contained in satrec</span></div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>        <a class="code hl_struct" href="structperturb_1_1vallado__sgp4_1_1elsetrec.html">elsetrec</a>&amp; satrec, <span class="keywordtype">double</span> tsince,</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>        <a class="code hl_struct" href="structperturb_1_1sgp4_1_1elsetrec.html">elsetrec</a>&amp; satrec, <span class="keywordtype">double</span> tsince,</div>
 <div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>        <span class="keywordtype">double</span> r[3], <span class="keywordtype">double</span> v[3]</div>
 <div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>        );</div>
 <div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span> </div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>    <span class="keywordtype">void</span> getgravconst</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="namespaceperturb_1_1sgp4.html#a20615d1d4bce5ae6fff7e8356fd25575">getgravconst</a></div>
 <div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>        (</div>
 <div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>        gravconsttype whichconst,</div>
 <div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>        <span class="keywordtype">double</span>&amp; tumin,</div>
@@ -247,18 +247,18 @@ $(document).ready(function(){initNavTree('vallado__sgp4_8hpp_source.html',''); i
 <div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span> </div>
 <div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span><span class="preprocessor">#ifndef PERTURB_DISABLE_IO</span></div>
 <div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>    <span class="comment">// older sgp4io methods</span></div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>    <span class="keywordtype">void</span> twoline2rv</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="namespaceperturb_1_1sgp4.html#a2a590932e88d1e1fe2a9ec472bf14274">twoline2rv</a></div>
 <div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>        (</div>
 <div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>        <span class="keywordtype">char</span>      longstr1[130], <span class="keywordtype">char</span> longstr2[130],</div>
 <div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>        <span class="keywordtype">char</span>      typerun, <span class="keywordtype">char</span> typeinput, <span class="keywordtype">char</span> opsmode,</div>
 <div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>        gravconsttype       whichconst,</div>
 <div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>        <span class="keywordtype">double</span>&amp; startmfe, <span class="keywordtype">double</span>&amp; stopmfe, <span class="keywordtype">double</span>&amp; deltamin,</div>
-<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>        <a class="code hl_struct" href="structperturb_1_1vallado__sgp4_1_1elsetrec.html">elsetrec</a>&amp; satrec</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>        <a class="code hl_struct" href="structperturb_1_1sgp4_1_1elsetrec.html">elsetrec</a>&amp; satrec</div>
 <div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>        );</div>
 <div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span><span class="preprocessor">#endif  </span><span class="comment">// PERTURB_DISABLE_IO</span></div>
 <div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span> </div>
 <div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>    <span class="comment">// older sgp4ext methods</span></div>
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>    <span class="keywordtype">double</span>  gstime_SGP4</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>    <span class="keywordtype">double</span>  <a class="code hl_function" href="namespaceperturb_1_1sgp4.html#a2b53783ff5d97e23b71a4a019b708913">gstime_SGP4</a></div>
 <div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>        (</div>
 <div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>        <span class="keywordtype">double</span> jdut1</div>
 <div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>        );</div>
@@ -268,58 +268,58 @@ $(document).ready(function(){initNavTree('vallado__sgp4_8hpp_source.html',''); i
 <div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>        <span class="keywordtype">double</span> x</div>
 <div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>        );</div>
 <div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span> </div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>    <span class="keywordtype">double</span>  mag_SGP4</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>    <span class="keywordtype">double</span>  <a class="code hl_function" href="namespaceperturb_1_1sgp4.html#a0ee49acd861fddd2b0476e1479d11983">mag_SGP4</a></div>
 <div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>        (</div>
 <div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>        <span class="keywordtype">double</span> x[3]</div>
 <div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>        );</div>
 <div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span> </div>
-<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>    <span class="keywordtype">void</span>    cross_SGP4</div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>    <span class="keywordtype">void</span>    <a class="code hl_function" href="namespaceperturb_1_1sgp4.html#a8a1481777704b21ff4cf813b5dc7767f">cross_SGP4</a></div>
 <div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>        (</div>
 <div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>        <span class="keywordtype">double</span> vec1[3], <span class="keywordtype">double</span> vec2[3], <span class="keywordtype">double</span> outvec[3]</div>
 <div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>        );</div>
 <div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span> </div>
-<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>    <span class="keywordtype">double</span>  dot_SGP4</div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>    <span class="keywordtype">double</span>  <a class="code hl_function" href="namespaceperturb_1_1sgp4.html#ac0e3cbb9b97906e89853fd77a6ae8d90">dot_SGP4</a></div>
 <div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>        (</div>
 <div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>        <span class="keywordtype">double</span> x[3], <span class="keywordtype">double</span> y[3]</div>
 <div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>        );</div>
 <div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span> </div>
-<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>    <span class="keywordtype">double</span>  angle_SGP4</div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>    <span class="keywordtype">double</span>  <a class="code hl_function" href="namespaceperturb_1_1sgp4.html#a7aad37eb8000dc4aa5493067616a5922">angle_SGP4</a></div>
 <div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>        (</div>
 <div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>        <span class="keywordtype">double</span> vec1[3],</div>
 <div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>        <span class="keywordtype">double</span> vec2[3]</div>
 <div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>        );</div>
 <div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span> </div>
-<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>    <span class="keywordtype">void</span>    newtonnu_SGP4</div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>    <span class="keywordtype">void</span>    <a class="code hl_function" href="namespaceperturb_1_1sgp4.html#a15716b0ec81d88b656976234500ccecb">newtonnu_SGP4</a></div>
 <div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>        (</div>
 <div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>        <span class="keywordtype">double</span> ecc, <span class="keywordtype">double</span> nu,</div>
 <div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>        <span class="keywordtype">double</span>&amp; e0, <span class="keywordtype">double</span>&amp; m</div>
 <div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>        );</div>
 <div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span> </div>
-<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>    <span class="keywordtype">double</span>  asinh_SGP4</div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>    <span class="keywordtype">double</span>  <a class="code hl_function" href="namespaceperturb_1_1sgp4.html#a6e7474b502b8379637228214ce9793af">asinh_SGP4</a></div>
 <div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>        (</div>
 <div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>        <span class="keywordtype">double</span> xval</div>
 <div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>        );</div>
 <div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span> </div>
-<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>    <span class="keywordtype">void</span>    rv2coe_SGP4</div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>    <span class="keywordtype">void</span>    <a class="code hl_function" href="namespaceperturb_1_1sgp4.html#a26e12916775406ce8b4e11ac47077cc9">rv2coe_SGP4</a></div>
 <div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>        (</div>
 <div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>        <span class="keywordtype">double</span> r[3], <span class="keywordtype">double</span> v[3], <span class="keywordtype">double</span> mus,</div>
 <div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>        <span class="keywordtype">double</span>&amp; p, <span class="keywordtype">double</span>&amp; a, <span class="keywordtype">double</span>&amp; ecc, <span class="keywordtype">double</span>&amp; incl, <span class="keywordtype">double</span>&amp; omega, <span class="keywordtype">double</span>&amp; argp,</div>
 <div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>        <span class="keywordtype">double</span>&amp; nu, <span class="keywordtype">double</span>&amp; m, <span class="keywordtype">double</span>&amp; arglat, <span class="keywordtype">double</span>&amp; truelon, <span class="keywordtype">double</span>&amp; lonper</div>
 <div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>        );</div>
 <div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span> </div>
-<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>    <span class="keywordtype">void</span>    jday_SGP4</div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>    <span class="keywordtype">void</span>    <a class="code hl_function" href="namespaceperturb_1_1sgp4.html#aa35b840aeba0ad9c2337623df827a4e5">jday_SGP4</a></div>
 <div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>        (</div>
 <div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>        <span class="keywordtype">int</span> year, <span class="keywordtype">int</span> mon, <span class="keywordtype">int</span> day, <span class="keywordtype">int</span> hr, <span class="keywordtype">int</span> minute, <span class="keywordtype">double</span> sec,</div>
 <div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>        <span class="keywordtype">double</span>&amp; jd, <span class="keywordtype">double</span>&amp; jdFrac</div>
 <div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>        );</div>
 <div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span> </div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>    <span class="keywordtype">void</span>    days2mdhms_SGP4</div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>    <span class="keywordtype">void</span>    <a class="code hl_function" href="namespaceperturb_1_1sgp4.html#aa4867c57cac99618d01bd53a4fcd3590">days2mdhms_SGP4</a></div>
 <div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>        (</div>
 <div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>        <span class="keywordtype">int</span> year, <span class="keywordtype">double</span> days,</div>
 <div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>        <span class="keywordtype">int</span>&amp; mon, <span class="keywordtype">int</span>&amp; day, <span class="keywordtype">int</span>&amp; hr, <span class="keywordtype">int</span>&amp; minute, <span class="keywordtype">double</span>&amp; sec</div>
 <div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>        );</div>
 <div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span> </div>
-<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>    <span class="keywordtype">void</span>    invjday_SGP4</div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>    <span class="keywordtype">void</span>    <a class="code hl_function" href="namespaceperturb_1_1sgp4.html#a68b4b3e7d3a7470c356a53af6388681d">invjday_SGP4</a></div>
 <div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>        (</div>
 <div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>        <span class="keywordtype">double</span> jd, <span class="keywordtype">double</span> jdFrac,</div>
 <div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>        <span class="keywordtype">int</span>&amp; year, <span class="keywordtype">int</span>&amp; mon, <span class="keywordtype">int</span>&amp; day,</div>
@@ -329,22 +329,36 @@ $(document).ready(function(){initNavTree('vallado__sgp4_8hpp_source.html',''); i
 <div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span> </div>
 <div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span><span class="comment">// }  // namespace</span></div>
 <div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span> </div>
-<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>}  <span class="comment">// namespace vallado_sgp4</span></div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>}  <span class="comment">// namespace sgp4</span></div>
 <div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>}  <span class="comment">// namespace perturb</span></div>
 <div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span> </div>
 <div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span><span class="comment">// NOLINTEND(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers</span></div>
 <div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span><span class="comment">// NOLINTEND(readability-avoid-const-params-in-decls)</span></div>
 <div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span><span class="comment">// clang-format on</span></div>
 <div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span> </div>
-<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span><span class="preprocessor">#endif  </span><span class="comment">// PERTURB_VALLADO_SGP4_HPP</span></div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span><span class="preprocessor">#endif  </span><span class="comment">// PERTURB_SGP4_HPP</span></div>
+<div class="ttc" id="anamespaceperturb_1_1sgp4_html_a0ee49acd861fddd2b0476e1479d11983"><div class="ttname"><a href="namespaceperturb_1_1sgp4.html#a0ee49acd861fddd2b0476e1479d11983">perturb::sgp4::mag_SGP4</a></div><div class="ttdeci">double mag_SGP4(double x[3])</div><div class="ttdef"><b>Definition:</b> sgp4.cpp:2564</div></div>
+<div class="ttc" id="anamespaceperturb_1_1sgp4_html_a15716b0ec81d88b656976234500ccecb"><div class="ttname"><a href="namespaceperturb_1_1sgp4.html#a15716b0ec81d88b656976234500ccecb">perturb::sgp4::newtonnu_SGP4</a></div><div class="ttdeci">void newtonnu_SGP4(double ecc, double nu, double &amp;e0, double &amp;m)</div><div class="ttdef"><b>Definition:</b> sgp4.cpp:2749</div></div>
+<div class="ttc" id="anamespaceperturb_1_1sgp4_html_a20615d1d4bce5ae6fff7e8356fd25575"><div class="ttname"><a href="namespaceperturb_1_1sgp4.html#a20615d1d4bce5ae6fff7e8356fd25575">perturb::sgp4::getgravconst</a></div><div class="ttdeci">void getgravconst(gravconsttype whichconst, double &amp;tumin, double &amp;mus, double &amp;radiusearthkm, double &amp;xke, double &amp;j2, double &amp;j3, double &amp;j4, double &amp;j3oj2)</div><div class="ttdef"><b>Definition:</b> sgp4.cpp:2102</div></div>
+<div class="ttc" id="anamespaceperturb_1_1sgp4_html_a20b46f8e119bc5ac9f2b02c003fa2fb4"><div class="ttname"><a href="namespaceperturb_1_1sgp4.html#a20b46f8e119bc5ac9f2b02c003fa2fb4">perturb::sgp4::sgp4</a></div><div class="ttdeci">bool sgp4(elsetrec &amp;satrec, double tsince, double r[3], double v[3])</div><div class="ttdef"><b>Definition:</b> sgp4.cpp:1770</div></div>
+<div class="ttc" id="anamespaceperturb_1_1sgp4_html_a26e12916775406ce8b4e11ac47077cc9"><div class="ttname"><a href="namespaceperturb_1_1sgp4.html#a26e12916775406ce8b4e11ac47077cc9">perturb::sgp4::rv2coe_SGP4</a></div><div class="ttdeci">void rv2coe_SGP4(double r[3], double v[3], double mus, double &amp;p, double &amp;a, double &amp;ecc, double &amp;incl, double &amp;omega, double &amp;argp, double &amp;nu, double &amp;m, double &amp;arglat, double &amp;truelon, double &amp;lonper)</div><div class="ttdef"><b>Definition:</b> sgp4.cpp:2863</div></div>
+<div class="ttc" id="anamespaceperturb_1_1sgp4_html_a2a590932e88d1e1fe2a9ec472bf14274"><div class="ttname"><a href="namespaceperturb_1_1sgp4.html#a2a590932e88d1e1fe2a9ec472bf14274">perturb::sgp4::twoline2rv</a></div><div class="ttdeci">void twoline2rv(char longstr1[130], char longstr2[130], char typerun, char typeinput, char opsmode, gravconsttype whichconst, double &amp;startmfe, double &amp;stopmfe, double &amp;deltamin, elsetrec &amp;satrec)</div><div class="ttdef"><b>Definition:</b> sgp4.cpp:2202</div></div>
+<div class="ttc" id="anamespaceperturb_1_1sgp4_html_a2b53783ff5d97e23b71a4a019b708913"><div class="ttname"><a href="namespaceperturb_1_1sgp4.html#a2b53783ff5d97e23b71a4a019b708913">perturb::sgp4::gstime_SGP4</a></div><div class="ttdeci">double gstime_SGP4(double jdut1)</div><div class="ttdef"><b>Definition:</b> sgp4.cpp:2506</div></div>
+<div class="ttc" id="anamespaceperturb_1_1sgp4_html_a68b4b3e7d3a7470c356a53af6388681d"><div class="ttname"><a href="namespaceperturb_1_1sgp4.html#a68b4b3e7d3a7470c356a53af6388681d">perturb::sgp4::invjday_SGP4</a></div><div class="ttdeci">void invjday_SGP4(double jd, double jdFrac, int &amp;year, int &amp;mon, int &amp;day, int &amp;hr, int &amp;minute, double &amp;sec)</div><div class="ttdef"><b>Definition:</b> sgp4.cpp:3235</div></div>
+<div class="ttc" id="anamespaceperturb_1_1sgp4_html_a6e7474b502b8379637228214ce9793af"><div class="ttname"><a href="namespaceperturb_1_1sgp4.html#a6e7474b502b8379637228214ce9793af">perturb::sgp4::asinh_SGP4</a></div><div class="ttdeci">double asinh_SGP4(double xval)</div><div class="ttdef"><b>Definition:</b> sgp4.cpp:2705</div></div>
+<div class="ttc" id="anamespaceperturb_1_1sgp4_html_a7aad37eb8000dc4aa5493067616a5922"><div class="ttname"><a href="namespaceperturb_1_1sgp4.html#a7aad37eb8000dc4aa5493067616a5922">perturb::sgp4::angle_SGP4</a></div><div class="ttdeci">double angle_SGP4(double vec1[3], double vec2[3])</div><div class="ttdef"><b>Definition:</b> sgp4.cpp:2659</div></div>
+<div class="ttc" id="anamespaceperturb_1_1sgp4_html_a8a1481777704b21ff4cf813b5dc7767f"><div class="ttname"><a href="namespaceperturb_1_1sgp4.html#a8a1481777704b21ff4cf813b5dc7767f">perturb::sgp4::cross_SGP4</a></div><div class="ttdeci">void cross_SGP4(double vec1[3], double vec2[3], double outvec[3])</div><div class="ttdef"><b>Definition:</b> sgp4.cpp:2594</div></div>
+<div class="ttc" id="anamespaceperturb_1_1sgp4_html_aa35b840aeba0ad9c2337623df827a4e5"><div class="ttname"><a href="namespaceperturb_1_1sgp4.html#aa35b840aeba0ad9c2337623df827a4e5">perturb::sgp4::jday_SGP4</a></div><div class="ttdeci">void jday_SGP4(int year, int mon, int day, int hr, int minute, double sec, double &amp;jd, double &amp;jdFrac)</div><div class="ttdef"><b>Definition:</b> sgp4.cpp:3100</div></div>
+<div class="ttc" id="anamespaceperturb_1_1sgp4_html_aa4867c57cac99618d01bd53a4fcd3590"><div class="ttname"><a href="namespaceperturb_1_1sgp4.html#aa4867c57cac99618d01bd53a4fcd3590">perturb::sgp4::days2mdhms_SGP4</a></div><div class="ttdeci">void days2mdhms_SGP4(int year, double days, int &amp;mon, int &amp;day, int &amp;hr, int &amp;minute, double &amp;sec)</div><div class="ttdef"><b>Definition:</b> sgp4.cpp:3161</div></div>
+<div class="ttc" id="anamespaceperturb_1_1sgp4_html_ac0e3cbb9b97906e89853fd77a6ae8d90"><div class="ttname"><a href="namespaceperturb_1_1sgp4.html#ac0e3cbb9b97906e89853fd77a6ae8d90">perturb::sgp4::dot_SGP4</a></div><div class="ttdeci">double dot_SGP4(double x[3], double y[3])</div><div class="ttdef"><b>Definition:</b> sgp4.cpp:2627</div></div>
 <div class="ttc" id="anamespaceperturb_html"><div class="ttname"><a href="namespaceperturb.html">perturb</a></div><div class="ttdoc">Primary namespace for the perturb library, everything is in here.</div><div class="ttdef"><b>Definition:</b> perturb.hpp:32</div></div>
-<div class="ttc" id="astructperturb_1_1vallado__sgp4_1_1elsetrec_html"><div class="ttname"><a href="structperturb_1_1vallado__sgp4_1_1elsetrec.html">perturb::vallado_sgp4::elsetrec</a></div><div class="ttdef"><b>Definition:</b> vallado_sgp4.hpp:90</div></div>
+<div class="ttc" id="astructperturb_1_1sgp4_1_1elsetrec_html"><div class="ttname"><a href="structperturb_1_1sgp4_1_1elsetrec.html">perturb::sgp4::elsetrec</a></div><div class="ttdef"><b>Definition:</b> sgp4.hpp:90</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5d5a5ec05ea476b57149ae374f60170a.html">perturb</a></li><li class="navelem"><a class="el" href="vallado__sgp4_8hpp.html">vallado_sgp4.hpp</a></li>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5d5a5ec05ea476b57149ae374f60170a.html">perturb</a></li><li class="navelem"><a class="el" href="sgp4_8hpp.html">sgp4.hpp</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>

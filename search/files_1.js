@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['vallado_5fsgp4_2ehpp_0',['vallado_sgp4.hpp',['../vallado__sgp4_8hpp.html',1,'']]]
+  ['sgp4_2ehpp_0',['sgp4.hpp',['../sgp4_8hpp.html',1,'']]]
 ];

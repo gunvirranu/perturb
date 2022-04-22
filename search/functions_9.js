@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['to_5fdatetime_0',['to_datetime',['../structperturb_1_1JulianDate.html#afe37ff1c30711cb1afb536a4cdc16bd5',1,'perturb::JulianDate']]]
+  ['mag_5fsgp4_0',['mag_SGP4',['../namespaceperturb_1_1sgp4.html#a0ee49acd861fddd2b0476e1479d11983',1,'perturb::sgp4']]]
 ];

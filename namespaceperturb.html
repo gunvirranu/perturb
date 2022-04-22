@@ -99,8 +99,8 @@ $(document).ready(function(){initNavTree('namespaceperturb.html',''); initResiza
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:namespaceperturb_1_1vallado__sgp4"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceperturb_1_1vallado__sgp4.html">vallado_sgp4</a></td></tr>
-<tr class="memdesc:namespaceperturb_1_1vallado__sgp4"><td class="mdescLeft">&#160;</td><td class="mdescRight">An internal namespace containing the underlying SGP4 implementation. <br /></td></tr>
+<tr class="memitem:namespaceperturb_1_1sgp4"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceperturb_1_1sgp4.html">sgp4</a></td></tr>
+<tr class="memdesc:namespaceperturb_1_1sgp4"><td class="mdescLeft">&#160;</td><td class="mdescRight">An internal namespace containing the underlying SGP4 implementation. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
@@ -187,7 +187,7 @@ constexpr double&#160;</td><td class="memItemRight" valign="bottom"><b>MINS_PER_
 </div><div class="memdoc">
 
 <p>Choice of gravity model / constants for the underlying SGP4 impl. </p>
-<p >Corresponds to the <code>gravconsttype</code> type in <code><a class="el" href="namespaceperturb_1_1vallado__sgp4.html" title="An internal namespace containing the underlying SGP4 implementation.">perturb::vallado_sgp4</a></code>. Generally, WGS72 is the standard choice, despite WGS83 being the newer and more accurate model. What is most important is that this is the exact same as the gravity model used to generate the TLE ephemeris. This can be confirmed from the source of your TLE data. </p>
+<p >Corresponds to the <code>gravconsttype</code> type in <code><a class="el" href="namespaceperturb_1_1sgp4.html" title="An internal namespace containing the underlying SGP4 implementation.">perturb::sgp4</a></code>. Generally, WGS72 is the standard choice, despite WGS84 being the newer and more accurate model. What is most important is that this is the exact same as the gravity model used to generate the TLE ephemeris. This can be confirmed from the source of your TLE data. </p>
 
 </div>
 </div>
@@ -216,7 +216,7 @@ constexpr double&#160;</td><td class="memItemRight" valign="bottom"><b>MINS_PER_
 <li>After construction of a <code><a class="el" href="classperturb_1_1Satellite.html" title="Represents a specific orbital ephemeris for an Earth-centered trajectory.">Satellite</a></code>, check <code><a class="el" href="classperturb_1_1Satellite.html#addff690305c8455e2f1522fbec79fde9" title="Return the last recorded error in the internal SGP4 record.">Satellite::last_error</a></code> for any issues with TLE parsing or SGP4 initialization.</li>
 <li>Calling <code><a class="el" href="classperturb_1_1Satellite.html#a9316a14fcbc5157f6bf1893f06b43793" title="Propagate the SGP4 model to a specific time point.">Satellite::propagate</a></code> returns a <code><a class="el" href="namespaceperturb.html#ac7ee004d313c675e4b824fc592e7454f" title="Possible issues during SGP4 propagation or even TLE parsing.">perturb::Sgp4Error</a></code>, indicating any possible issues with propagation.</li>
 </ol>
-<p >If everything is all good, the value should be <code>Sgp4Error::NONE</code>. The errors <code>Sgp4Error::MEAN_ELEMENTS</code> to <code>SGP4Error::DECAYED</code> directly correlate to errors in the underlying SGP4 impl, from the comments of <code>vallado_sgp4::sgp4</code>. The additional <code>Sgp4Error::INVALID_TLE</code> is for issues with reading the TLE strings. </p>
+<p >If everything is all good, the value should be <code>Sgp4Error::NONE</code>. The errors <code>Sgp4Error::MEAN_ELEMENTS</code> to <code>SGP4Error::DECAYED</code> directly correlate to errors in the underlying SGP4 impl, from the comments of <code><a class="el" href="namespaceperturb_1_1sgp4.html#a20b46f8e119bc5ac9f2b02c003fa2fb4">perturb::sgp4::sgp4</a></code>. The additional <code>Sgp4Error::INVALID_TLE</code> is for issues with reading the TLE strings. </p>
 
 </div>
 </div>

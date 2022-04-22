@@ -1,8 +1,8 @@
 var annotated_dup =
 [
     [ "perturb", "namespaceperturb.html", [
-      [ "vallado_sgp4", "namespaceperturb_1_1vallado__sgp4.html", [
-        [ "elsetrec", "structperturb_1_1vallado__sgp4_1_1elsetrec.html", null ]
+      [ "sgp4", "namespaceperturb_1_1sgp4.html", [
+        [ "elsetrec", "structperturb_1_1sgp4_1_1elsetrec.html", null ]
       ] ],
       [ "ClassicalOrbitalElements", "structperturb_1_1ClassicalOrbitalElements.html", "structperturb_1_1ClassicalOrbitalElements" ],
       [ "JulianDate", "structperturb_1_1JulianDate.html", "structperturb_1_1JulianDate" ],

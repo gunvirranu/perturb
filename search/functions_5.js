@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['normalize_0',['normalize',['../structperturb_1_1JulianDate.html#a5ea22238cfbaaef061497770020a4b1d',1,'perturb::JulianDate']]],
-  ['normalized_1',['normalized',['../structperturb_1_1JulianDate.html#aef91414492db47b0f0017a3d17b41060',1,'perturb::JulianDate']]]
+  ['getgravconst_0',['getgravconst',['../namespaceperturb_1_1sgp4.html#a20615d1d4bce5ae6fff7e8356fd25575',1,'perturb::sgp4']]],
+  ['gstime_5fsgp4_1',['gstime_SGP4',['../namespaceperturb_1_1sgp4.html#a2b53783ff5d97e23b71a4a019b708913',1,'perturb::sgp4']]]
 ];

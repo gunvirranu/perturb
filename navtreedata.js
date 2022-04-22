@@ -26,12 +26,13 @@ var NAVTREE =
 [
   [ "perturb", "index.html", [
     [ "Namespaces", "namespaces.html", [
-      [ "Basic Usage", "index.html#autotoc_md0", null ],
-      [ "Build Options", "index.html#autotoc_md1", null ],
-      [ "License", "index.html#autotoc_md2", null ],
+      [ "Basic Usage", "index.html#autotoc_md20", null ],
+      [ "Build Options", "index.html#autotoc_md21", null ],
+      [ "License", "index.html#autotoc_md22", null ],
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
         [ "All", "namespacemembers.html", null ],
+        [ "Functions", "namespacemembers_func.html", null ],
         [ "Variables", "namespacemembers_vars.html", null ],
         [ "Typedefs", "namespacemembers_type.html", null ],
         [ "Enumerations", "namespacemembers_enum.html", null ]

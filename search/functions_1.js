@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['epoch_0',['epoch',['../classperturb_1_1Satellite.html#aa2a4e8642762b12bf3a87795d1ddea34',1,'perturb::Satellite']]]
+  ['classicalorbitalelements_0',['ClassicalOrbitalElements',['../structperturb_1_1ClassicalOrbitalElements.html#a1d46fa7fe48786091ef6ee2717440fa1',1,'perturb::ClassicalOrbitalElements']]],
+  ['cross_5fsgp4_1',['cross_SGP4',['../namespaceperturb_1_1sgp4.html#a8a1481777704b21ff4cf813b5dc7767f',1,'perturb::sgp4']]]
 ];

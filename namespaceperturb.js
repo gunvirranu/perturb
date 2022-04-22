@@ -1,6 +1,6 @@
 var namespaceperturb =
 [
-    [ "vallado_sgp4", "namespaceperturb_1_1vallado__sgp4.html", "namespaceperturb_1_1vallado__sgp4" ],
+    [ "sgp4", "namespaceperturb_1_1sgp4.html", "namespaceperturb_1_1sgp4" ],
     [ "ClassicalOrbitalElements", "structperturb_1_1ClassicalOrbitalElements.html", "structperturb_1_1ClassicalOrbitalElements" ],
     [ "JulianDate", "structperturb_1_1JulianDate.html", "structperturb_1_1JulianDate" ],
     [ "Satellite", "classperturb_1_1Satellite.html", "classperturb_1_1Satellite" ],
