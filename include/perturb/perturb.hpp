@@ -99,7 +99,7 @@ enum class GravModel {
 ///  "The error associated with approximating UT1 with UTC is within the
 ///   theoretical uncertainty of the SGP4 theory itself. Except for the GMST
 ///   calculation, this paper and code assumes time to be realized as UTC."
-struct YMDhms {
+struct DateTime {
     int year;    ///< Year from 1900 to 2100
     int month;   ///< Month from 1 to 12
     int day;     ///< Day from 1 to {28, 29, 30, 31} (depending on month)
@@ -110,10 +110,10 @@ struct YMDhms {
 
 /// Represents a specific point in time on the Julian calendar.
 ///
-/// Generally not constructed manually, but instead converted from a `YMDhms`
+/// Generally not constructed manually, but instead converted from a `DateTime`
 /// or from `Satellite::epoch`. Supports some basic manipulation operations.
-/// For a human readable representation, can be converted back to `YMDhms`.
-/// As for what time point this represents, see the comment on `YMDhms`.
+/// For a human readable representation, can be converted back to `DateTime`.
+/// As for what time point this represents, see the comment on `DateTime`.
 ///
 /// Internally, this is represented as the "theoretical" sum of two double
 /// precision floats. This is to preserve as much time accuracy as possible,
@@ -142,18 +142,18 @@ struct JulianDate {
     /// @param jd_frac Smaller fractional Julian day value
     explicit JulianDate(double jd, double jd_frac);
 
-    /// Construct from a `YMDhms` time point.
+    /// Construct from a `DateTime` time point.
     ///
     /// @pre Only years from 1900 to 2100 are supported.
     /// @warning The date and time are assumed to be valid, with no checks.
     ///
     /// @param t Time point, must be from 1900 to 2100
-    explicit JulianDate(YMDhms t);
+    explicit JulianDate(DateTime t);
 
-    /// Convert to a `YMDhms` representing the same time point.
+    /// Convert to a `DateTime` representing the same time point.
     ///
     /// @return Same time point converted to a human readable representation
-    YMDhms to_datetime() const;
+    DateTime to_datetime() const;
 
     /// Normalizes a Julian date representation to a canonical representation.
     ///

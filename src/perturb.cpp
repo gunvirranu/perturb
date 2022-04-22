@@ -44,15 +44,15 @@ JulianDate::JulianDate(double _jd) : jd(_jd), jd_frac(0) {}
 
 JulianDate::JulianDate(double _jd, double _jd_frac) : jd(_jd), jd_frac(_jd_frac) {}
 
-JulianDate::JulianDate(YMDhms t) {
+JulianDate::JulianDate(DateTime t) {
     double tmp_jd, tmp_jd_frac;
     sgp4::jday_SGP4(t.year, t.month, t.day, t.hour, t.min, t.sec, tmp_jd, tmp_jd_frac);
     jd = tmp_jd;
     jd_frac = tmp_jd_frac;
 }
 
-YMDhms JulianDate::to_datetime() const {
-    YMDhms t {};
+DateTime JulianDate::to_datetime() const {
+    DateTime t {};
     sgp4::invjday_SGP4(jd, jd_frac, t.year, t.month, t.day, t.hour, t.min, t.sec);
     return t;
 }

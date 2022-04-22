@@ -34,7 +34,7 @@ double norm(const Vec3 &v) {
 
 TEST_CASE("test_julian_date_type") {
     constexpr double EPS = 1e-10;
-    const auto t = YMDhms { 2022, 3, 14, 0, 31, 19.3 };
+    const auto t = DateTime { 2022, 3, 14, 0, 31, 19.3 };
     const auto jd = JulianDate(t);
 
     // Check subtraction of two JDs
@@ -83,7 +83,7 @@ TEST_CASE(
 
     for (int i = 0; i < N_CHECKS; ++i) {
         const auto jd = (JD_START + i * DELTA_JD).normalized();
-        const YMDhms t = jd.to_datetime();
+        const DateTime t = jd.to_datetime();
         const auto jd_conv = JulianDate(t);
         CHECK_MESSAGE(
             jd.jd == jd_conv.jd,
@@ -106,7 +106,7 @@ TEST_CASE("test_sgp4_iss_tle") {
 
     // Check that the epoch is correct based of manual calculations
     SUBCASE("test_epoch") {
-        const YMDhms epoch = sat.epoch().to_datetime();
+        const DateTime epoch = sat.epoch().to_datetime();
         CHECK(epoch.year == 2022);
         CHECK(epoch.month == 3);
         CHECK(epoch.day == 12);
