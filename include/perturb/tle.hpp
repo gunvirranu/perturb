@@ -8,6 +8,9 @@
 #define PERTURB_TLE_HPP
 
 #include <cstddef>
+#ifndef PERTURB_DISABLE_IO
+#  include <string>
+#endif
 
 namespace perturb {
 
@@ -51,6 +54,14 @@ struct TLE {
     double mean_motion;
     unsigned long revolution_number;
     unsigned char line_2_checksum;
+
+#ifndef PERTURB_DISABLE_IO
+    TLEParseError parse(const char *line_1, const char *line_2);
+#endif  // PERTURB_DISABLE_IO
+
+#ifndef PERTURB_DISABLE_IO
+    TLEParseError parse(const std::string &line_1, const std::string &line_2);
+#endif  // PERTURB_DISABLE_IO
 };
 
 }  // namespace perturb
