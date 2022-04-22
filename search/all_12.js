@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['year_0',['year',['../structperturb_1_1YMDhms.html#a5a3af6ff98f99603099e5b2a3dece220',1,'perturb::YMDhms']]],
-  ['ymdhms_1',['YMDhms',['../structperturb_1_1YMDhms.html',1,'perturb']]]
+  ['year_0',['year',['../structperturb_1_1DateTime.html#ad20ee302d45c0d5db0fcd2f72b9ae4bb',1,'perturb::DateTime']]]
 ];

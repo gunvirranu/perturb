@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['hour_0',['hour',['../structperturb_1_1YMDhms.html#a9fd6c6abad053e976d12dfc45e74d789',1,'perturb::YMDhms']]]
+  ['hour_0',['hour',['../structperturb_1_1DateTime.html#af4c65ed1a135572affc2b29e344bcf73',1,'perturb::DateTime']]]
 ];

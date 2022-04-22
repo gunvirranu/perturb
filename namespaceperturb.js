@@ -2,10 +2,10 @@ var namespaceperturb =
 [
     [ "sgp4", "namespaceperturb_1_1sgp4.html", "namespaceperturb_1_1sgp4" ],
     [ "ClassicalOrbitalElements", "structperturb_1_1ClassicalOrbitalElements.html", "structperturb_1_1ClassicalOrbitalElements" ],
+    [ "DateTime", "structperturb_1_1DateTime.html", "structperturb_1_1DateTime" ],
     [ "JulianDate", "structperturb_1_1JulianDate.html", "structperturb_1_1JulianDate" ],
     [ "Satellite", "classperturb_1_1Satellite.html", "classperturb_1_1Satellite" ],
     [ "StateVector", "structperturb_1_1StateVector.html", "structperturb_1_1StateVector" ],
-    [ "YMDhms", "structperturb_1_1YMDhms.html", "structperturb_1_1YMDhms" ],
     [ "Vec3", "namespaceperturb.html#a24e2b6a2c7eafb6ad3c612227ab56227", null ],
     [ "GravModel", "namespaceperturb.html#a2903bdfd35b1a5eef9bb8a0b2bfa3a2c", [
       [ "WGS72_OLD", "namespaceperturb.html#a2903bdfd35b1a5eef9bb8a0b2bfa3a2caac6dc6f0163895c481bd5fff297710d2", null ],

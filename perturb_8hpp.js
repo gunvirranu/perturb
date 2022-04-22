@@ -1,6 +1,6 @@
 var perturb_8hpp =
 [
-    [ "perturb::YMDhms", "structperturb_1_1YMDhms.html", "structperturb_1_1YMDhms" ],
+    [ "perturb::DateTime", "structperturb_1_1DateTime.html", "structperturb_1_1DateTime" ],
     [ "perturb::JulianDate", "structperturb_1_1JulianDate.html", "structperturb_1_1JulianDate" ],
     [ "perturb::StateVector", "structperturb_1_1StateVector.html", "structperturb_1_1StateVector" ],
     [ "perturb::ClassicalOrbitalElements", "structperturb_1_1ClassicalOrbitalElements.html", "structperturb_1_1ClassicalOrbitalElements" ],

@@ -2,7 +2,7 @@ var searchData=
 [
   ['sat_5frec_0',['sat_rec',['../classperturb_1_1Satellite.html#a0a046c57b914d3bb90e4f4461088a363',1,'perturb::Satellite']]],
   ['satellite_1',['Satellite',['../classperturb_1_1Satellite.html',1,'perturb::Satellite'],['../classperturb_1_1Satellite.html#ae93d17d155628e9a72e78c707068bbe7',1,'perturb::Satellite::Satellite()']]],
-  ['sec_2',['sec',['../structperturb_1_1YMDhms.html#a2869c787bf9d9fdeb65d6831960c8ca2',1,'perturb::YMDhms']]],
+  ['sec_2',['sec',['../structperturb_1_1DateTime.html#a3039bf96af8b941a9c7db70c0b1888c2',1,'perturb::DateTime']]],
   ['semilatus_5frectum_3',['semilatus_rectum',['../structperturb_1_1ClassicalOrbitalElements.html#a0443af1e2f081d4faae12db769522755',1,'perturb::ClassicalOrbitalElements']]],
   ['semimajor_5faxis_4',['semimajor_axis',['../structperturb_1_1ClassicalOrbitalElements.html#a322ec4a74a2f7df8ad2964972259d0b8',1,'perturb::ClassicalOrbitalElements']]],
   ['sgp4_5',['sgp4',['../namespaceperturb_1_1sgp4.html#a20b46f8e119bc5ac9f2b02c003fa2fb4',1,'perturb::sgp4']]],
