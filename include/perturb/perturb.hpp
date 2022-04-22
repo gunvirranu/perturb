@@ -19,9 +19,9 @@
 #define PERTURB_PERTURB_HPP
 
 #include "perturb/sgp4.hpp"
+#include "perturb/tle.hpp"
 
 #include <array>
-#include <cstddef>
 #ifndef PERTURB_DISABLE_IO
 #  include <string>
 #endif
@@ -33,13 +33,6 @@ namespace perturb {
 
 /// Alias for representing position and velocity vectors
 using Vec3 = std::array<double, 3>;
-
-/// Both lines of a TLE **must** be this length, for TLE constructors.
-///
-/// The memory can and is accessed.
-/// Lines can be longer for verification mode, but that's for internal testing
-/// purposes only and doesn't pertain to general usage.
-constexpr std::size_t TLE_LINE_LEN = 69;
 
 /// Possible issues during SGP4 propagation or even TLE parsing.
 ///
