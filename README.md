@@ -46,7 +46,7 @@ int main() {
     assert(sat.epoch().to_datetime().day == 12);
 
     // Let's see what the ISS is doing on Pi Day
-    const auto t = JulianDate(YMDhms { 2022, 3, 14, 1, 59, 26.535 });
+    const auto t = JulianDate(DateTime { 2022, 3, 14, 1, 59, 26.535 });
     const double delta_days = t - sat.epoch();
     assert(1 < delta_days && delta_days < 3);  // It's been ~2 days since the epoch
 
@@ -120,7 +120,7 @@ Everything in this library is in the `perturb::` namespace. Here's a quick intro
 
 I won't cover the details of [SGP4][SGP4], but in brief, it's a very popular orbit propagator for Earth-centered spacecraft. Usually, the input orbit ephemeris is through a [TLE][TLE], such as the ones provided by [Celestrek][Celestrek]. These TLE inputs can be used to construct a `perturb::Satellite` object.
 
-A specific point in time is represented as a `perturb::JulianDate`. You can either construct one from a specific date and time via `perturb::YMDhms` or offset a number of days from the `epoch()` of a satellite.
+A specific point in time is represented as a `perturb::JulianDate`. You can either construct one from a specific date and time via `perturb::DateTime` or offset a number of days from the `epoch()` of a satellite.
 
 Passing in a time point to the `propagate(...)` method of a satellite yields a `StateVector`, which contains a time-stamp, and a position and velocity vector. These vectors are just a `std::array<double, 3>`, measured in kilometres, and are represented in the [TEME][ECI-TEME] coordinate reference frame. The details of this frame can get a bit annoying, so this library does _not_ handle converting it to others. For handling Earth-centered reference frames such as TEME and transformations between them, you may be interested in the [`gelocus`][gelocus] library.
 

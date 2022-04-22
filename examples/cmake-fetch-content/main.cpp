@@ -17,7 +17,7 @@ int main() {
     assert(sat.epoch().to_datetime().day == 12);
 
     // Let's see what the ISS is doing on Pi Day
-    const auto t = JulianDate(YMDhms { 2022, 3, 14, 1, 59, 26.535 });
+    const auto t = JulianDate(DateTime { 2022, 3, 14, 1, 59, 26.535 });
     const double delta_days = t - sat.epoch();
     assert(1 < delta_days && delta_days < 3);  // It's been ~2 days since the epoch
 
