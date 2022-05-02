@@ -9,12 +9,13 @@
 #include "perturb/perturb.hpp"
 #include "perturb/tle.hpp"
 
-#define CHECK_VEC(a, b, eps) \
-    CHECK(a[0] == doctest::Approx(b[0]).epsilon(eps)); \
-    CHECK(a[1] == doctest::Approx(b[1]).epsilon(eps)); \
-    CHECK(a[2] == doctest::Approx(b[2]).epsilon(eps))
-
 using namespace perturb;
+using doctest::Approx;
+
+#define CHECK_VEC(a, b, eps) \
+    CHECK(a[0] == Approx(b[0]).epsilon(eps)); \
+    CHECK(a[1] == Approx(b[1]).epsilon(eps)); \
+    CHECK(a[2] == Approx(b[2]).epsilon(eps))
 
 #ifndef PERTURB_DISABLE_IO
 Satellite sat_from_verif_tle(
@@ -50,7 +51,7 @@ TEST_CASE("test_julian_date_type") {
     const auto jd2 = JulianDate(t2);
     const double dt = jd2 - jd;
     const double expected_dt = (t2.day - t.day) + ((t2.hour - t.hour) + (t2.min - t.min) / 60.0) / 24.0;
-    CHECK(dt == doctest::Approx(expected_dt).epsilon(EPS));
+    CHECK(dt == Approx(expected_dt).epsilon(EPS));
 
     // Check that normalization works
     const auto jd_unnorm = jd + dt;
@@ -62,7 +63,7 @@ TEST_CASE("test_julian_date_type") {
     // Check addition of JD and offset
     const auto jd3 = (jd + dt).normalized();
     CHECK(jd2.jd == jd3.jd);
-    CHECK(jd2.jd_frac == doctest::Approx(jd3.jd_frac).epsilon(EPS));
+    CHECK(jd2.jd_frac == Approx(jd3.jd_frac).epsilon(EPS));
 
     // Check addition assignment
     auto jd4 = jd;
@@ -74,7 +75,7 @@ TEST_CASE("test_julian_date_type") {
     // Check subtraction of JD and offset
     const auto jd5 = (jd3 - dt).normalized();
     CHECK(jd5.jd == jd.jd);
-    CHECK(jd5.jd_frac == doctest::Approx(jd.jd_frac).epsilon(EPS));
+    CHECK(jd5.jd_frac == Approx(jd.jd_frac).epsilon(EPS));
 }
 
 TEST_CASE(
@@ -95,7 +96,7 @@ TEST_CASE(
             t.year, "-", t.month, "-", t.day
         );
         CHECK_MESSAGE(
-            jd.jd_frac == doctest::Approx(jd_conv.jd_frac).epsilon(1e-12),
+            jd.jd_frac == Approx(jd_conv.jd_frac).epsilon(1e-12),
             t.hour, ":", t.min, ":", t.sec
         );
     }
@@ -207,7 +208,7 @@ TEST_CASE("test_sgp4_iss_tle") {
         CHECK(epoch.day == 12);
         CHECK(epoch.hour == 18);
         CHECK(epoch.min == 43);
-        CHECK(epoch.sec == doctest::Approx(40).epsilon(1e-5));
+        CHECK(epoch.sec == Approx(40).epsilon(1e-5));
     }
 
     // Check height above Earth and speed roughly stay the same over a week.
@@ -226,8 +227,8 @@ TEST_CASE("test_sgp4_iss_tle") {
             CHECK(err == Sgp4Error::NONE);
             const double dist = norm(sv.position) - AVG_EARTH_RADIUS;
             const double speed = norm(sv.velocity);
-            CHECK(dist == doctest::Approx(AVG_ISS_HEIGHT).epsilon(0.05));
-            CHECK(speed == doctest::Approx(AVG_ISS_SPEED).epsilon(0.05));
+            CHECK(dist == Approx(AVG_ISS_HEIGHT).epsilon(0.05));
+            CHECK(speed == Approx(AVG_ISS_SPEED).epsilon(0.05));
             mins += CHECK_EVERY_MINS;
         }
     }
@@ -235,42 +236,36 @@ TEST_CASE("test_sgp4_iss_tle") {
     // Check position and velocity vectors are roughly the same after entire orbits
     SUBCASE("test_whole_orbit") {
         constexpr double AVG_ISS_ORBITAL = 92.8;    // minutes
-        constexpr double EPS = 0.1;                 // Acceptable relative delta
         constexpr int CHECK_N_ORBITS = 1000;        // Number of consecutive orbits
         StateVector sv_1, sv_2;
         for (int i = 0; i < CHECK_N_ORBITS; ++i) {
             const double t = i * AVG_ISS_ORBITAL;
             sat.propagate_from_epoch(t, sv_1);
             sat.propagate_from_epoch(t + AVG_ISS_ORBITAL, sv_2);
-            const auto &vel_1 = sv_1.velocity;
-            const auto &vel_2 = sv_2.velocity;
-            CHECK(vel_1[0] == doctest::Approx(vel_2[0]).epsilon(EPS));
-            CHECK(vel_1[1] == doctest::Approx(vel_2[1]).epsilon(EPS));
-            CHECK(vel_1[2] == doctest::Approx(vel_2[2]).epsilon(EPS));
-            CHECK(vel_1[0] == doctest::Approx(vel_2[0]).epsilon(EPS));
-            CHECK(vel_1[1] == doctest::Approx(vel_2[1]).epsilon(EPS));
-            CHECK(vel_1[2] == doctest::Approx(vel_2[2]).epsilon(EPS));
+            const auto &pos_1 = sv_1.position, &pos_2 = sv_2.position;
+            const auto &vel_1 = sv_1.velocity, &vel_2 = sv_2.velocity;
+            CHECK_VEC(pos_1, pos_2, 0.1);
+            CHECK_VEC(vel_1, vel_2, 0.1);
         }
     }
 
     // Check position and velocity is roughly inverse after half orbits
     SUBCASE("test_half_orbit") {
         constexpr double AVG_ISS_ORBITAL = 92.8;    // minutes
-        constexpr double EPS = 0.05;                // Acceptable relative delta
         constexpr int CHECK_N_ORBITS = 1000;        // Number of consecutive orbits
         StateVector sv_1, sv_2;
         for (int i = 0; i < CHECK_N_ORBITS; ++i) {
             const auto t = i * AVG_ISS_ORBITAL;
             sat.propagate_from_epoch(t, sv_1);
             sat.propagate_from_epoch(t + AVG_ISS_ORBITAL / 2.0, sv_2);
-            const auto &vel_1 = sv_1.velocity;
-            const auto &vel_2 = sv_2.velocity;
-            CHECK(vel_1[0] == doctest::Approx(-vel_2[0]).epsilon(EPS));
-            CHECK(vel_1[1] == doctest::Approx(-vel_2[1]).epsilon(EPS));
-            CHECK(vel_1[2] == doctest::Approx(-vel_2[2]).epsilon(EPS));
-            CHECK(vel_1[0] == doctest::Approx(-vel_2[0]).epsilon(EPS));
-            CHECK(vel_1[1] == doctest::Approx(-vel_2[1]).epsilon(EPS));
-            CHECK(vel_1[2] == doctest::Approx(-vel_2[2]).epsilon(EPS));
+            for (std::size_t j = 0; j < 3; ++j) {
+                sv_2.position[j] *= -1;
+                sv_2.velocity[j] *= -1;
+            }
+            const auto &pos_1 = sv_1.position, &pos_2 = sv_2.position;
+            const auto &vel_1 = sv_1.velocity, &vel_2 = sv_2.velocity;
+            CHECK_VEC(pos_1, pos_2, 0.05);
+            CHECK_VEC(vel_1, vel_2, 0.05);
         }
     }
 }
@@ -408,7 +403,7 @@ TEST_CASE(
 
 #ifdef PERTURB_SGP4_ENABLE_DEBUG
 #define CHECK_AB_MEMBER(x) CHECK(a.x == b.x)
-#define CHECK_AB_MEMBER_EPS(x, eps) CHECK(a.x == doctest::Approx(b.x).epsilon(eps))
+#define CHECK_AB_MEMBER_EPS(x, eps) CHECK(a.x == Approx(b.x).epsilon(eps))
 
 TEST_CASE(
     "test_tle_parser_with_verif_mode"
