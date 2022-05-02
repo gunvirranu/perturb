@@ -9,6 +9,11 @@
 #include "perturb/perturb.hpp"
 #include "perturb/tle.hpp"
 
+#define CHECK_VEC(a, b, eps) \
+    CHECK(a[0] == doctest::Approx(b[0]).epsilon(eps)); \
+    CHECK(a[1] == doctest::Approx(b[1]).epsilon(eps)); \
+    CHECK(a[2] == doctest::Approx(b[2]).epsilon(eps))
+
 using namespace perturb;
 
 #ifndef PERTURB_DISABLE_IO
@@ -398,5 +403,85 @@ TEST_CASE(
         }
     }
     std::fclose(out_file);
+}
+#endif  // PERTURB_SGP4_ENABLE_DEBUG
+
+#ifdef PERTURB_SGP4_ENABLE_DEBUG
+#define CHECK_AB_MEMBER(x) CHECK(a.x == b.x)
+#define CHECK_AB_MEMBER_EPS(x, eps) CHECK(a.x == doctest::Approx(b.x).epsilon(eps))
+
+TEST_CASE(
+    "test_tle_parser_with_verif_mode"
+    * doctest::description("Compare TLE parser against Vallado on all verif TLEs")
+) {
+    std::ifstream in_file("SGP4-VER.TLE");
+    std::string line_1, line_2;
+    while (std::getline(in_file, line_1)) {
+        if (line_1[0] == '#') {
+            continue;
+        }
+        REQUIRE(std::getline(in_file, line_2));
+        line_1.resize(TLE_LINE_LEN);
+        line_2.resize(TLE_LINE_LEN);
+        INFO("TLE: ", line_1, "\n       ", line_2);
+
+        // Parse into `TLE` type and construct `Satellite` as `sat_tle`
+        TLE tle {};
+        const auto err = tle.parse(line_1, line_2);
+        // Ignore `NONE`, `CHECKSUM_MISMATCH`, and `INVALID_VALUE`
+        CHECK(err != TLEParseError::SHOULD_BE_SPACE);
+        CHECK(err != TLEParseError::INVALID_FORMAT);
+        // `TLE::parse` can't handle some odd parsing cases
+        if (err == TLEParseError::INVALID_VALUE) {
+            continue;
+        }
+        auto sat_tle = Satellite(tle);
+
+        // Parse and construct `sat_orig` using Vallado's impl
+        auto sat_orig = Satellite::from_tle(line_1, line_2);
+        CHECK(sat_orig.last_error() != Sgp4Error::INVALID_TLE);
+
+        // Correct some unimportant differences
+        sat_tle.sat_rec.elnum = (sat_tle.sat_rec.elnum * 10 + tle.line_1_checksum);
+        sat_tle.sat_rec.revnum = (sat_tle.sat_rec.revnum * 10 + tle.line_2_checksum);
+
+        // Check that a subset of the member vars match. Others are based off these.
+        const auto &a = sat_tle.sat_rec, &b = sat_orig.sat_rec;
+        // Line 1
+        CHECK_AB_MEMBER(satnum);
+        CHECK_AB_MEMBER(classification);
+        // `Satellite(const TLE &)` doesn't set `sat_rec.intldesg`, so ignore
+        // CHECK_SAT_MEMBER(intldesg);
+        CHECK_AB_MEMBER(epochyr);
+        CHECK_AB_MEMBER(epochdays);
+        CHECK_AB_MEMBER(epochdays);
+        CHECK_AB_MEMBER(ndot);
+        CHECK_AB_MEMBER_EPS(nddot, 1e-16);
+        CHECK_AB_MEMBER_EPS(bstar, 1e-16);
+        CHECK_AB_MEMBER(ephtype);
+        CHECK_AB_MEMBER(elnum);
+        // Line 2
+        CHECK_AB_MEMBER(inclo);
+        CHECK_AB_MEMBER(nodeo);
+        CHECK_AB_MEMBER(ecco);
+        CHECK_AB_MEMBER(argpo);
+        CHECK_AB_MEMBER(mo);
+        CHECK_AB_MEMBER(no_kozai);
+        CHECK_AB_MEMBER(revnum);
+
+        // Try propagating to check that output predictions match
+        for (const double mins : { 0.0, 0.5, 5.0, 30.0, 1440.0, 20000.0 }) {
+            CAPTURE(mins);
+
+            StateVector sv_a {}, sv_b {};
+            (void) sat_tle.propagate_from_epoch(mins, sv_a);
+            (void) sat_orig.propagate_from_epoch(mins, sv_b);
+
+            CHECK(sv_a.epoch.jd == sv_b.epoch.jd);
+            CHECK(sv_a.epoch.jd_frac == sv_b.epoch.jd_frac);
+            CHECK_VEC(sv_a.position, sv_b.position, 1e-16);
+            CHECK_VEC(sv_a.velocity, sv_b.velocity, 1e-14);
+        }
+    }
 }
 #endif  // PERTURB_SGP4_ENABLE_DEBUG
