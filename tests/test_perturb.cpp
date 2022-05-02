@@ -12,10 +12,10 @@
 using namespace perturb;
 using doctest::Approx;
 
-#define CHECK_VEC(a, b, eps) \
-    CHECK(a[0] == Approx(b[0]).epsilon(eps)); \
-    CHECK(a[1] == Approx(b[1]).epsilon(eps)); \
-    CHECK(a[2] == Approx(b[2]).epsilon(eps))
+#define CHECK_VEC(a, b, eps, scl) \
+    CHECK((a)[0] == Approx((b)[0]).scale(scl).epsilon(eps)); \
+    CHECK((a)[1] == Approx((b)[1]).scale(scl).epsilon(eps)); \
+    CHECK((a)[2] == Approx((b)[2]).scale(scl).epsilon(eps))
 
 #ifndef PERTURB_DISABLE_IO
 Satellite sat_from_verif_tle(
@@ -244,8 +244,8 @@ TEST_CASE("test_sgp4_iss_tle") {
             sat.propagate_from_epoch(t + AVG_ISS_ORBITAL, sv_2);
             const auto &pos_1 = sv_1.position, &pos_2 = sv_2.position;
             const auto &vel_1 = sv_1.velocity, &vel_2 = sv_2.velocity;
-            CHECK_VEC(pos_1, pos_2, 0.1);
-            CHECK_VEC(vel_1, vel_2, 0.1);
+            CHECK_VEC(pos_1, pos_2, 0.05, 1000);
+            CHECK_VEC(vel_1, vel_2, 0.05, 5);
         }
     }
 
@@ -264,8 +264,8 @@ TEST_CASE("test_sgp4_iss_tle") {
             }
             const auto &pos_1 = sv_1.position, &pos_2 = sv_2.position;
             const auto &vel_1 = sv_1.velocity, &vel_2 = sv_2.velocity;
-            CHECK_VEC(pos_1, pos_2, 0.05);
-            CHECK_VEC(vel_1, vel_2, 0.05);
+            CHECK_VEC(pos_1, pos_2, 0.05, 1000);
+            CHECK_VEC(vel_1, vel_2, 0.05, 5);
         }
     }
 }
@@ -474,8 +474,8 @@ TEST_CASE(
 
             CHECK(sv_a.epoch.jd == sv_b.epoch.jd);
             CHECK(sv_a.epoch.jd_frac == sv_b.epoch.jd_frac);
-            CHECK_VEC(sv_a.position, sv_b.position, 1e-16);
-            CHECK_VEC(sv_a.velocity, sv_b.velocity, 1e-14);
+            CHECK_VEC(sv_a.position, sv_b.position, 1e-16, 1);
+            CHECK_VEC(sv_a.velocity, sv_b.velocity, 1e-14, 1);
         }
     }
 }
