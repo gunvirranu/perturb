@@ -1,6 +1,6 @@
 /*
  * perturb -- A modern C++11 wrapper for the SGP4 orbit propagator
- * Version 0.0.0
+ * Version 1.0.0
  * https://github.com/gunvirranu/perturb
  *
  * Licensed under the MIT License <http://opensource.org/licenses/MIT>.
@@ -12,7 +12,7 @@
 //! @file
 //! Primary header file for the perturb library
 //! @author Gunvir Ranu
-//! @version 0.0.0
+//! @version 1.0.0
 //! @copyright Gunvir Ranu, MIT License
 
 #ifndef PERTURB_PERTURB_HPP

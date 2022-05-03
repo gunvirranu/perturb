@@ -2,7 +2,7 @@
 
 PROJECT_NAME           = "perturb"
 PROJECT_BRIEF          = "A modern C++11 wrapper for the SGP4 orbit propagator"
-PROJECT_NUMBER         = 0.0.0
+PROJECT_NUMBER         = 1.0.0
 
 INPUT                  = ../include/perturb, ../src, index.md
 JAVADOC_AUTOBRIEF      = YES

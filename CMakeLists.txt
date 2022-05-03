@@ -9,7 +9,7 @@ endif()
 
 project(
     perturb
-    VERSION 0.0.1
+    VERSION 1.0.0
     DESCRIPTION "A modern C++ wrapper for SGP4 orbit propagation"
     HOMEPAGE_URL "https://github.com/gunvirranu/perturb"
     LANGUAGES CXX
