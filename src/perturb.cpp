@@ -18,8 +18,8 @@
 
 namespace perturb {
 
-constexpr double MINS_PER_DAY = 24 * 60;
-constexpr double PI = 3.14159265358979323846;
+static constexpr double MINS_PER_DAY = 24 * 60;
+static constexpr double PI = 3.14159265358979323846;
 
 static Sgp4Error convert_sgp4_error_code(const int error_code) {
     if (error_code < 0 || error_code >= static_cast<int>(Sgp4Error::UNKNOWN)) {

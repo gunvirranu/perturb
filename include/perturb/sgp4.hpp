@@ -142,7 +142,7 @@ typedef struct elsetrec  // NOLINT(modernize-use-using,altera-struct-pack-align)
 
     bool sgp4init
         (
-        gravconsttype whichconst, char opsmode, const char satn[9], const double epoch,
+        gravconsttype whichconst, char opsmode, const char satn[5], const double epoch,
         const double xbstar, const double xndot, const double xnddot, const double xecco, const double xargpo,
         const double xinclo, const double xmo, const double xno,
         const double xnodeo, elsetrec& satrec

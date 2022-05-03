@@ -237,11 +237,30 @@ public:
     /// Internal SGP4 type
     sgp4::elsetrec sat_rec;
 
-    /// Constructs from a raw SGP4 orbital record.
+    /// Construct from a raw SGP4 orbital record.
     ///
     /// @param sat_rec Pre-initialized SGP4 orbital record
     explicit Satellite(sgp4::elsetrec sat_rec);
 
+    /// Construct and initialize from a pre-parsed TLE record.
+    ///
+    /// Does not require any string parsing, so aight for embedded. Does the
+    /// same initialization steps as `perturb::sgp4::twoline2rv` and then uses
+    /// `perturb::sgp4::sgp4init` to fully initialize.
+    ///
+    /// You probably don't want to parse a TLE string into a `TwoLineElement`
+    /// and then construct a `Satellite` via this. You should instead use the
+    /// `Satellite::from_tle` constructor directly.
+    ///
+    /// This is only useful if you don't want *any* IO (via the `PERTURB_DISABLE_IO`
+    /// flag), because then this and the `Satellite(sgp4::elsetrec)` constructor are the
+    /// only way of constructing a `Satellite` object. It's up to you how you wanna
+    /// construct the parsed `perturb::TwoLineElement` object.
+    ///
+    /// @pre The TLE must be valid and contain valid values.
+    ///
+    /// @param tle Parsed and valid TLE
+    /// @param grav_model Gravity constants to use (default `GravModel::WGS72`)
     explicit Satellite(
         const TwoLineElement &tle, GravModel grav_model = GravModel::WGS72
     );
