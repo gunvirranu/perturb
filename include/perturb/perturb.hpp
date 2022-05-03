@@ -242,7 +242,9 @@ public:
     /// @param sat_rec Pre-initialized SGP4 orbital record
     explicit Satellite(sgp4::elsetrec sat_rec);
 
-    explicit Satellite(const TLE &tle, GravModel grav_model = GravModel::WGS72);
+    explicit Satellite(
+        const TwoLineElement &tle, GravModel grav_model = GravModel::WGS72
+    );
 
 #ifndef PERTURB_DISABLE_IO
     /// Construct and initialize a `Satellite` from a TLE record.

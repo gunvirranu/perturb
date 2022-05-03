@@ -28,7 +28,7 @@ static unsigned int calc_tle_line_checksum(const char *line) {
 
 #ifndef PERTURB_DISABLE_IO
 // FIXME: Use a more robust parsing method. I wish string_view existed :(
-TLEParseError TLE::parse(const char *line_1, const char *line_2) {
+TLEParseError TwoLineElement::parse(const char *line_1, const char *line_2) {
     // Make sure there are spaces in the right places
     constexpr std::array<int, 8> LINE_1_SPACES = { 2, 9, 18, 33, 44, 53, 62, 64 };
     for (const int i : LINE_1_SPACES) {
@@ -163,7 +163,9 @@ TLEParseError TLE::parse(const char *line_1, const char *line_2) {
 #endif  // PERTURB_DISABLE_IO
 
 #ifndef PERTURB_DISABLE_IO
-TLEParseError TLE::parse(const std::string &line_1, const std::string &line_2) {
+TLEParseError TwoLineElement::parse(
+    const std::string &line_1, const std::string &line_2
+) {
     if (line_1.length() < TLE_LINE_LEN || line_2.length() < TLE_LINE_LEN) {
         return TLEParseError::INVALID_FORMAT;
     }

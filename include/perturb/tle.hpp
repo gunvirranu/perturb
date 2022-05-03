@@ -29,7 +29,7 @@ enum class TLEParseError {
     CHECKSUM_MISMATCH,
 };
 
-struct TLE {
+struct TwoLineElement {
     // Line 1
     char catalog_number[6];
     char classification;

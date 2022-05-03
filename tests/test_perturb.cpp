@@ -108,7 +108,7 @@ TEST_CASE("test_tle_parse") {
     const char *TLE_2 = "2 25544  51.6424  94.0370 0004047 256.5103  89.8846 15.49386383330227";
 
     SUBCASE("test_standard") {
-        TLE tle {};
+        TwoLineElement tle {};
         const auto err1 = tle.parse(TLE_1, TLE_2);
         CHECK(err1 == TLEParseError::NONE);
 
@@ -149,7 +149,7 @@ TEST_CASE("test_tle_parse") {
     }
 
     SUBCASE("test_line_1_errors") {
-        TLE tle {};
+        TwoLineElement tle {};
         const auto err1 = tle.parse(
             "1 25544U*98067A   22071.78032407  .00021395  00000-0  39008-3 0  9996",
             TLE_2
@@ -170,7 +170,7 @@ TEST_CASE("test_tle_parse") {
     }
 
     SUBCASE("test_line_2_errors") {
-        TLE tle {};
+        TwoLineElement tle {};
         const auto err1 = tle.parse(
             TLE_1,
             "2 25544  51.6424* 94.0370 0004047 256.5103  89.8846 15.49386383330227"
@@ -421,7 +421,7 @@ TEST_CASE(
         INFO("TLE: ", line_1, "\n       ", line_2);
 
         // Parse into `TLE` type and construct `Satellite` as `sat_tle`
-        TLE tle {};
+        TwoLineElement tle {};
         const auto err = tle.parse(line_1, line_2);
         // Ignore `NONE`, `CHECKSUM_MISMATCH`, and `INVALID_VALUE`
         CHECK(err != TLEParseError::SHOULD_BE_SPACE);

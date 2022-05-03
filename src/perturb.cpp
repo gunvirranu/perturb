@@ -116,7 +116,7 @@ ClassicalOrbitalElements::ClassicalOrbitalElements(
 
 Satellite::Satellite(const sgp4::elsetrec _sat_rec) : sat_rec(_sat_rec) {}
 
-Satellite::Satellite(const TLE &tle, GravModel grav_model) : sat_rec({}) {
+Satellite::Satellite(const TwoLineElement &tle, GravModel grav_model) : sat_rec({}) {
     constexpr double DEG_TO_RAD = PI / 180.0;
     constexpr double XP_DOT_P = 1440.0 / (2 * PI);
 
