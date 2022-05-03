@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['eccentricity_0',['eccentricity',['../structperturb_1_1ClassicalOrbitalElements.html#a0a990e33def30f40b830bb81341f2c03',1,'perturb::ClassicalOrbitalElements']]],
-  ['elsetrec_1',['elsetrec',['../structperturb_1_1sgp4_1_1elsetrec.html',1,'perturb::sgp4']]],
-  ['epoch_2',['epoch',['../structperturb_1_1StateVector.html#a794f1086971960451fb59026d7f65f55',1,'perturb::StateVector::epoch()'],['../classperturb_1_1Satellite.html#aa2a4e8642762b12bf3a87795d1ddea34',1,'perturb::Satellite::epoch()']]]
+  ['datetime_0',['DateTime',['../structperturb_1_1DateTime.html',1,'perturb']]],
+  ['day_1',['day',['../structperturb_1_1DateTime.html#a34f906a00e301da3e3517a43fa059275',1,'perturb::DateTime']]],
+  ['days2mdhms_5fsgp4_2',['days2mdhms_SGP4',['../namespaceperturb_1_1sgp4.html#aa4867c57cac99618d01bd53a4fcd3590',1,'perturb::sgp4']]],
+  ['dot_5fsgp4_3',['dot_SGP4',['../namespaceperturb_1_1sgp4.html#ac0e3cbb9b97906e89853fd77a6ae8d90',1,'perturb::sgp4']]]
 ];

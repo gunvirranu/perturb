@@ -1,7 +1,9 @@
 var searchData=
 [
-  ['operator_2b_0',['operator+',['../structperturb_1_1JulianDate.html#a7d161bfd2393f2cbf5b96b26844d30f9',1,'perturb::JulianDate']]],
-  ['operator_2b_3d_1',['operator+=',['../structperturb_1_1JulianDate.html#a088fd5400a3f142026d0047990596e11',1,'perturb::JulianDate']]],
-  ['operator_2d_2',['operator-',['../structperturb_1_1JulianDate.html#a8e15aa199ffe05e88982cd5b9cc1b1f4',1,'perturb::JulianDate::operator-(const JulianDate &amp;rhs) const'],['../structperturb_1_1JulianDate.html#ac0005c019cb0e4855bb81fc62d0586d3',1,'perturb::JulianDate::operator-(const double &amp;delta_jd) const']]],
-  ['operator_2d_3d_3',['operator-=',['../structperturb_1_1JulianDate.html#af0351484b098f3d37a77ace8dd779310',1,'perturb::JulianDate']]]
+  ['n_5fddot_0',['n_ddot',['../structperturb_1_1TwoLineElement.html#a963fefaddee5eac92784f56e81c2c62d',1,'perturb::TwoLineElement']]],
+  ['n_5fdot_1',['n_dot',['../structperturb_1_1TwoLineElement.html#aeb892167daa76dbc82a214fc76998f9e',1,'perturb::TwoLineElement']]],
+  ['newtonnu_5fsgp4_2',['newtonnu_SGP4',['../namespaceperturb_1_1sgp4.html#a15716b0ec81d88b656976234500ccecb',1,'perturb::sgp4']]],
+  ['none_3',['NONE',['../namespaceperturb.html#a1ddcb36ca08106b8a3997f80932953bcab50339a10e1de285ac99d4c3990b8693',1,'perturb']]],
+  ['normalize_4',['normalize',['../structperturb_1_1JulianDate.html#a5ea22238cfbaaef061497770020a4b1d',1,'perturb::JulianDate']]],
+  ['normalized_5',['normalized',['../structperturb_1_1JulianDate.html#aef91414492db47b0f0017a3d17b41060',1,'perturb::JulianDate']]]
 ];

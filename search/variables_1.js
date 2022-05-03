@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['day_0',['day',['../structperturb_1_1DateTime.html#a34f906a00e301da3e3517a43fa059275',1,'perturb::DateTime']]]
+  ['b_5fstar_0',['b_star',['../structperturb_1_1TwoLineElement.html#a605f83a36208908325fe469768b8856e',1,'perturb::TwoLineElement']]]
 ];

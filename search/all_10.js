@@ -1,8 +1,14 @@
 var searchData=
 [
-  ['tle_5fline_5flen_0',['TLE_LINE_LEN',['../namespaceperturb.html#a8bf99fd90789ad2f69e7ac1bab8832ef',1,'perturb']]],
-  ['to_5fdatetime_1',['to_datetime',['../structperturb_1_1JulianDate.html#a47a55d34288d7c965a6f663f0485fcc0',1,'perturb::JulianDate']]],
-  ['true_5fanomaly_2',['true_anomaly',['../structperturb_1_1ClassicalOrbitalElements.html#ad9aba315cc0ad064937e1b962ba3d2a0',1,'perturb::ClassicalOrbitalElements']]],
-  ['true_5flongitude_3',['true_longitude',['../structperturb_1_1ClassicalOrbitalElements.html#a866d848eac3b6db9e3e98413c563f355',1,'perturb::ClassicalOrbitalElements']]],
-  ['twoline2rv_4',['twoline2rv',['../namespaceperturb_1_1sgp4.html#a2a590932e88d1e1fe2a9ec472bf14274',1,'perturb::sgp4']]]
+  ['sat_5frec_0',['sat_rec',['../classperturb_1_1Satellite.html#a0a046c57b914d3bb90e4f4461088a363',1,'perturb::Satellite']]],
+  ['satellite_1',['Satellite',['../classperturb_1_1Satellite.html',1,'perturb::Satellite'],['../classperturb_1_1Satellite.html#ae93d17d155628e9a72e78c707068bbe7',1,'perturb::Satellite::Satellite(sgp4::elsetrec sat_rec)'],['../classperturb_1_1Satellite.html#af8bb234a866f0b44f8a129d5764078fc',1,'perturb::Satellite::Satellite(const TwoLineElement &amp;tle, GravModel grav_model=GravModel::WGS72)']]],
+  ['sec_2',['sec',['../structperturb_1_1DateTime.html#a3039bf96af8b941a9c7db70c0b1888c2',1,'perturb::DateTime']]],
+  ['semilatus_5frectum_3',['semilatus_rectum',['../structperturb_1_1ClassicalOrbitalElements.html#a0443af1e2f081d4faae12db769522755',1,'perturb::ClassicalOrbitalElements']]],
+  ['semimajor_5faxis_4',['semimajor_axis',['../structperturb_1_1ClassicalOrbitalElements.html#a322ec4a74a2f7df8ad2964972259d0b8',1,'perturb::ClassicalOrbitalElements']]],
+  ['sgp4_5',['sgp4',['../namespaceperturb_1_1sgp4.html#a20b46f8e119bc5ac9f2b02c003fa2fb4',1,'perturb::sgp4']]],
+  ['sgp4_2ehpp_6',['sgp4.hpp',['../sgp4_8hpp.html',1,'']]],
+  ['sgp4error_7',['Sgp4Error',['../namespaceperturb.html#ac7ee004d313c675e4b824fc592e7454f',1,'perturb']]],
+  ['sgp4init_8',['sgp4init',['../namespaceperturb_1_1sgp4.html#a592ccd36ecc8e89c1d2456001d297fb7',1,'perturb::sgp4']]],
+  ['should_5fbe_5fspace_9',['SHOULD_BE_SPACE',['../namespaceperturb.html#a1ddcb36ca08106b8a3997f80932953bcad055d11e60a99ee6b44327cb2d458b3a',1,'perturb']]],
+  ['statevector_10',['StateVector',['../structperturb_1_1StateVector.html',1,'perturb']]]
 ];

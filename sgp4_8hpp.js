@@ -14,5 +14,6 @@ var sgp4_8hpp =
     [ "newtonnu_SGP4", "sgp4_8hpp.html#a15716b0ec81d88b656976234500ccecb", null ],
     [ "rv2coe_SGP4", "sgp4_8hpp.html#a26e12916775406ce8b4e11ac47077cc9", null ],
     [ "sgp4", "sgp4_8hpp.html#a20b46f8e119bc5ac9f2b02c003fa2fb4", null ],
+    [ "sgp4init", "sgp4_8hpp.html#a592ccd36ecc8e89c1d2456001d297fb7", null ],
     [ "twoline2rv", "sgp4_8hpp.html#a2a590932e88d1e1fe2a9ec472bf14274", null ]
 ];

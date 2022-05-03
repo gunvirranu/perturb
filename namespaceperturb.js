@@ -6,6 +6,7 @@ var namespaceperturb =
     [ "JulianDate", "structperturb_1_1JulianDate.html", "structperturb_1_1JulianDate" ],
     [ "Satellite", "classperturb_1_1Satellite.html", "classperturb_1_1Satellite" ],
     [ "StateVector", "structperturb_1_1StateVector.html", "structperturb_1_1StateVector" ],
+    [ "TwoLineElement", "structperturb_1_1TwoLineElement.html", "structperturb_1_1TwoLineElement" ],
     [ "Vec3", "namespaceperturb.html#a24e2b6a2c7eafb6ad3c612227ab56227", null ],
     [ "GravModel", "namespaceperturb.html#a2903bdfd35b1a5eef9bb8a0b2bfa3a2c", [
       [ "WGS72_OLD", "namespaceperturb.html#a2903bdfd35b1a5eef9bb8a0b2bfa3a2caac6dc6f0163895c481bd5fff297710d2", null ],
@@ -22,6 +23,13 @@ var namespaceperturb =
       [ "DECAYED", "namespaceperturb.html#ac7ee004d313c675e4b824fc592e7454fa078e26129053477b881b7a43739414b0", null ],
       [ "INVALID_TLE", "namespaceperturb.html#ac7ee004d313c675e4b824fc592e7454fad6530762d2e2bc0f99ab38cef3b116dc", null ],
       [ "UNKNOWN", "namespaceperturb.html#ac7ee004d313c675e4b824fc592e7454fa696b031073e74bf2cb98e5ef201d4aa3", null ]
+    ] ],
+    [ "TLEParseError", "namespaceperturb.html#a1ddcb36ca08106b8a3997f80932953bc", [
+      [ "NONE", "namespaceperturb.html#a1ddcb36ca08106b8a3997f80932953bcab50339a10e1de285ac99d4c3990b8693", null ],
+      [ "SHOULD_BE_SPACE", "namespaceperturb.html#a1ddcb36ca08106b8a3997f80932953bcad055d11e60a99ee6b44327cb2d458b3a", null ],
+      [ "INVALID_FORMAT", "namespaceperturb.html#a1ddcb36ca08106b8a3997f80932953bca252d8e34178da47f2208605a66051241", null ],
+      [ "INVALID_VALUE", "namespaceperturb.html#a1ddcb36ca08106b8a3997f80932953bcad8f24f388e990b9ccf8905b7993b99ae", null ],
+      [ "CHECKSUM_MISMATCH", "namespaceperturb.html#a1ddcb36ca08106b8a3997f80932953bca2e0ee01e0807b586c11744580712274f", null ]
     ] ],
     [ "TLE_LINE_LEN", "namespaceperturb.html#a8bf99fd90789ad2f69e7ac1bab8832ef", null ]
 ];

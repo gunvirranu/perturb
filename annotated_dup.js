@@ -8,6 +8,7 @@ var annotated_dup =
       [ "DateTime", "structperturb_1_1DateTime.html", "structperturb_1_1DateTime" ],
       [ "JulianDate", "structperturb_1_1JulianDate.html", "structperturb_1_1JulianDate" ],
       [ "Satellite", "classperturb_1_1Satellite.html", "classperturb_1_1Satellite" ],
-      [ "StateVector", "structperturb_1_1StateVector.html", "structperturb_1_1StateVector" ]
+      [ "StateVector", "structperturb_1_1StateVector.html", "structperturb_1_1StateVector" ],
+      [ "TwoLineElement", "structperturb_1_1TwoLineElement.html", "structperturb_1_1TwoLineElement" ]
     ] ]
 ];

@@ -21,6 +21,5 @@ var perturb_8hpp =
       [ "DECAYED", "perturb_8hpp.html#ac7ee004d313c675e4b824fc592e7454fa078e26129053477b881b7a43739414b0", null ],
       [ "INVALID_TLE", "perturb_8hpp.html#ac7ee004d313c675e4b824fc592e7454fad6530762d2e2bc0f99ab38cef3b116dc", null ],
       [ "UNKNOWN", "perturb_8hpp.html#ac7ee004d313c675e4b824fc592e7454fa696b031073e74bf2cb98e5ef201d4aa3", null ]
-    ] ],
-    [ "TLE_LINE_LEN", "perturb_8hpp.html#a8bf99fd90789ad2f69e7ac1bab8832ef", null ]
+    ] ]
 ];

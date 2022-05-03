@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['year_0',['year',['../structperturb_1_1DateTime.html#ad20ee302d45c0d5db0fcd2f72b9ae4bb',1,'perturb::DateTime']]]
+  ['vec3_0',['Vec3',['../namespaceperturb.html#a24e2b6a2c7eafb6ad3c612227ab56227',1,'perturb']]],
+  ['velocity_1',['velocity',['../structperturb_1_1StateVector.html#a08e17a4f6956470c01f64d4e61c2e19e',1,'perturb::StateVector']]]
 ];

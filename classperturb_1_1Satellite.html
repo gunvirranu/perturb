@@ -101,8 +101,11 @@ $(document).ready(function(){initNavTree('classperturb_1_1Satellite.html',''); i
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ae93d17d155628e9a72e78c707068bbe7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classperturb_1_1Satellite.html#ae93d17d155628e9a72e78c707068bbe7">Satellite</a> (<a class="el" href="structperturb_1_1sgp4_1_1elsetrec.html">sgp4::elsetrec</a> <a class="el" href="classperturb_1_1Satellite.html#a0a046c57b914d3bb90e4f4461088a363">sat_rec</a>)</td></tr>
-<tr class="memdesc:ae93d17d155628e9a72e78c707068bbe7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs from a raw SGP4 orbital record.  <a href="classperturb_1_1Satellite.html#ae93d17d155628e9a72e78c707068bbe7">More...</a><br /></td></tr>
+<tr class="memdesc:ae93d17d155628e9a72e78c707068bbe7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct from a raw SGP4 orbital record.  <a href="classperturb_1_1Satellite.html#ae93d17d155628e9a72e78c707068bbe7">More...</a><br /></td></tr>
 <tr class="separator:ae93d17d155628e9a72e78c707068bbe7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8bb234a866f0b44f8a129d5764078fc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classperturb_1_1Satellite.html#af8bb234a866f0b44f8a129d5764078fc">Satellite</a> (const <a class="el" href="structperturb_1_1TwoLineElement.html">TwoLineElement</a> &amp;tle, <a class="el" href="namespaceperturb.html#a2903bdfd35b1a5eef9bb8a0b2bfa3a2c">GravModel</a> grav_model=GravModel::WGS72)</td></tr>
+<tr class="memdesc:af8bb234a866f0b44f8a129d5764078fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct and initialize from a pre-parsed TLE record.  <a href="classperturb_1_1Satellite.html#af8bb234a866f0b44f8a129d5764078fc">More...</a><br /></td></tr>
+<tr class="separator:af8bb234a866f0b44f8a129d5764078fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:addff690305c8455e2f1522fbec79fde9"><td class="memItemLeft" align="right" valign="top"><a id="addff690305c8455e2f1522fbec79fde9" name="addff690305c8455e2f1522fbec79fde9"></a>
 <a class="el" href="namespaceperturb.html#ac7ee004d313c675e4b824fc592e7454f">Sgp4Error</a>&#160;</td><td class="memItemRight" valign="bottom"><b>last_error</b> () const</td></tr>
 <tr class="memdesc:addff690305c8455e2f1522fbec79fde9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the last recorded error in the internal SGP4 record. <br /></td></tr>
@@ -139,7 +142,7 @@ Public Attributes</h2></td></tr>
 <p >This is the primary type in this library. Wraps the internal SGP4 record type <code><a class="el" href="structperturb_1_1sgp4_1_1elsetrec.html">perturb::sgp4::elsetrec</a></code>. Generally constructed via TLEs through <code><a class="el" href="classperturb_1_1Satellite.html#a267ba5e892e29413313feb8896817553" title="Construct and initialize a Satellite from a TLE record.">Satellite::from_tle</a></code> constructors. Of particular importance is the <code><a class="el" href="classperturb_1_1Satellite.html#addff690305c8455e2f1522fbec79fde9" title="Return the last recorded error in the internal SGP4 record.">Satellite::last_error</a></code> method which you can check to determine if there were any issues with TLE initialization or propagation. The primary method of running the SGP4 algorithm is the <code><a class="el" href="classperturb_1_1Satellite.html#a9316a14fcbc5157f6bf1893f06b43793" title="Propagate the SGP4 model to a specific time point.">Satellite::propagate</a></code> method. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ae93d17d155628e9a72e78c707068bbe7" name="ae93d17d155628e9a72e78c707068bbe7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae93d17d155628e9a72e78c707068bbe7">&#9670;&nbsp;</a></span>Satellite()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ae93d17d155628e9a72e78c707068bbe7">&#9670;&nbsp;</a></span>Satellite() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -162,10 +165,59 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Constructs from a raw SGP4 orbital record. </p>
+<p>Construct from a raw SGP4 orbital record. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">sat_rec</td><td>Pre-initialized SGP4 orbital record </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af8bb234a866f0b44f8a129d5764078fc" name="af8bb234a866f0b44f8a129d5764078fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af8bb234a866f0b44f8a129d5764078fc">&#9670;&nbsp;</a></span>Satellite() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">perturb::Satellite::Satellite </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structperturb_1_1TwoLineElement.html">TwoLineElement</a> &amp;&#160;</td>
+          <td class="paramname"><em>tle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceperturb.html#a2903bdfd35b1a5eef9bb8a0b2bfa3a2c">GravModel</a>&#160;</td>
+          <td class="paramname"><em>grav_model</em> = <code>GravModel::WGS72</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct and initialize from a pre-parsed TLE record. </p>
+<p >Does not require any string parsing, so aight for embedded. Does the same initialization steps as <code><a class="el" href="namespaceperturb_1_1sgp4.html#a2a590932e88d1e1fe2a9ec472bf14274">perturb::sgp4::twoline2rv</a></code> and then uses <code><a class="el" href="namespaceperturb_1_1sgp4.html#a592ccd36ecc8e89c1d2456001d297fb7">perturb::sgp4::sgp4init</a></code> to fully initialize.</p>
+<p >You probably don't want to parse a TLE string into a <code><a class="el" href="structperturb_1_1TwoLineElement.html" title="Represents a pre-parsed TLE record.">TwoLineElement</a></code> and then construct a <code><a class="el" href="classperturb_1_1Satellite.html" title="Represents a specific orbital ephemeris for an Earth-centered trajectory.">Satellite</a></code> via this. You should instead use the <code><a class="el" href="classperturb_1_1Satellite.html#a267ba5e892e29413313feb8896817553" title="Construct and initialize a Satellite from a TLE record.">Satellite::from_tle</a></code> constructor directly.</p>
+<p >This is only useful if you don't want <em>any</em> IO (via the <code>PERTURB_DISABLE_IO</code> flag), because then this and the <code><a class="el" href="classperturb_1_1Satellite.html#ae93d17d155628e9a72e78c707068bbe7" title="Construct from a raw SGP4 orbital record.">Satellite(sgp4::elsetrec)</a></code> constructor are the only way of constructing a <code><a class="el" href="classperturb_1_1Satellite.html" title="Represents a specific orbital ephemeris for an Earth-centered trajectory.">Satellite</a></code> object. It's up to you how you wanna construct the parsed <code><a class="el" href="structperturb_1_1TwoLineElement.html" title="Represents a pre-parsed TLE record.">perturb::TwoLineElement</a></code> object.</p>
+<dl class="section pre"><dt>Precondition</dt><dd>The TLE must be valid and contain valid values.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tle</td><td>Parsed and valid TLE </td></tr>
+    <tr><td class="paramname">grav_model</td><td>Gravity constants to use (default <code>GravModel::WGS72</code>) </td></tr>
   </table>
   </dd>
 </dl>

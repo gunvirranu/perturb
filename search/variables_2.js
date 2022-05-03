@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['eccentricity_0',['eccentricity',['../structperturb_1_1ClassicalOrbitalElements.html#a0a990e33def30f40b830bb81341f2c03',1,'perturb::ClassicalOrbitalElements']]],
-  ['epoch_1',['epoch',['../structperturb_1_1StateVector.html#a794f1086971960451fb59026d7f65f55',1,'perturb::StateVector']]]
+  ['catalog_5fnumber_0',['catalog_number',['../structperturb_1_1TwoLineElement.html#a5d62a555571b2503c7d36a7469d21463',1,'perturb::TwoLineElement']]],
+  ['classification_1',['classification',['../structperturb_1_1TwoLineElement.html#a58dacf08a7f4d87213509132b309424d',1,'perturb::TwoLineElement']]]
 ];

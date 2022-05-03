@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['mean_5fanomaly_0',['mean_anomaly',['../structperturb_1_1ClassicalOrbitalElements.html#a5e34789f06d303dac727f92360e50699',1,'perturb::ClassicalOrbitalElements']]],
-  ['min_1',['min',['../structperturb_1_1DateTime.html#ab343a78faeb5bb5cfdac3d910da65ac5',1,'perturb::DateTime']]],
-  ['month_2',['month',['../structperturb_1_1DateTime.html#a2edb2c69147ee071913eaf22592225b1',1,'perturb::DateTime']]]
+  ['jd_0',['jd',['../structperturb_1_1JulianDate.html#af6dfe1205752e795dd152858cd73c38c',1,'perturb::JulianDate']]],
+  ['jd_5ffrac_1',['jd_frac',['../structperturb_1_1JulianDate.html#af3daf860049de78416698815d5ff5a0c',1,'perturb::JulianDate']]]
 ];

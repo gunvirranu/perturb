@@ -14,6 +14,6 @@ var namespaceperturb_1_1sgp4 =
     [ "newtonnu_SGP4", "namespaceperturb_1_1sgp4.html#a15716b0ec81d88b656976234500ccecb", null ],
     [ "rv2coe_SGP4", "namespaceperturb_1_1sgp4.html#a26e12916775406ce8b4e11ac47077cc9", null ],
     [ "sgp4", "namespaceperturb_1_1sgp4.html#a20b46f8e119bc5ac9f2b02c003fa2fb4", null ],
-    [ "sgp4init", "namespaceperturb_1_1sgp4.html#aa9ba4598491b2be1a3f861e8ff3dae1c", null ],
+    [ "sgp4init", "namespaceperturb_1_1sgp4.html#a592ccd36ecc8e89c1d2456001d297fb7", null ],
     [ "twoline2rv", "namespaceperturb_1_1sgp4.html#a2a590932e88d1e1fe2a9ec472bf14274", null ]
 ];

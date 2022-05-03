@@ -117,9 +117,8 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ad1d9c7857d0405b089b0152134d62dab"><td class="memItemLeft" align="right" valign="top"><a id="ad1d9c7857d0405b089b0152134d62dab" name="ad1d9c7857d0405b089b0152134d62dab"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>sgp4init</b> (gravconsttype whichconst, char opsmode, const char satn[9], const double epoch, const double xbstar, const double xndot, const double xnddot, const double xecco, const double xargpo, const double xinclo, const double xmo, const double xno, const double xnodeo, <a class="el" href="structperturb_1_1sgp4_1_1elsetrec.html">elsetrec</a> &amp;satrec)</td></tr>
-<tr class="separator:ad1d9c7857d0405b089b0152134d62dab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a592ccd36ecc8e89c1d2456001d297fb7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceperturb_1_1sgp4.html#a592ccd36ecc8e89c1d2456001d297fb7">sgp4init</a> (gravconsttype whichconst, char opsmode, const char satn[5], const double epoch, const double xbstar, const double xndot, const double xnddot, const double xecco, const double xargpo, const double xinclo, const double xmo, const double xno, const double xnodeo, <a class="el" href="structperturb_1_1sgp4_1_1elsetrec.html">elsetrec</a> &amp;satrec)</td></tr>
+<tr class="separator:a592ccd36ecc8e89c1d2456001d297fb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a20b46f8e119bc5ac9f2b02c003fa2fb4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceperturb_1_1sgp4.html#a20b46f8e119bc5ac9f2b02c003fa2fb4">sgp4</a> (<a class="el" href="structperturb_1_1sgp4_1_1elsetrec.html">elsetrec</a> &amp;satrec, double tsince, double r[3], double v[3])</td></tr>
 <tr class="separator:a20b46f8e119bc5ac9f2b02c003fa2fb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a20615d1d4bce5ae6fff7e8356fd25575"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceperturb_1_1sgp4.html#a20615d1d4bce5ae6fff7e8356fd25575">getgravconst</a> (gravconsttype whichconst, double &amp;tumin, double &amp;mus, double &amp;radiusearthkm, double &amp;xke, double &amp;j2, double &amp;j3, double &amp;j4, double &amp;j3oj2)</td></tr>
@@ -151,8 +150,6 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>sgn_SGP4</b> (doubl
 <tr class="separator:aa4867c57cac99618d01bd53a4fcd3590"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68b4b3e7d3a7470c356a53af6388681d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceperturb_1_1sgp4.html#a68b4b3e7d3a7470c356a53af6388681d">invjday_SGP4</a> (double jd, double jdFrac, int &amp;year, int &amp;mon, int &amp;day, int &amp;hr, int &amp;minute, double &amp;sec)</td></tr>
 <tr class="separator:a68b4b3e7d3a7470c356a53af6388681d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa9ba4598491b2be1a3f861e8ff3dae1c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceperturb_1_1sgp4.html#aa9ba4598491b2be1a3f861e8ff3dae1c">sgp4init</a> (gravconsttype whichconst, char opsmode, const char satn[5], const double epoch, const double xbstar, const double xndot, const double xnddot, const double xecco, const double xargpo, const double xinclo, const double xmo, const double xno_kozai, const double xnodeo, <a class="el" href="structperturb_1_1sgp4_1_1elsetrec.html">elsetrec</a> &amp;satrec)</td></tr>
-<tr class="separator:aa9ba4598491b2be1a3f861e8ff3dae1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >An internal namespace containing the underlying SGP4 implementation. </p>
@@ -870,7 +867,7 @@ vallado       2013, 113, alg 9, ex 2-5</h2>
  <pre class="fragment">                       procedure sgp4
 </pre><p> this procedure is the <a class="el" href="namespaceperturb_1_1sgp4.html" title="An internal namespace containing the underlying SGP4 implementation.">sgp4</a> prediction model from space command. this is an updated and combined version of <a class="el" href="namespaceperturb_1_1sgp4.html" title="An internal namespace containing the underlying SGP4 implementation.">sgp4</a> and sdp4, which were originally published separately in spacetrack report #3. this version follows the methodology from the aiaa paper (2006) describing the history and development of the code.</p>
 <p >author : david vallado 719-573-2600 28 jun 2005</p>
-<p >inputs : satrec - initialised structure from sgp4init() call. tsince - time since epoch (minutes)</p>
+<p >inputs : satrec - initialised structure from <a class="el" href="namespaceperturb_1_1sgp4.html#a592ccd36ecc8e89c1d2456001d297fb7">sgp4init()</a> call. tsince - time since epoch (minutes)</p>
 <p >outputs : r - position vector km v - velocity km/sec return code - non-zero on error. 1 - mean elements, ecc &gt;= 1.0 or ecc &lt; -0.001 or a &lt; 0.95 er 2 - mean motion less than 0.0 3 - pert elements, ecc &lt; 0.0 or ecc &gt; 1.0 4 - semi-latus rectum &lt; 0.0 5 - epoch elements are sub-orbital 6 - satellite has decayed</p>
 <p >locals : am - axnl, aynl - betal - cosim , sinim , cosomm , sinomm , cnod , snod , cos2u , sin2u , coseo1 , sineo1 , cosi , sini , cosip , sinip , cosisq , cossu , sinsu , cosu , sinu delm - delomg - dndt - eccm - emsq - ecose - el2 - eo1 - eccp - esine - argpm - argpp - omgadf -c pl - r - rtemsq - rdotl - rl - rvdot - rvdotl - su - t2 , t3 , t4 , tc tem5, temp , temp1 , temp2 , tempa , tempe , templ u , ux , uy , uz , vx , vy , vz inclm - inclination mm - mean anomaly nm - mean motion nodem - right asc of ascending node xinc - xincp - xl - xlm - mp - xmdf - xmx - xmy - nodedf - xnode - nodep - np -</p>
 <p >coupling : getgravconst- no longer used. Variables are conatined within satrec dpper dpspace</p>
@@ -880,8 +877,8 @@ vallado, crawford, hujsak, kelso  2006</h2>
 
 </div>
 </div>
-<a id="aa9ba4598491b2be1a3f861e8ff3dae1c" name="aa9ba4598491b2be1a3f861e8ff3dae1c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa9ba4598491b2be1a3f861e8ff3dae1c">&#9670;&nbsp;</a></span>sgp4init()</h2>
+<a id="a592ccd36ecc8e89c1d2456001d297fb7" name="a592ccd36ecc8e89c1d2456001d297fb7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a592ccd36ecc8e89c1d2456001d297fb7">&#9670;&nbsp;</a></span>sgp4init()</h2>
 
 <div class="memitem">
 <div class="memproto">

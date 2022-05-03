@@ -120,6 +120,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structperturb_1_1StateVector.html">StateVector</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents the output prediction from SGP4.  <a href="structperturb_1_1StateVector.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structperturb_1_1TwoLineElement.html">TwoLineElement</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents a pre-parsed TLE record.  <a href="structperturb_1_1TwoLineElement.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
@@ -152,15 +155,23 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:a2903bdfd35b1a5eef9bb8a0b2bfa3a2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Choice of gravity model / constants for the underlying SGP4 impl.  <a href="namespaceperturb.html#a2903bdfd35b1a5eef9bb8a0b2bfa3a2c">More...</a><br /></td></tr>
 <tr class="separator:a2903bdfd35b1a5eef9bb8a0b2bfa3a2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ddcb36ca08106b8a3997f80932953bc"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceperturb.html#a1ddcb36ca08106b8a3997f80932953bc">TLEParseError</a> { <br />
+&#160;&#160;<a class="el" href="namespaceperturb.html#a1ddcb36ca08106b8a3997f80932953bcab50339a10e1de285ac99d4c3990b8693">NONE</a>
+, <a class="el" href="namespaceperturb.html#a1ddcb36ca08106b8a3997f80932953bcad055d11e60a99ee6b44327cb2d458b3a">SHOULD_BE_SPACE</a>
+, <a class="el" href="namespaceperturb.html#a1ddcb36ca08106b8a3997f80932953bca252d8e34178da47f2208605a66051241">INVALID_FORMAT</a>
+, <a class="el" href="namespaceperturb.html#a1ddcb36ca08106b8a3997f80932953bcad8f24f388e990b9ccf8905b7993b99ae">INVALID_VALUE</a>
+, <br />
+&#160;&#160;<a class="el" href="namespaceperturb.html#a1ddcb36ca08106b8a3997f80932953bca2e0ee01e0807b586c11744580712274f">CHECKSUM_MISMATCH</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:a1ddcb36ca08106b8a3997f80932953bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Possible errors when parsing a TLE.  <a href="namespaceperturb.html#a1ddcb36ca08106b8a3997f80932953bc">More...</a><br /></td></tr>
+<tr class="separator:a1ddcb36ca08106b8a3997f80932953bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:a8bf99fd90789ad2f69e7ac1bab8832ef"><td class="memItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceperturb.html#a8bf99fd90789ad2f69e7ac1bab8832ef">TLE_LINE_LEN</a> = 69</td></tr>
 <tr class="memdesc:a8bf99fd90789ad2f69e7ac1bab8832ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Both lines of a TLE <b>must</b> be this length, for TLE constructors.  <a href="namespaceperturb.html#a8bf99fd90789ad2f69e7ac1bab8832ef">More...</a><br /></td></tr>
 <tr class="separator:a8bf99fd90789ad2f69e7ac1bab8832ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a646128b8a97b458cd183e00a08de9215"><td class="memItemLeft" align="right" valign="top"><a id="a646128b8a97b458cd183e00a08de9215" name="a646128b8a97b458cd183e00a08de9215"></a>
-constexpr double&#160;</td><td class="memItemRight" valign="bottom"><b>MINS_PER_DAY</b> = 24 * 60</td></tr>
-<tr class="separator:a646128b8a97b458cd183e00a08de9215"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Primary namespace for the perturb library, everything is in here. </p>
@@ -217,6 +228,44 @@ constexpr double&#160;</td><td class="memItemRight" valign="bottom"><b>MINS_PER_
 <li>Calling <code><a class="el" href="classperturb_1_1Satellite.html#a9316a14fcbc5157f6bf1893f06b43793" title="Propagate the SGP4 model to a specific time point.">Satellite::propagate</a></code> returns a <code><a class="el" href="namespaceperturb.html#ac7ee004d313c675e4b824fc592e7454f" title="Possible issues during SGP4 propagation or even TLE parsing.">perturb::Sgp4Error</a></code>, indicating any possible issues with propagation.</li>
 </ol>
 <p >If everything is all good, the value should be <code>Sgp4Error::NONE</code>. The errors <code>Sgp4Error::MEAN_ELEMENTS</code> to <code>SGP4Error::DECAYED</code> directly correlate to errors in the underlying SGP4 impl, from the comments of <code><a class="el" href="namespaceperturb_1_1sgp4.html#a20b46f8e119bc5ac9f2b02c003fa2fb4">perturb::sgp4::sgp4</a></code>. The additional <code>Sgp4Error::INVALID_TLE</code> is for issues with reading the TLE strings. </p>
+
+</div>
+</div>
+<a id="a1ddcb36ca08106b8a3997f80932953bc" name="a1ddcb36ca08106b8a3997f80932953bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ddcb36ca08106b8a3997f80932953bc">&#9670;&nbsp;</a></span>TLEParseError</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="namespaceperturb.html#a1ddcb36ca08106b8a3997f80932953bc">perturb::TLEParseError</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Possible errors when parsing a TLE. </p>
+<p >Returned by <code><a class="el" href="structperturb_1_1TwoLineElement.html#ad999212b90f6e7de70a23f4854579044" title="Parse a TLE record string.">TwoLineElement::parse</a></code> after processing a TLE record string.</p>
+<dl class="section post"><dt>Postcondition</dt><dd>Errors (excluding <code>NONE</code>) are guaranteed to occur in definition order. Meaning that spaces are checked first, then invalid format, then invalid values, and lastly checksum. This allows you to assume, for example, that if there is a <code>CHECKSUM_MISMATCH</code>, then none of the previous errors occurred first, and so the invalid checksum is the <em>only</em> issue. </dd></dl>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a1ddcb36ca08106b8a3997f80932953bcab50339a10e1de285ac99d4c3990b8693" name="a1ddcb36ca08106b8a3997f80932953bcab50339a10e1de285ac99d4c3990b8693"></a>NONE&#160;</td><td class="fielddoc"><p >If no issues when parsing. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a1ddcb36ca08106b8a3997f80932953bcad055d11e60a99ee6b44327cb2d458b3a" name="a1ddcb36ca08106b8a3997f80932953bcad055d11e60a99ee6b44327cb2d458b3a"></a>SHOULD_BE_SPACE&#160;</td><td class="fielddoc"><p >If there is a lack of space in the TLE. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a1ddcb36ca08106b8a3997f80932953bca252d8e34178da47f2208605a66051241" name="a1ddcb36ca08106b8a3997f80932953bca252d8e34178da47f2208605a66051241"></a>INVALID_FORMAT&#160;</td><td class="fielddoc"><p >If general parsing was unsuccessfully. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a1ddcb36ca08106b8a3997f80932953bcad8f24f388e990b9ccf8905b7993b99ae" name="a1ddcb36ca08106b8a3997f80932953bcad8f24f388e990b9ccf8905b7993b99ae"></a>INVALID_VALUE&#160;</td><td class="fielddoc"><p >If a parsed value doesn't make sense. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a1ddcb36ca08106b8a3997f80932953bca2e0ee01e0807b586c11744580712274f" name="a1ddcb36ca08106b8a3997f80932953bca2e0ee01e0807b586c11744580712274f"></a>CHECKSUM_MISMATCH&#160;</td><td class="fielddoc"><p >If the checksum doesn't match. </p>
+</td></tr>
+</table>
 
 </div>
 </div>

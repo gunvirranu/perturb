@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['longitude_5fof_5fperiapsis_0',['longitude_of_periapsis',['../structperturb_1_1ClassicalOrbitalElements.html#a49632af3c22e695a59d1071e3869ebcd',1,'perturb::ClassicalOrbitalElements']]]
+  ['inclination_0',['inclination',['../structperturb_1_1ClassicalOrbitalElements.html#accec745d2fec194f43a765a6934bdf47',1,'perturb::ClassicalOrbitalElements::inclination()'],['../structperturb_1_1TwoLineElement.html#ac10a570fbbf73f251b5a205b1ad0c87b',1,'perturb::TwoLineElement::inclination()']]]
 ];
