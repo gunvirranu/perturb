@@ -17,7 +17,7 @@ Don't you just hate that awkward moment when you need to propagate Earth-centred
 ## Features
 
 - [Uses Vallado's latest and greatest de-facto standard SGP4 implementation](original)
-- ~~Strictly standards compliant C++11~~ with no dependencies
+- Strictly standards compliant C++11 with no dependencies
 - [Embedded support](#build-options) (i.e. no dynamic memory, no recursion, no exceptions, no virtual, no RTTI, none of that runtime funny business)
 - [Built with modern CMake](#install) with a relatively standard library layout
 - Has tests and CI, which is more than I can say for most of my code
@@ -122,7 +122,7 @@ I won't cover the details of [SGP4][SGP4], but in brief, it's a very popular orb
 
 A specific point in time is represented as a `perturb::JulianDate`. You can either construct one from a specific date and time via `perturb::DateTime` or offset a number of days from the `epoch()` of a satellite.
 
-Passing in a time point to the `propagate(...)` method of a satellite yields a `StateVector`, which contains a time-stamp, and a position and velocity vector. These vectors are just a `std::array<double, 3>`, measured in kilometres, and are represented in the [TEME][ECI-TEME] coordinate reference frame. The details of this frame can get a bit annoying, so this library does _not_ handle converting it to others. For handling Earth-centered reference frames such as TEME and transformations between them, you may be interested in the [`gelocus`][gelocus] library.
+Passing in a time point to the `Satellite::propagate(...)` method of a satellite yields a `perturb::StateVector`, which contains a time-stamp, and a position and velocity vector. These vectors are just a `std::array<double, 3>`, measured in kilometres, and are represented in the [TEME][ECI-TEME] coordinate reference frame. The details of this frame can get a bit annoying, so this library does _not_ handle converting it to others. For handling Earth-centered reference frames such as TEME and transformations between them, you may be interested in the [`gelocus`][gelocus] library.
 
 Check out [this page][perturb-docs] for some slightly more detailed documentation of the interface.
 
@@ -142,7 +142,7 @@ target_compile_definitions(perturb PRIVATE PERTURB_DISABLE_IO)
 
 You could also set the `perturb_DISABLE_IO` option in CMake to `ON` before initializing the `perturb` target. This is also by default `OFF`. Setting this option will handle defining the `PERTURB_DISABLE_IO` preprocessor flag.
 
-Do note, this will leave you with no way of parsing TLEs. You may need to pre-parse the TLE and initialize the propagator using numerical values directly. This functionality doesn't currently exist, but tracking issue #5 exists for this feature.
+Do note, this will leave you with no way of parsing TLEs. You will need to pre-parse the TLE and initialize the propagator using numerical values directly. This can be done by initializing the `TwoLineElement` type however you wish and using that to construct a `Satellite` object via its constructor.
 
 ## License
 

@@ -12,15 +12,14 @@
 #include "perturb/perturb.hpp"
 
 #include <cmath>
-#ifndef PERTURB_DISABLE_IO
-#  include <cstring>
-#endif
+#include <cstring>
 
 #include "perturb/sgp4.hpp"
 
 namespace perturb {
 
-constexpr double MINS_PER_DAY = 24 * 60;
+static constexpr double MINS_PER_DAY = 24 * 60;
+static constexpr double PI = 3.14159265358979323846;
 
 static Sgp4Error convert_sgp4_error_code(const int error_code) {
     if (error_code < 0 || error_code >= static_cast<int>(Sgp4Error::UNKNOWN)) {
@@ -116,6 +115,59 @@ ClassicalOrbitalElements::ClassicalOrbitalElements(
 }
 
 Satellite::Satellite(const sgp4::elsetrec _sat_rec) : sat_rec(_sat_rec) {}
+
+Satellite::Satellite(const TwoLineElement &tle, GravModel grav_model) : sat_rec({}) {
+    constexpr double DEG_TO_RAD = PI / 180.0;
+    constexpr double XP_DOT_P = 1440.0 / (2 * PI);
+
+    // Line 1
+    std::memcpy(sat_rec.satnum, tle.catalog_number, sizeof(sat_rec.satnum));
+    sat_rec.classification = tle.classification;
+    // Don't bother converting to set `sat_rec.intldesg` b/c it has no effects
+    sat_rec.epochyr = static_cast<int>(tle.epoch_year);
+    sat_rec.epochdays = tle.epoch_day_of_year;
+    sat_rec.ndot = tle.n_dot;
+    sat_rec.nddot = tle.n_ddot;
+    sat_rec.bstar = tle.b_star;
+    sat_rec.ephtype = tle.ephemeris_type;
+    sat_rec.elnum = tle.element_set_number;
+
+    // Line 2
+    sat_rec.inclo = tle.inclination;
+    sat_rec.nodeo = tle.raan;
+    sat_rec.ecco = tle.eccentricity;
+    sat_rec.argpo = tle.arg_of_perigee;
+    sat_rec.mo = tle.mean_anomaly;
+    sat_rec.no_kozai = tle.mean_motion;
+    sat_rec.revnum = static_cast<long>(tle.revolution_number);
+
+    // Post-process same as how Vallado does it
+    sat_rec.error = 0;
+    sat_rec.no_kozai /= XP_DOT_P;  // [rad / min]
+    sat_rec.ndot /= (XP_DOT_P * 1440.0);
+    sat_rec.nddot /= (XP_DOT_P * 1440.0 * 1440);
+    sat_rec.inclo *= DEG_TO_RAD;
+    sat_rec.nodeo *= DEG_TO_RAD;
+    sat_rec.argpo *= DEG_TO_RAD;
+    sat_rec.mo *= DEG_TO_RAD;
+
+    DateTime t {};
+    t.year = sat_rec.epochyr + ((sat_rec.epochyr < 57) ? 2000 : 1900);
+    sgp4::days2mdhms_SGP4(
+        t.year, sat_rec.epochdays, t.month, t.day, t.hour, t.min, t.sec
+    );
+    const auto jd = JulianDate(t);
+    sat_rec.jdsatepoch = jd.jd;
+    sat_rec.jdsatepochF = jd.jd_frac;
+    const double epoch = (jd.jd + jd.jd_frac) - 2433281.5;
+
+    // Initialize orbit
+    sgp4::sgp4init(
+        convert_grav_model(grav_model), 'i', sat_rec.satnum, epoch, sat_rec.bstar,
+        sat_rec.ndot, sat_rec.nddot, sat_rec.ecco, sat_rec.argpo, sat_rec.inclo,
+        sat_rec.mo, sat_rec.no_kozai, sat_rec.nodeo, sat_rec
+    );
+}
 
 #ifndef PERTURB_DISABLE_IO
 Satellite Satellite::from_tle(char *line_1, char *line_2, GravModel grav_model) {

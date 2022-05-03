@@ -19,9 +19,9 @@
 #define PERTURB_PERTURB_HPP
 
 #include "perturb/sgp4.hpp"
+#include "perturb/tle.hpp"
 
 #include <array>
-#include <cstddef>
 #ifndef PERTURB_DISABLE_IO
 #  include <string>
 #endif
@@ -33,13 +33,6 @@ namespace perturb {
 
 /// Alias for representing position and velocity vectors
 using Vec3 = std::array<double, 3>;
-
-/// Both lines of a TLE **must** be this length, for TLE constructors.
-///
-/// The memory can and is accessed.
-/// Lines can be longer for verification mode, but that's for internal testing
-/// purposes only and doesn't pertain to general usage.
-constexpr std::size_t TLE_LINE_LEN = 69;
 
 /// Possible issues during SGP4 propagation or even TLE parsing.
 ///
@@ -244,10 +237,33 @@ public:
     /// Internal SGP4 type
     sgp4::elsetrec sat_rec;
 
-    /// Constructs from a raw SGP4 orbital record.
+    /// Construct from a raw SGP4 orbital record.
     ///
     /// @param sat_rec Pre-initialized SGP4 orbital record
     explicit Satellite(sgp4::elsetrec sat_rec);
+
+    /// Construct and initialize from a pre-parsed TLE record.
+    ///
+    /// Does not require any string parsing, so aight for embedded. Does the
+    /// same initialization steps as `perturb::sgp4::twoline2rv` and then uses
+    /// `perturb::sgp4::sgp4init` to fully initialize.
+    ///
+    /// You probably don't want to parse a TLE string into a `TwoLineElement`
+    /// and then construct a `Satellite` via this. You should instead use the
+    /// `Satellite::from_tle` constructor directly.
+    ///
+    /// This is only useful if you don't want *any* IO (via the `PERTURB_DISABLE_IO`
+    /// flag), because then this and the `Satellite(sgp4::elsetrec)` constructor are the
+    /// only way of constructing a `Satellite` object. It's up to you how you wanna
+    /// construct the parsed `perturb::TwoLineElement` object.
+    ///
+    /// @pre The TLE must be valid and contain valid values.
+    ///
+    /// @param tle Parsed and valid TLE
+    /// @param grav_model Gravity constants to use (default `GravModel::WGS72`)
+    explicit Satellite(
+        const TwoLineElement &tle, GravModel grav_model = GravModel::WGS72
+    );
 
 #ifndef PERTURB_DISABLE_IO
     /// Construct and initialize a `Satellite` from a TLE record.

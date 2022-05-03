@@ -1,15 +1,21 @@
+#define DOCTEST_CONFIG_TREAT_CHAR_STAR_AS_STRING
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include <doctest/doctest.h>
 
 #include <array>
-#include <cstdio>
 #include <cmath>
-#include <cstring>
 #include <fstream>
 
 #include "perturb/perturb.hpp"
+#include "perturb/tle.hpp"
 
 using namespace perturb;
+using doctest::Approx;
+
+#define CHECK_VEC(a, b, eps, scl) \
+    CHECK((a)[0] == Approx((b)[0]).scale(scl).epsilon(eps)); \
+    CHECK((a)[1] == Approx((b)[1]).scale(scl).epsilon(eps)); \
+    CHECK((a)[2] == Approx((b)[2]).scale(scl).epsilon(eps))
 
 #ifndef PERTURB_DISABLE_IO
 Satellite sat_from_verif_tle(
@@ -45,7 +51,7 @@ TEST_CASE("test_julian_date_type") {
     const auto jd2 = JulianDate(t2);
     const double dt = jd2 - jd;
     const double expected_dt = (t2.day - t.day) + ((t2.hour - t.hour) + (t2.min - t.min) / 60.0) / 24.0;
-    CHECK(dt == doctest::Approx(expected_dt).epsilon(EPS));
+    CHECK(dt == Approx(expected_dt).epsilon(EPS));
 
     // Check that normalization works
     const auto jd_unnorm = jd + dt;
@@ -57,7 +63,7 @@ TEST_CASE("test_julian_date_type") {
     // Check addition of JD and offset
     const auto jd3 = (jd + dt).normalized();
     CHECK(jd2.jd == jd3.jd);
-    CHECK(jd2.jd_frac == doctest::Approx(jd3.jd_frac).epsilon(EPS));
+    CHECK(jd2.jd_frac == Approx(jd3.jd_frac).epsilon(EPS));
 
     // Check addition assignment
     auto jd4 = jd;
@@ -69,7 +75,7 @@ TEST_CASE("test_julian_date_type") {
     // Check subtraction of JD and offset
     const auto jd5 = (jd3 - dt).normalized();
     CHECK(jd5.jd == jd.jd);
-    CHECK(jd5.jd_frac == doctest::Approx(jd.jd_frac).epsilon(EPS));
+    CHECK(jd5.jd_frac == Approx(jd.jd_frac).epsilon(EPS));
 }
 
 TEST_CASE(
@@ -90,11 +96,101 @@ TEST_CASE(
             t.year, "-", t.month, "-", t.day
         );
         CHECK_MESSAGE(
-            jd.jd_frac == doctest::Approx(jd_conv.jd_frac).epsilon(1e-12),
+            jd.jd_frac == Approx(jd_conv.jd_frac).epsilon(1e-12),
             t.hour, ":", t.min, ":", t.sec
         );
     }
 }
+
+#ifndef PERTURB_DISABLE_IO
+TEST_CASE("test_tle_parse") {
+    const char *TLE_1 = "1 25544U 98067A   22071.78032407  .00021395  00000-0  39008-3 0  9996";
+    const char *TLE_2 = "2 25544  51.6424  94.0370 0004047 256.5103  89.8846 15.49386383330227";
+
+    SUBCASE("test_standard") {
+        TwoLineElement tle {};
+        const auto err1 = tle.parse(TLE_1, TLE_2);
+        CHECK(err1 == TLEParseError::NONE);
+
+        CHECK(tle.catalog_number == "25544");
+        CHECK(tle.classification == 'U');
+        CHECK(tle.launch_year == 98U);
+        CHECK(tle.launch_number == 67U);
+        CHECK(tle.launch_piece == "A");
+        CHECK(tle.epoch_year == 22U);
+        CHECK(tle.epoch_day_of_year == 71.78032407);
+        CHECK(tle.n_dot == 0.00021395);
+        CHECK(tle.n_ddot == 0.0e0);
+        CHECK(tle.b_star == 0.39008e-3);
+        CHECK(tle.ephemeris_type == 0U);
+        CHECK(tle.element_set_number == 999U);
+        CHECK(tle.line_1_checksum == 6U);
+
+        CHECK(tle.inclination == 51.6424);
+        CHECK(tle.raan == 94.0370);
+        CHECK(tle.eccentricity == 0.0004047);
+        CHECK(tle.arg_of_perigee == 256.5103);
+        CHECK(tle.mean_anomaly == 89.8846);
+        CHECK(tle.mean_motion == 15.49386383);
+        CHECK(tle.revolution_number == 33022UL);
+        CHECK(tle.line_2_checksum == 7U);
+
+        const auto err2 = tle.parse(
+            "1 25544U 98067 BA 22071.78032407  .00021395 .00000-0 .39008-3 0 39999",
+            "2 25544  51.6424  94.0370 0004047 256.5103  89.8846  5.49386383 30223"
+        );
+        CHECK(err2 == TLEParseError::NONE);
+        CHECK(tle.launch_piece == "BA");
+        CHECK(tle.n_ddot == 0.0e0);
+        CHECK(tle.b_star == 0.39008e-3);
+        CHECK(tle.mean_motion == 5.49386383);
+        CHECK(tle.revolution_number == 3022UL);
+        CHECK(tle.line_2_checksum == 3U);
+    }
+
+    SUBCASE("test_line_1_errors") {
+        TwoLineElement tle {};
+        const auto err1 = tle.parse(
+            "1 25544U*98067A   22071.78032407  .00021395  00000-0  39008-3 0  9996",
+            TLE_2
+        );
+        CHECK(err1 == TLEParseError::SHOULD_BE_SPACE);
+
+        const auto err2 = tle.parse(
+            "1 25544U 98067A   22071.78032407  .00021395  00000-0  39008-3 0  9990",
+            TLE_2
+        );
+        CHECK(err2 == TLEParseError::CHECKSUM_MISMATCH);
+
+        const auto err3 = tle.parse(
+            "1 25544U 98067A   22071.78*32407  .00021395  00000-0  39008-3 0  9996",
+            TLE_2
+        );
+        CHECK(err3 == TLEParseError::INVALID_FORMAT);
+    }
+
+    SUBCASE("test_line_2_errors") {
+        TwoLineElement tle {};
+        const auto err1 = tle.parse(
+            TLE_1,
+            "2 25544  51.6424* 94.0370 0004047 256.5103  89.8846 15.49386383330227"
+        );
+        CHECK(err1 == TLEParseError::SHOULD_BE_SPACE);
+
+        const auto err2 = tle.parse(
+            TLE_1,
+            "2 25544  51.6424  94.0370 0004047 256.5103  89.8846 15.49386383330220"
+        );
+        CHECK(err2 == TLEParseError::CHECKSUM_MISMATCH);
+
+        const auto err3 = tle.parse(
+            TLE_1,
+            "2 25544  51.6424  94.0370 0004047 256.5103  89.8846 15.493*6383330227"
+        );
+        CHECK(err3 == TLEParseError::INVALID_FORMAT);
+    }
+}
+#endif  // PERTURB_DISABLE_IO
 
 #ifndef PERTURB_DISABLE_IO
 TEST_CASE("test_sgp4_iss_tle") {
@@ -112,7 +208,7 @@ TEST_CASE("test_sgp4_iss_tle") {
         CHECK(epoch.day == 12);
         CHECK(epoch.hour == 18);
         CHECK(epoch.min == 43);
-        CHECK(epoch.sec == doctest::Approx(40).epsilon(1e-5));
+        CHECK(epoch.sec == Approx(40).epsilon(1e-5));
     }
 
     // Check height above Earth and speed roughly stay the same over a week.
@@ -131,8 +227,8 @@ TEST_CASE("test_sgp4_iss_tle") {
             CHECK(err == Sgp4Error::NONE);
             const double dist = norm(sv.position) - AVG_EARTH_RADIUS;
             const double speed = norm(sv.velocity);
-            CHECK(dist == doctest::Approx(AVG_ISS_HEIGHT).epsilon(0.05));
-            CHECK(speed == doctest::Approx(AVG_ISS_SPEED).epsilon(0.05));
+            CHECK(dist == Approx(AVG_ISS_HEIGHT).epsilon(0.05));
+            CHECK(speed == Approx(AVG_ISS_SPEED).epsilon(0.05));
             mins += CHECK_EVERY_MINS;
         }
     }
@@ -140,42 +236,36 @@ TEST_CASE("test_sgp4_iss_tle") {
     // Check position and velocity vectors are roughly the same after entire orbits
     SUBCASE("test_whole_orbit") {
         constexpr double AVG_ISS_ORBITAL = 92.8;    // minutes
-        constexpr double EPS = 0.1;                 // Acceptable relative delta
         constexpr int CHECK_N_ORBITS = 1000;        // Number of consecutive orbits
         StateVector sv_1, sv_2;
         for (int i = 0; i < CHECK_N_ORBITS; ++i) {
             const double t = i * AVG_ISS_ORBITAL;
             sat.propagate_from_epoch(t, sv_1);
             sat.propagate_from_epoch(t + AVG_ISS_ORBITAL, sv_2);
-            const auto &vel_1 = sv_1.velocity;
-            const auto &vel_2 = sv_2.velocity;
-            CHECK(vel_1[0] == doctest::Approx(vel_2[0]).epsilon(EPS));
-            CHECK(vel_1[1] == doctest::Approx(vel_2[1]).epsilon(EPS));
-            CHECK(vel_1[2] == doctest::Approx(vel_2[2]).epsilon(EPS));
-            CHECK(vel_1[0] == doctest::Approx(vel_2[0]).epsilon(EPS));
-            CHECK(vel_1[1] == doctest::Approx(vel_2[1]).epsilon(EPS));
-            CHECK(vel_1[2] == doctest::Approx(vel_2[2]).epsilon(EPS));
+            const auto &pos_1 = sv_1.position, &pos_2 = sv_2.position;
+            const auto &vel_1 = sv_1.velocity, &vel_2 = sv_2.velocity;
+            CHECK_VEC(pos_1, pos_2, 0.05, 1000);
+            CHECK_VEC(vel_1, vel_2, 0.05, 5);
         }
     }
 
     // Check position and velocity is roughly inverse after half orbits
     SUBCASE("test_half_orbit") {
         constexpr double AVG_ISS_ORBITAL = 92.8;    // minutes
-        constexpr double EPS = 0.05;                // Acceptable relative delta
         constexpr int CHECK_N_ORBITS = 1000;        // Number of consecutive orbits
         StateVector sv_1, sv_2;
         for (int i = 0; i < CHECK_N_ORBITS; ++i) {
             const auto t = i * AVG_ISS_ORBITAL;
             sat.propagate_from_epoch(t, sv_1);
             sat.propagate_from_epoch(t + AVG_ISS_ORBITAL / 2.0, sv_2);
-            const auto &vel_1 = sv_1.velocity;
-            const auto &vel_2 = sv_2.velocity;
-            CHECK(vel_1[0] == doctest::Approx(-vel_2[0]).epsilon(EPS));
-            CHECK(vel_1[1] == doctest::Approx(-vel_2[1]).epsilon(EPS));
-            CHECK(vel_1[2] == doctest::Approx(-vel_2[2]).epsilon(EPS));
-            CHECK(vel_1[0] == doctest::Approx(-vel_2[0]).epsilon(EPS));
-            CHECK(vel_1[1] == doctest::Approx(-vel_2[1]).epsilon(EPS));
-            CHECK(vel_1[2] == doctest::Approx(-vel_2[2]).epsilon(EPS));
+            for (std::size_t j = 0; j < 3; ++j) {
+                sv_2.position[j] *= -1;
+                sv_2.velocity[j] *= -1;
+            }
+            const auto &pos_1 = sv_1.position, &pos_2 = sv_2.position;
+            const auto &vel_1 = sv_1.velocity, &vel_2 = sv_2.velocity;
+            CHECK_VEC(pos_1, pos_2, 0.05, 1000);
+            CHECK_VEC(vel_1, vel_2, 0.05, 5);
         }
     }
 }
@@ -308,5 +398,85 @@ TEST_CASE(
         }
     }
     std::fclose(out_file);
+}
+#endif  // PERTURB_SGP4_ENABLE_DEBUG
+
+#ifdef PERTURB_SGP4_ENABLE_DEBUG
+#define CHECK_AB_MEMBER(x) CHECK(a.x == b.x)
+#define CHECK_AB_MEMBER_EPS(x, eps) CHECK(a.x == Approx(b.x).epsilon(eps))
+
+TEST_CASE(
+    "test_tle_parser_with_verif_mode"
+    * doctest::description("Compare TLE parser against Vallado on all verif TLEs")
+) {
+    std::ifstream in_file("SGP4-VER.TLE");
+    std::string line_1, line_2;
+    while (std::getline(in_file, line_1)) {
+        if (line_1[0] == '#') {
+            continue;
+        }
+        REQUIRE(std::getline(in_file, line_2));
+        line_1.resize(TLE_LINE_LEN);
+        line_2.resize(TLE_LINE_LEN);
+        INFO("TLE: ", line_1, "\n       ", line_2);
+
+        // Parse into `TLE` type and construct `Satellite` as `sat_tle`
+        TwoLineElement tle {};
+        const auto err = tle.parse(line_1, line_2);
+        // Ignore `NONE`, `CHECKSUM_MISMATCH`, and `INVALID_VALUE`
+        CHECK(err != TLEParseError::SHOULD_BE_SPACE);
+        CHECK(err != TLEParseError::INVALID_FORMAT);
+        // `TLE::parse` can't handle some odd parsing cases
+        if (err == TLEParseError::INVALID_VALUE) {
+            continue;
+        }
+        auto sat_tle = Satellite(tle);
+
+        // Parse and construct `sat_orig` using Vallado's impl
+        auto sat_orig = Satellite::from_tle(line_1, line_2);
+        CHECK(sat_orig.last_error() != Sgp4Error::INVALID_TLE);
+
+        // Correct some unimportant differences
+        sat_tle.sat_rec.elnum = (sat_tle.sat_rec.elnum * 10 + tle.line_1_checksum);
+        sat_tle.sat_rec.revnum = (sat_tle.sat_rec.revnum * 10 + tle.line_2_checksum);
+
+        // Check that a subset of the member vars match. Others are based off these.
+        const auto &a = sat_tle.sat_rec, &b = sat_orig.sat_rec;
+        // Line 1
+        CHECK_AB_MEMBER(satnum);
+        CHECK_AB_MEMBER(classification);
+        // `Satellite(const TLE &)` doesn't set `sat_rec.intldesg`, so ignore
+        // CHECK_SAT_MEMBER(intldesg);
+        CHECK_AB_MEMBER(epochyr);
+        CHECK_AB_MEMBER(epochdays);
+        CHECK_AB_MEMBER(epochdays);
+        CHECK_AB_MEMBER(ndot);
+        CHECK_AB_MEMBER_EPS(nddot, 1e-16);
+        CHECK_AB_MEMBER_EPS(bstar, 1e-16);
+        CHECK_AB_MEMBER(ephtype);
+        CHECK_AB_MEMBER(elnum);
+        // Line 2
+        CHECK_AB_MEMBER(inclo);
+        CHECK_AB_MEMBER(nodeo);
+        CHECK_AB_MEMBER(ecco);
+        CHECK_AB_MEMBER(argpo);
+        CHECK_AB_MEMBER(mo);
+        CHECK_AB_MEMBER(no_kozai);
+        CHECK_AB_MEMBER(revnum);
+
+        // Try propagating to check that output predictions match
+        for (const double mins : { 0.0, 0.5, 5.0, 30.0, 1440.0, 20000.0 }) {
+            CAPTURE(mins);
+
+            StateVector sv_a {}, sv_b {};
+            (void) sat_tle.propagate_from_epoch(mins, sv_a);
+            (void) sat_orig.propagate_from_epoch(mins, sv_b);
+
+            CHECK(sv_a.epoch.jd == sv_b.epoch.jd);
+            CHECK(sv_a.epoch.jd_frac == sv_b.epoch.jd_frac);
+            CHECK_VEC(sv_a.position, sv_b.position, 1e-16, 1);
+            CHECK_VEC(sv_a.velocity, sv_b.velocity, 1e-14, 1);
+        }
+    }
 }
 #endif  // PERTURB_SGP4_ENABLE_DEBUG

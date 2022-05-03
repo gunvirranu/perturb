@@ -2256,8 +2256,6 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
         if (longstr1[68] == ' ')
             longstr1[68] = '0';
 
-        // FIXME: Find better way to do this scanf business
-
 #ifdef _MSC_VER // chk if compiling in MSVS c++
         sscanf_s(longstr1, "%2d %5s %1c %10s %2d %12lf %11lf %7lf %2d %7lf %2d %2d %6ld ",
             &cardnumb, &satrec.satnum, 6 * sizeof(char), &satrec.classification, sizeof(char), &satrec.intldesg, 11 * sizeof(char), &satrec.epochyr,
