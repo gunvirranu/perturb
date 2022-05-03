@@ -4,15 +4,14 @@
 
 #### A modern C++11 wrapper for the SGP4 orbit propagator
 
+[![Release][release_badge]][release]
 [![Docs][docs_badge]][docs]
-[![CI][ci_badge]][ci]
 [![License][license_badge]][license]
+[![CI][ci_badge]][ci]
 
 </div>
 
 Don't you just hate that awkward moment when you need to propagate Earth-centred spacecraft trajectories using the accurate-ish [SGP4][SGP4] model, but also want to avoid having to understand [source code that literally dates back to the 80s](original/SGP4.cpp)? Well you're in luck, cause `perturb` provides a simple interface so you don't have to. Throw this library a [TLE][TLE] orbital element and it'll spit out a position and velocity vector.
-
-### Note: Still WIP. There'll be a proper release at some point.
 
 ## Features
 
@@ -85,7 +84,6 @@ FetchContent_MakeAvailable(perturb)
 
 # Link perturb into your project
 target_link_libraries(YOUR_VERY_COOL_PROJECT_TARGET perturb)
-
 ```
 
 Also see the [`examples`](examples) directory for a full CMake example project using this. You can make more complicated adjustments as necessary, but this demonstrates the basics.
@@ -144,6 +142,10 @@ You could also set the `perturb_DISABLE_IO` option in CMake to `ON` before initi
 
 Do note, this will leave you with no way of parsing TLEs. You will need to pre-parse the TLE and initialize the propagator using numerical values directly. This can be done by initializing the `TwoLineElement` type however you wish and using that to construct a `Satellite` object via its constructor.
 
+## Changelog
+
+See [`CHANGELOG.md`](CHANGELOG.md).
+
 ## License
 
 `perturb` is licensed under the [MIT license](LICENSE).
@@ -160,9 +162,11 @@ Do note, this will leave you with no way of parsing TLEs. You will need to pre-p
 [perturb-docs]: https://gunvirranu.github.io/perturb
 
 <!-- Badges -->
-[ci]: https://github.com/gunvirranu/perturb/actions "Github Actions"
-[ci_badge]: https://github.com/gunvirranu/perturb/workflows/CI/badge.svg?branch=master "Github Actions"
-[license]: #license "License"
-[license_badge]: https://img.shields.io/badge/license-MIT-blue.svg "License"
+[release]: https://github.com/gunvirranu/perturb/releases "Release"
+[release_badge]: https://img.shields.io/github/v/release/gunvirranu/perturb?color=orange&logo=github&sort=semver "Release"
 [docs]: https://gunvirranu.github.io/perturb "Docs"
 [docs_badge]: https://img.shields.io/badge/docs-passing-success "Docs"
+[license]: #license "License"
+[license_badge]: https://img.shields.io/badge/license-MIT-blue.svg "License"
+[ci]: https://github.com/gunvirranu/perturb/actions "Github Actions"
+[ci_badge]: https://github.com/gunvirranu/perturb/workflows/CI/badge.svg?branch=master "Github Actions"
