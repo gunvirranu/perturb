@@ -76,6 +76,20 @@ TEST_CASE("test_julian_date_type") {
     const auto jd5 = (jd3 - dt).normalized();
     CHECK(jd5.jd == jd.jd);
     CHECK(jd5.jd_frac == Approx(jd.jd_frac).epsilon(EPS));
+
+    // Check ordering overloads
+    CHECK(jd < jd2);
+    CHECK_FALSE(jd2 < jd);
+    CHECK(jd2 > jd);
+    CHECK_FALSE(jd > jd2);
+    CHECK(jd <= jd2);
+    CHECK_FALSE(jd2 <= jd);
+    CHECK(jd <= jd);
+    CHECK(jd2 <= jd2);
+    CHECK(jd2 >= jd);
+    CHECK_FALSE(jd >= jd2);
+    CHECK(jd >= jd);
+    CHECK(jd2 >= jd2);
 }
 
 TEST_CASE(
