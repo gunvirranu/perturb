@@ -173,15 +173,21 @@ struct JulianDate {
     /// @param delta_jd Number of fractional days to add
     /// @return Sum of a time point and offset, *not* normalized
     JulianDate operator+(const double &delta_jd) const;
-
     /// Add a delta number of days offset to this time point
     JulianDate &operator+=(const double &delta_jd);
-
     /// Returns another time point offset backwards by a number of days
     JulianDate operator-(const double &delta_jd) const;
-
     /// Subtracts a delta number of days offset to this time point
     JulianDate &operator-=(const double &delta_jd);
+
+    /// Compare if chronologically earlier than another time point
+    bool operator<(const JulianDate &rhs) const;
+    /// Compare if chronologically after than another time point
+    bool operator>(const JulianDate &rhs) const;
+    /// Compare if earlier than or same as another time point
+    bool operator<=(const JulianDate &rhs) const;
+    /// Compare if after than or same as another time point
+    bool operator>=(const JulianDate &rhs) const;
 };
 
 /// Represents the output prediction from SGP4.

@@ -100,6 +100,22 @@ JulianDate &JulianDate::operator-=(const double &delta_jd) {
     return *this = *this - delta_jd;
 }
 
+bool JulianDate::operator<(const JulianDate &rhs) const {
+    return (*this - rhs) < 0;
+}
+
+bool JulianDate::operator>(const JulianDate &rhs) const {
+    return (*this - rhs) > 0;
+}
+
+bool JulianDate::operator<=(const JulianDate &rhs) const {
+    return (*this - rhs) <= 0;
+}
+
+bool JulianDate::operator>=(const JulianDate &rhs) const {
+    return (*this - rhs) >= 0;
+}
+
 ClassicalOrbitalElements::ClassicalOrbitalElements(
     StateVector sv, GravModel grav_model
 ) {
