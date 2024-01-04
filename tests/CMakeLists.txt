@@ -15,8 +15,8 @@ endif()
 include(FetchContent)
 FetchContent_Declare(
     doctest
-    GIT_REPOSITORY "https://github.com/doctest/doctest"
-    GIT_TAG "v2.4.8"
+    GIT_REPOSITORY "https://github.com/gunvirranu/doctest"
+    GIT_TAG "v2.4.12-gunvirranu"
 )
 FetchContent_MakeAvailable(doctest)
 
