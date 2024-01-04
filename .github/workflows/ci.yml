@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Get latest CMake and ninja
         uses: lukka/get-cmake@latest
@@ -25,15 +25,15 @@ jobs:
         run: cmake --build build
 
       - name: Check header formatting
-        uses: jidicula/clang-format-action@v4.6.2
+        uses: jidicula/clang-format-action@v4.11.0
         with:
-          clang-format-version: '14'
+          clang-format-version: '17'
           check-path: 'include/perturb'
 
       - name: Check source formatting
-        uses: jidicula/clang-format-action@v4.6.2
+        uses: jidicula/clang-format-action@v4.11.0
         with:
-          clang-format-version: '14'
+          clang-format-version: '17'
           check-path: 'src'
 
   examples:
@@ -42,7 +42,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Get latest CMake and ninja
         uses: lukka/get-cmake@latest
@@ -94,7 +94,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Get latest CMake and ninja
         uses: lukka/get-cmake@latest
@@ -119,10 +119,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Build docs with Doxygen
-        uses: mattnotmitt/doxygen-action@1.9.3
+        uses: mattnotmitt/doxygen-action@1.9.5
         with:
           working-directory: docs
 
