@@ -168,5 +168,5 @@ See [`CHANGELOG.md`](CHANGELOG.md).
 [docs_badge]: https://img.shields.io/badge/docs-passing-success "Docs"
 [license]: #license "License"
 [license_badge]: https://img.shields.io/badge/license-MIT-blue.svg "License"
-[ci]: https://github.com/gunvirranu/perturb/actions "Github Actions"
-[ci_badge]: https://github.com/gunvirranu/perturb/workflows/CI/badge.svg?branch=master "Github Actions"
+[ci]: https://github.com/gunvirranu/perturb/actions/workflows/ci.yml "CI Workflow"
+[ci_badge]: https://github.com/gunvirranu/perturb/actions/workflows/ci.yml/badge.svg?branch=master "CI Workflow Badge"
