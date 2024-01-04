@@ -11,6 +11,10 @@ var structperturb_1_1JulianDate =
     [ "operator-", "structperturb_1_1JulianDate.html#ac0005c019cb0e4855bb81fc62d0586d3", null ],
     [ "operator-", "structperturb_1_1JulianDate.html#a8e15aa199ffe05e88982cd5b9cc1b1f4", null ],
     [ "operator-=", "structperturb_1_1JulianDate.html#af0351484b098f3d37a77ace8dd779310", null ],
+    [ "operator<", "structperturb_1_1JulianDate.html#ab1a2521307645fc1a807d9246742ef73", null ],
+    [ "operator<=", "structperturb_1_1JulianDate.html#a90789f113c566234373a807a3943bf83", null ],
+    [ "operator>", "structperturb_1_1JulianDate.html#a7b2e2ba7237ba9e037e4202485adda1e", null ],
+    [ "operator>=", "structperturb_1_1JulianDate.html#a6bbffc98edfd4a22dc3da24b6e8fad7d", null ],
     [ "to_datetime", "structperturb_1_1JulianDate.html#a47a55d34288d7c965a6f663f0485fcc0", null ],
     [ "jd", "structperturb_1_1JulianDate.html#af6dfe1205752e795dd152858cd73c38c", null ],
     [ "jd_frac", "structperturb_1_1JulianDate.html#af3daf860049de78416698815d5ff5a0c", null ]
