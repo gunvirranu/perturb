@@ -2268,6 +2268,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
 #endif
         if (typerun == 'v')  // run for specified times from the file
         {
+// This is a brutal section lol
 #ifdef PERTURB_SGP4_ENABLE_DEBUG
             if (longstr2[52] == ' ')
             {
@@ -2367,6 +2368,8 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
         days2mdhms_SGP4(year, satrec.epochdays, mon, day, hr, minute, sec);
         jday_SGP4(year, mon, day, hr, minute, sec, satrec.jdsatepoch, satrec.jdsatepochF);
 
+// This section is all junk for interactive usage
+// Disabled by default b/c not useful, but will leave in for debug
 #ifdef PERTURB_SGP4_ENABLE_DEBUG
         // ---- input start stop times manually
         if ((typerun != 'v') && (typerun != 'c'))

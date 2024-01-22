@@ -18,7 +18,13 @@ using doctest::Approx;
     CHECK((a)[1] == Approx((b)[1]).scale(scl).epsilon(eps)); \
     CHECK((a)[2] == Approx((b)[2]).scale(scl).epsilon(eps))
 
-#ifndef PERTURB_DISABLE_IO
+double norm(const Vec3 &v) {
+    return std::sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+}
+
+// Verification mode TLE parsing is excluded by default
+#ifdef PERTURB_SGP4_ENABLE_DEBUG
+/// Construct a `Satellite` from special extended verification mode ('v') TLEs
 Satellite sat_from_verif_tle(
     std::string &line_1, std::string &line_2, double &startmfe, double &stopmfe,
     double &deltamin
@@ -28,7 +34,7 @@ Satellite sat_from_verif_tle(
     constexpr char INPUT_TYPE = 'e';
     constexpr char OPS_MODE = 'a';
 
-    // Check received string buffers are of appropriate length
+    // Check received string buffers are of extended length (don't know exact)
     REQUIRE(line_1.length() >= TLE_LINE_LEN);
     REQUIRE(line_2.length() >= TLE_LINE_LEN);
 
@@ -39,14 +45,10 @@ Satellite sat_from_verif_tle(
         stopmfe, deltamin, sat_rec
     );
 
-    // Construct and return `Satellite` using pre-parsed `sat_rec`
+    // Construct `Satellite` using pre-parsed `sat_rec`, bypassing perturb's usual TLE parser
     return Satellite(sat_rec);
 }
-#endif  // PERTURB_DISABLE_IO
-
-double norm(const Vec3 &v) {
-    return std::sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
-}
+#endif  // PERTURB_SGP4_ENABLE_DEBUG
 
 TEST_CASE("test_julian_date_type") {
     constexpr double EPS = 1e-10;
@@ -174,6 +176,8 @@ TEST_CASE("test_tle_parse") {
         CHECK(tle.line_2_checksum == 3U);
     }
 
+    // FIXME: Test some weird combinations with spaces, +/-, etc.
+
     SUBCASE("test_line_1_errors") {
         TwoLineElement tle {};
         const auto err1 = tle.parse(
@@ -219,7 +223,10 @@ TEST_CASE("test_tle_parse") {
 #endif  // PERTURB_DISABLE_IO
 
 #ifndef PERTURB_DISABLE_IO
-TEST_CASE("test_sgp4_iss_tle") {
+TEST_CASE(
+    "test_sgp4_iss_tle"
+    * doctest::description("Sanity checks on position vectors from an ISS TLE")
+) {
     // Pulled sometime around 2022-03-12
     std::string ISS_TLE_1(
         "1 25544U 98067A   22071.78032407  .00021395  00000-0  39008-3 0  9996"
@@ -325,6 +332,7 @@ TEST_CASE(
     constexpr double RAD_TO_DEG = 180 / PI;
     constexpr double DEG_TO_RAD = PI / 180;
 
+    // TODO: Figure out how to actually compare against `tcppver.out`
     std::ifstream in_file("SGP4-VER.TLE");
     FILE *out_file = std::fopen("generated-tcppver.out", "w");
     REQUIRE(out_file != nullptr);
@@ -448,6 +456,7 @@ TEST_CASE(
 }
 #endif  // PERTURB_SGP4_ENABLE_DEBUG
 
+// FIXME: Expand this to test TLEs from other sources too!
 #ifdef PERTURB_SGP4_ENABLE_DEBUG
 #  define CHECK_AB_MEMBER(x)          CHECK(a.x == b.x)
 #  define CHECK_AB_MEMBER_EPS(x, eps) CHECK(a.x == Approx(b.x).epsilon(eps))
@@ -459,17 +468,20 @@ TEST_CASE(
     std::ifstream in_file("SGP4-VER.TLE");
     std::string line_1, line_2;
 
+    // Process line by line until start of TLE and not comment, then read second  line
     while (std::getline(in_file, line_1)) {
         if (line_1[0] == '#') {
             continue;
         }
         REQUIRE(std::getline(in_file, line_2));
 
+        // Chop off any extra part of TLE used for verification mode
+        // We're only checking equivalency of TLE parsing, not debug mode
         line_1.resize(TLE_LINE_LEN);
         line_2.resize(TLE_LINE_LEN);
         INFO("TLE: ", line_1, "\n       ", line_2);
 
-        // Parse into `TLE` type and construct `Satellite` as `sat_tle`
+        // Parse into `TwoLineElement` type and construct `Satellite` as `sat_tle`
         TwoLineElement tle {};
         const auto err = tle.parse(line_1, line_2);
 
