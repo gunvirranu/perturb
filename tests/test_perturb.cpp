@@ -525,6 +525,7 @@ TEST_CASE(
         CHECK_AB_MEMBER(mo);
         CHECK_AB_MEMBER(no_kozai);
         CHECK_AB_MEMBER(revnum);
+        CHECK(true == false);
 
         // Try propagating to check that output predictions match
         for (const double mins : { 0.0, 0.5, 5.0, 30.0, 1440.0, 20000.0 }) {
