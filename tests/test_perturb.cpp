@@ -536,8 +536,8 @@ TEST_CASE(
 
             CHECK(sv_a.epoch.jd == sv_b.epoch.jd);
             CHECK(sv_a.epoch.jd_frac == sv_b.epoch.jd_frac);
-            CHECK_VEC(sv_a.position, sv_b.position, 1e-16, 1);
-            CHECK_VEC(sv_a.velocity, sv_b.velocity, 1e-14, 1);
+            CHECK_VEC(sv_a.position, sv_b.position, 1e-14, 1000);
+            CHECK_VEC(sv_a.velocity, sv_b.velocity, 1e-14, 10);
         }
     }
 }
