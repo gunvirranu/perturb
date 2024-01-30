@@ -110,14 +110,11 @@ jobs:
         run: cmake "--preset=ci-$("${{ matrix.os }}".split("-")[0])" -Dperturb_DISABLE_IO=${{ matrix.disable_io }}
 
       - name: Build
-        run: cmake --build build --config Release
-
-      - name: Install
-        run: cmake --install build --config Release --prefix prefix
+        run: cmake --build build
 
       - name: Test
-        working-directory: build
-        run: ctest --output-on-failure -C Release
+        working-directory: build/tests
+        run: test_perturb
 
   docs:
     name: Docs

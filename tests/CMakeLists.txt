@@ -50,7 +50,3 @@ if(NOT perturb_DISABLE_IO)
             PERTURB_SGP4_ENABLE_DEBUG
     )
 endif()
-
-enable_testing()
-include(${doctest_SOURCE_DIR}/scripts/cmake/doctest.cmake)
-doctest_discover_tests(test_perturb)
