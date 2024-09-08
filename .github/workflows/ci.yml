@@ -91,7 +91,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ ubuntu-latest, macos-latest, windows-2022 ]
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
         disable_io: [ OFF ]
         include:
           - os: ubuntu-latest
