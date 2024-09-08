@@ -112,9 +112,15 @@ jobs:
       - name: Build
         run: cmake --build build
 
-      - name: Test
+      - name: Run tests on Unix
+        if: matrix.os != 'windows-latest'
         working-directory: build/tests
-        run: test_perturb
+        run: ./test_perturb --duration --force-colors
+
+      - name: Run tests on Windows
+        if: matrix.os == 'windows-latest'
+        working-directory: build/tests/Debug
+        run: ./test_perturb.exe --duration --force-colors
 
   docs:
     name: Docs
