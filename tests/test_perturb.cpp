@@ -334,6 +334,8 @@ TEST_CASE(
 
     // TODO: Figure out how to actually compare against `tcppver.out`
     std::ifstream in_file("SGP4-VER.TLE");
+    REQUIRE_MESSAGE(in_file, "Ensure verification data file exists and is opened");
+
     FILE *out_file = std::fopen("generated-tcppver.out", "w");
     REQUIRE(out_file != nullptr);
 
@@ -466,9 +468,10 @@ TEST_CASE(
     * doctest::description("Compare TLE parser against Vallado on all verif TLEs")
 ) {
     std::ifstream in_file("SGP4-VER.TLE");
-    std::string line_1, line_2;
+    REQUIRE_MESSAGE(in_file, "Ensure verification data file exists and is opened");
 
-    // Process line by line until start of TLE and not comment, then read second  line
+    // Process line by line until start of TLE and not comment, then read second line
+    std::string line_1, line_2;
     while (std::getline(in_file, line_1)) {
         if (line_1[0] == '#') {
             continue;
