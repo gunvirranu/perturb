@@ -75,10 +75,12 @@ Point it at this Github repo with a tagged release version and you should be goo
 
 ```cmake
 include(FetchContent)
+
 # Download and setup the perturb library
 FetchContent_Declare(
     perturb
     GIT_REPOSITORY "https://github.com/gunvirranu/perturb"
+    GIT_TAG 5723e50a54d438876b7a02e02a326e30b51ead4c  # Release v1.0.0
 )
 FetchContent_MakeAvailable(perturb)
 
@@ -86,7 +88,7 @@ FetchContent_MakeAvailable(perturb)
 target_link_libraries(YOUR_VERY_COOL_PROJECT_TARGET perturb)
 ```
 
-Also see the [`examples`](examples) directory for a full CMake example project using this. You can make more complicated adjustments as necessary, but this demonstrates the basics.
+See the [`examples`](examples) directory for CMake example projects using this approach. You can make more complicated adjustments as necessary, but this demonstrates the basics.
 
 ### Git Submodules
 
