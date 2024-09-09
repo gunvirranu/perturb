@@ -15,6 +15,7 @@ include(FetchContent)
 FetchContent_Declare(
     perturb
     GIT_REPOSITORY "https://github.com/gunvirranu/perturb"
+    GIT_TAG 5723e50a54d438876b7a02e02a326e30b51ead4c  # Release v1.0.0
 )
 FetchContent_MakeAvailable(perturb)
 
