@@ -47,43 +47,30 @@ jobs:
     needs: [ lint ]
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        example-folder: [ cmake-local, cmake-fetch-content ]
+
+    defaults:
+      run:
+        working-directory: examples/${{ matrix.example-folder }}
+
     steps:
       - uses: actions/checkout@v4
 
       - name: Get latest CMake and ninja
         uses: lukka/get-cmake@latest
 
-      - name: Configure local example
-        working-directory: examples/cmake-local
+      - name: Configure example
         run: cmake -S . -B build
 
-      - name: Build local example
-        working-directory: examples/cmake-local
+      - name: Build example
         run: cmake --build build
 
-      - name: Run local example
-        working-directory: examples/cmake-local/build
-        run: ./VeryCoolProject
-
-      - if: github.ref == 'refs/heads/master'
-          && github.event_name == 'push'
-          && github.repository_owner == 'gunvirranu'
-        run: echo "RUN_FETCH_EXAMPLE=true" >> $GITHUB_ENV
-
-      - name: Configure fetch-content example
-        working-directory: examples/cmake-fetch-content
-        if: env.RUN_FETCH_EXAMPLE == 'true'
-        run: cmake -S . -B build
-
-      - name: Build fetch-content example
-        working-directory: examples/cmake-fetch-content
-        if: env.RUN_FETCH_EXAMPLE == 'true'
-        run: cmake --build build
-
-      - name: Run fetch-content example
-        working-directory: examples/cmake-fetch-content/build
-        if: env.RUN_FETCH_EXAMPLE == 'true'
-        run: ./VeryCoolProject
+      - name: Run example
+        run: |
+          cd build
+          ./VeryCoolExampleProject
 
   test:
     name: Test
