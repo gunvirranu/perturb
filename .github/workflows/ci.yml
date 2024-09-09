@@ -115,12 +115,16 @@ jobs:
       - name: Run tests on Unix
         if: matrix.os != 'windows-latest'
         working-directory: build/tests
-        run: ./test_perturb --duration --force-colors
+        run: |
+          cp ../../tests/SGP4-VER.TLE .
+          ./test_perturb --duration --force-colors
 
       - name: Run tests on Windows
         if: matrix.os == 'windows-latest'
         working-directory: build/tests/Debug
-        run: ./test_perturb.exe --duration --force-colors
+        run: |
+          Copy-Item -Path ../../../tests/SGP4-VER.TLE -Destination .
+          ./test_perturb.exe --duration --force-colors
 
   docs:
     name: Docs
