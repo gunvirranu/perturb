@@ -189,10 +189,12 @@ Satellite::Satellite(const TwoLineElement &tle, GravModel grav_model) : sat_rec(
 Satellite Satellite::from_tle(char *line_1, char *line_2, GravModel grav_model) {
     sgp4::elsetrec sat_rec {};
     const bool bad_ptrs = !line_1 || !line_2;
+    // FIXME: Remove `strlen` and just check last byte
     if (bad_ptrs || std::strlen(line_1) < TLE_LINE_LEN
         || std::strlen(line_2) < TLE_LINE_LEN) {
         sat_rec.error = static_cast<int>(Sgp4Error::INVALID_TLE);
     } else {
+        // FIXME: Change default TLE to own parser, check downstream usage for assumptions
         double _startmfe, _stopmfe, _deltamin;
         sgp4::twoline2rv(
             line_1, line_2, ' ', ' ', 'i', convert_grav_model(grav_model), _startmfe,
@@ -210,6 +212,7 @@ Satellite Satellite::from_tle(
     if (line_1.length() < TLE_LINE_LEN || line_2.length() < TLE_LINE_LEN) {
         return from_tle(nullptr, nullptr);
     }
+    // FIXME: Find a way to remove usage of &str[0]
     return from_tle(&line_1[0], &line_2[0], grav_model);
 }
 #endif  // PERTURB_DISABLE_IO

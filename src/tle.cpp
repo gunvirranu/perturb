@@ -151,6 +151,7 @@ TLEParseError TwoLineElement::parse(const char *line_1, const char *line_2) {
     valid_vals &= (this->element_set_number < 10000U);
     // Line 2
     valid_vals &= (line2_num == 2);
+    // FIXME: Change to `strncmp`
     valid_vals &= (std::strcmp(this->catalog_number, catlog_num_line2) == 0);
     valid_vals &= (0.0 <= this->inclination) && (this->inclination <= 180.0);
     valid_vals &= (0.0 <= this->raan) && (this->raan <= 360.0);

@@ -1,15 +1,27 @@
+# Gunvir Singh Ranu
+# Last Updated: 2024-01-29
+# Options as of clang-format 19
+# Commented out some currently unsupported by CLion
+
 AccessModifierOffset: -4
 AlignAfterOpenBracket: BlockIndent
-AlignConsecutiveMacros: Consecutive
+AlignArrayOfStructures: Right
 AlignConsecutiveAssignments: None
+AlignConsecutiveBitFields: Consecutive
 AlignConsecutiveDeclarations: None
+AlignConsecutiveMacros: Consecutive
+# AlignConsecutiveShortCaseStatements: true
 AlignEscapedNewlines: Left
 AlignOperands: DontAlign
-AlignTrailingComments: true
+AlignTrailingComments:
+  Kind: Always
+  OverEmptyLines: 0
 AllowAllArgumentsOnNextLine: true
 AllowAllParametersOfDeclarationOnNextLine: true
+# AllowBreakBeforeNoexceptSpecifier: OnlyWithParen
 AllowShortBlocksOnASingleLine: Empty
 AllowShortCaseLabelsOnASingleLine: true
+# AllowShortCompoundRequirementOnASingleLine:  true
 AllowShortEnumsOnASingleLine: false
 AllowShortFunctionsOnASingleLine: Empty
 AllowShortIfStatementsOnASingleLine: Never
@@ -20,8 +32,13 @@ AlwaysBreakBeforeMultilineStrings: true
 AlwaysBreakTemplateDeclarations: MultiLine
 BinPackArguments: true
 BinPackParameters: true
+BitFieldColonSpacing: Both
+# BreakAdjacentStringLiterals: true
+BreakAfterAttributes: Leave
 BreakBeforeBinaryOperators: NonAssignment
 BreakBeforeBraces: Attach
+BreakBeforeConceptDeclarations: Allowed
+BreakBeforeInlineASMColon: OnlyMultiline
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializers: AfterColon
 BreakInheritanceList: AfterColon
@@ -31,36 +48,51 @@ CompactNamespaces: false
 ConstructorInitializerIndentWidth: 4
 ContinuationIndentWidth: 4
 Cpp11BracedListStyle: false
-DeriveLineEnding: false
-PenaltyReturnTypeOnItsOwnLine: 500
 DerivePointerAlignment: true
 EmptyLineAfterAccessModifier: Leave
 EmptyLineBeforeAccessModifier: Leave
 FixNamespaceComments: true
 IncludeBlocks: Preserve
-IncludeIsMainRegex: '(test[-_])?$'
-IncludeIsMainSourceRegex: '(\.hpp)$'
 IndentAccessModifiers: false
-IndentCaseBlocks: true
+IndentCaseBlocks: false
 IndentCaseLabels: true
 IndentExternBlock: NoIndent
 IndentGotoLabels: false
 IndentPPDirectives: AfterHash
+IndentRequiresClause: false
 IndentWidth: 4
 IndentWrappedFunctionNames: false
+InsertBraces: true
+InsertNewlineAtEOF: true
+# IntegerLiteralSeparator:
+#   Binary: 4
+#   Decimal: 3
+#   Hex: 4
+#   BinaryMinDigits: 8
+#   DecimalMinDigits: 5
+#   HexMinDigits: 8
+# KeepEmptyLinesAtEOF: true
 KeepEmptyLinesAtTheStartOfBlocks: false
 LambdaBodyIndentation: Signature
+Language: Cpp
+LineEnding: LF
 MaxEmptyLinesToKeep: 1
-NamespaceIndentation: Inner
+NamespaceIndentation: None
 PPIndentWidth: 2
 PackConstructorInitializers: NextLine
+PenaltyReturnTypeOnItsOwnLine: 500
 PointerAlignment: Right
 QualifierAlignment: Left
-ReflowComments: true
-ReferenceAlignment: Right
-SortIncludes: CaseInsensitive
+ReferenceAlignment: Pointer
+ReflowComments: false
+# RemoveParentheses: MultipleParentheses
+RemoveSemicolon: true
+RequiresClausePosition: WithPreceding
+RequiresExpressionIndentation: OuterScope
+SeparateDefinitionBlocks: Always
 ShortNamespaceLines: 10
-SortUsingDeclarations: true
+SortIncludes: CaseInsensitive
+# SortUsingDeclarations: LexicographicNumeric
 SpaceAfterCStyleCast: true
 SpaceAfterLogicalNot: false
 SpaceAfterTemplateKeyword: true
@@ -73,18 +105,14 @@ SpaceBeforeParens: ControlStatements
 SpaceBeforeRangeBasedForLoopColon: true
 SpaceBeforeSquareBrackets: false
 SpaceInEmptyBlock: false
-SpaceInEmptyParentheses: false
 SpacesBeforeTrailingComments: 2
-SpacesInAngles: false
-SpacesInCStyleCastParentheses: false
-SpacesInConditionalStatement: false
+SpacesInAngles: Never
 SpacesInContainerLiterals: false
 SpacesInLineCommentPrefix:
   Minimum: 1
   Maximum: -1
-SpacesInParentheses: false
+# SpacesInParens: Never
 SpacesInSquareBrackets: false
 Standard: c++11
 TabWidth: 4
-UseCRLF: false
 UseTab: Never
