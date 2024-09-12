@@ -16,6 +16,7 @@ project(
 )
 
 option(perturb_DISABLE_IO "Disable I/O and string functionality" OFF)
+option(perturb_EXPORT_C_INTERFACE "Provide a C ABI interface" OFF)
 
 # For CMake 3.21+, variable is set by default by project()
 if(CMAKE_VERSION VERSION_LESS 3.21.0)
@@ -55,7 +56,7 @@ endif()
 
 add_library(
     perturb
-    src/perturb.cpp src/tle.cpp src/sgp4.cpp
+    src/perturb.cpp src/tle.cpp src/sgp4.cpp src/perturb_c.cpp
 )
 
 target_include_directories(
@@ -68,6 +69,10 @@ target_compile_features(perturb PUBLIC cxx_std_11)
 
 if(perturb_DISABLE_IO)
     target_compile_definitions(perturb PUBLIC PERTURB_DISABLE_IO)
+endif()
+
+if(perturb_EXPORT_C_INTERFACE)
+    target_compile_definitions(perturb PUBLIC PERTURB_EXPORT_C_INTERFACE)
 endif()
 
 # ---- Install rules ----

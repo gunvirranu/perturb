@@ -26,7 +26,8 @@
       "hidden": true,
       "inherits": "cmake-pedantic",
       "cacheVariables": {
-        "perturb_DEVELOPER_MODE": "ON"
+        "perturb_DEVELOPER_MODE": "ON",
+        "perturb_EXPORT_C_INTERFACE": "ON"
       }
     },
     {
