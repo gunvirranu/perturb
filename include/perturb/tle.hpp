@@ -25,13 +25,6 @@
 
 namespace perturb {
 
-/// Both lines of a TLE **must** be this length, for TLE constructors.
-///
-/// The memory can and is accessed.
-/// Lines can be longer for verification mode, but that's for internal testing
-/// purposes only and doesn't pertain to general usage.
-constexpr std::size_t TLE_LINE_LEN = 69;
-
 /// Possible errors when parsing a TLE.
 ///
 /// Returned by `TwoLineElement::parse` after processing a TLE record string.

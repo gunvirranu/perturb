@@ -6,11 +6,10 @@
 * Licensed under the MIT License <http://opensource.org/licenses/MIT>.
 * SPDX-License-Identifier: MIT
 *
-* Copyright (c) 2024 Gunvir Ranu
+* Copyright (c) 2024 Gunvir Singh Ranu
 */
 
-//! @file
-//! Exported C interface header for the C++ perturb library
+//! @file Primary C header for the perturb library
 //! @author Gunvir Singh Ranu
 //! @version 1.0.0
 //! @copyright Gunvir Singh Ranu, MIT License
@@ -18,79 +17,148 @@
 #ifndef PERTURB_PERTURB_H
 #define PERTURB_PERTURB_H
 
-// Sanity checks on if you're including this header correctly
-// `perturb.hpp` is the primary C++ header for this library, perturb.
-// This header, `perturb.h`, is intended only for C ABI consumers.
-#ifndef PERTURB_EXPORT_C_INTERFACE
-#  if __cplusplus
-#    error "Seems like you're using C++. Use the perturb.hpp header."
-#  else
-#    error "Seems like you're using C. Enable the PERTURB_EXPORT_C_INTERFACE option."
-#  endif
-#endif
-#ifdef PERTURB_EXPORT_C_INTERFACE
-
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 
-#define PERTURB_TLE_LINE_LEN 69U
-
-// Support header inclusion from C++
-#if __cplusplus
-extern "C" {
+// Define `PERTURB_SGP4_ENABLE_DEBUG` to enable Vallado's verification mode.
+// Generally, this is unwanted. Only enabled for tests.
+#if (defined(PERTURB_SGP4_ENABLE_DEBUG) && defined(PERTURB_DISABLE_IO))
+#  error "Cannot enable SGP4 debug without I/O functionality"
 #endif
 
-typedef double perturb_real_t;
+#ifdef __cplusplus
+extern "C" {  // Support header inclusion from C++
+
+#  ifdef PERTURB_ENABLE_CPP_INTERFACE
+namespace perturb {
+/// Namespace to shove C interface into to not pollute globals
+namespace c_internal {
+#  endif
+#endif  // __cplusplus
+
+#if !(defined(__cplusplus) && defined(PERTURB_ENABLE_CPP_INTERFACE))
+/// Both lines of a TLE **must** be this length, for TLE constructors.
+///
+/// It is assumed that this memory can be safely accessed.
+/// Lines can be longer for verification mode, but that's for internal testing
+/// purposes only and doesn't pertain to general usage.
+/// Macro definition is excluded in C++ cases to not pollute globals.
+#  define PERTURB_TLE_LINE_LEN 69U
+#endif
+
+/// Alias to allow possibility of supporting 32-bit and 64-bit floating point
+typedef double perturb_real_t;  // TODO: Support float32_t and float64_t
 
 extern const size_t PERTURB_C_SATELLITE_ALLOC_SIZE;
 extern const size_t PERTURB_C_TLE_ALLOC_SIZE;
 
-struct perturb_satellite {
-    void * p_satellite;
+/// A basic and human readable representation of a point in time.
+///
+/// The primary purpose of this type is to be constructed manually via
+/// aggregate initialization and the converted to a `JulianDate`.
+///
+/// @warning
+/// This type doesn't enforce a valid date and time upon construction; there
+/// are no checks. Additionally, the conversion to `JulianDate` values are only
+/// valid from years 1900 to 2100.
+///
+/// The question of what this time point represents gets complicated. In the
+/// "Revisiting Spacetrack Report #3" paper from Celestrak, it is discussed
+/// what this time represents. While UTC would make sense, the method
+/// `perturb::sgp4::gstime_SGP4` requires UT1 time to calculate GMST. This
+/// library makes the same assumption that the paper concludes:
+///
+/// @par
+///  "The error associated with approximating UT1 with UTC is within the
+///   theoretical uncertainty of the SGP4 theory itself. Except for the GMST
+///   calculation, this paper and code assumes time to be realized as UTC."
+struct perturb_date_time {
+    uint16_t year;       ///< [year] from 1900 to 2100
+    uint8_t month;       ///< [month] from 1 to 12
+    uint8_t day;         ///< [day] from 1 to {28, 29, 30, 31} (depending on month)
+    uint8_t hour;        ///< [hour] from 0 to 23
+    uint8_t min;         ///< [minute] from 0 to 59
+    perturb_real_t sec;  ///< Fractional [sec] from 0.0 to 59.999...
 };
 
-struct perturb_tle {
-    void * p_tle;
-};
-
+/// Represents a specific point in time on the Julian calendar.
+///
+/// Generally not constructed manually, but instead converted from a `DateTime`
+/// or from `Satellite::epoch`. Supports some basic manipulation operations.
+/// For a human readable representation, can be converted back to `DateTime`.
+/// As for what time point this represents, see the comment on `DateTime`.
+///
+/// Internally, this is represented as the "theoretical" sum of two double
+/// precision floats. This is to preserve as much time accuracy as possible,
+/// since many bits are lost due to storing the number of the day. The smaller
+/// value is used to represent a more accurate time offset from that day. The
+/// "normalized" value restricts the larger value to entire days and the
+/// smaller to a [0.0, 1.0) time offset.
 struct perturb_julian_date {
-    perturb_real_t jd;
-    perturb_real_t jd_frac;
+    perturb_real_t jd;      /// Fractional # of [day] since the epoch (4713 B.C.)
+    perturb_real_t jd_frac; /// Smaller fractional number of [day], *usually* between 0 and 1
 };
 
+/// Represents the output prediction from SGP4.
+///
+/// Generated by `Satellite::propagate` method. The vectors are represented in
+/// the TEME (True Equator Mean Equinox) reference frame. Can be converted to
+/// classical orbital elements with the `ClassicalOrbitalElements` type.
 struct perturb_state_vector {
-    struct perturb_julian_date epoch;
-    perturb_real_t position[3];
-    perturb_real_t velocity[3];
+    struct perturb_julian_date epoch;   /// Time-stamp of the state vector
+    perturb_real_t position[3];         /// Position in the TEME frame in [km]
+    perturb_real_t velocity[3];         /// Velocity in the TEME frame in [km/s]
 };
 
-struct perturb_julian_date perturb_datetime_to_julian(
-    uint8_t year,
-    uint8_t month,
-    uint8_t day,
-    uint8_t hour,
-    uint8_t min,
-    perturb_real_t sec
-);
+/// Classical Keplerian orbital elements.
+///
+/// Names and values are from the underlying SGP4 implementation. Can be
+/// generated from a `StateVector` via the constructor.
+struct perturb_classical_orbital_elements {
+    perturb_real_t semilatus_rectum;        ///< Samilatus rectum in [km]
+    perturb_real_t semimajor_axis;          ///< Semimajor axis in [km]
+    perturb_real_t eccentricity;            ///< Eccentricity (unitless)
+    perturb_real_t inclination;             ///< Inlination in [rad]
+    perturb_real_t raan;                    ///< Right ascension of ascending node in [rad]
+    perturb_real_t arg_of_perigee;          ///< Argument of perigee in [rad]
+    perturb_real_t true_anomaly;            ///< True anomaly in [rad]
+    perturb_real_t mean_anomaly;            ///< Mean anomaly in [rad]
+    perturb_real_t arg_of_latitude;         ///< Argument of latitude in [rad]
+    perturb_real_t true_longitude;          ///< True longitude in [rad]
+    perturb_real_t longitude_of_periapsis;  ///< Longitude of periapsis in [rad]
+};
+
+struct perturb_satellite;   // Forward declare, defined in `sgp4.h`
+struct perturb_tle;         // Forward declare, defined in `tle.h`
+
+struct perturb_julian_date perturb_datetime_to_julian(struct perturb_date_time t);
 
 struct perturb_julian_date perturb_add_days_to_julian(
-    struct perturb_julian_date t,
-    perturb_real_t days
+    struct perturb_julian_date t, perturb_real_t days
 );
 
 struct perturb_julian_date perturb_epoch(struct perturb_satellite sat);
 
 bool perturb_init_sat_from_tle(struct perturb_satellite sat, struct perturb_tle tle);
-bool perturb_parse_tle(char * line_1, char * line_2, struct perturb_tle tle);
-bool perturb_parse_tle_and_init_sat(char * line_1, char * line_2, struct perturb_satellite sat);
+bool perturb_parse_tle(char *line_1, char *line_2, struct perturb_tle tle);
+bool perturb_parse_tle_and_init_sat(
+    char *line_1, char *line_2, struct perturb_satellite sat
+);
 
-struct perturb_state_vector perturb_propagate_days(struct perturb_satellite sat, perturb_real_t days);
-struct perturb_state_vector perturb_propagate(struct perturb_satellite sat, struct perturb_julian_date t);
+struct perturb_state_vector perturb_propagate_days(
+    struct perturb_satellite sat, perturb_real_t days
+);
+struct perturb_state_vector perturb_propagate(
+    struct perturb_satellite sat, struct perturb_julian_date t
+);
 
-#if __cplusplus
-}
+#ifdef __cplusplus
+#  ifdef PERTURB_ENABLE_CPP_INTERFACE
+}  // namespace c_internal
+}  // namespace perturb
+#  endif
+}  // extern "C"
 #endif
 
-#endif  // PERTURB_EXPORT_C_INTERFACE
 #endif  // PERTURB_PERTURB_H

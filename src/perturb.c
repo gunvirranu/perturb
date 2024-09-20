@@ -10,17 +10,7 @@
 */
 
 #include "perturb/perturb.h"
-#include "perturb/perturb.hpp"
 
-#ifdef PERTURB_EXPORT_C_INTERFACE
-
-using namespace perturb;
-
-extern "C" {
-
-const size_t PERTURB_C_SATELLITE_ALLOC_SIZE = sizeof(Satellite);
-const size_t PERTURB_C_TLE_ALLOC_SIZE = sizeof(TwoLineElement);
-
-}
-
-#endif  // PERTURB_EXPORT_C_INTERFACE
+#ifdef __cplusplus
+#  error "Okay someone messed up haha"
+#endif
