@@ -6,13 +6,13 @@
  * Licensed under the MIT License <http://opensource.org/licenses/MIT>.
  * SPDX-License-Identifier: MIT
  *
- * Copyright (c) 2022 Gunvir Ranu
+ * Copyright (c) 2022 Gunvir Singh Ranu
  */
 
 //! @file Primary C++ header for the perturb library
-//! @author Gunvir Ranu
+//! @author Gunvir Singh Ranu
 //! @version 1.0.0
-//! @copyright Gunvir Ranu, MIT License
+//! @copyright Gunvir Singh Ranu, MIT License
 
 #ifndef PERTURB_PERTURB_HPP
 #define PERTURB_PERTURB_HPP
@@ -25,13 +25,15 @@
 #  error "Set the PERTURB_ENABLE_CPP_INTERFACE feature flag to support the C++ interface"
 #endif
 
-#include "perturb/perturb.h"
-
 #include <array>
 #include <cstddef>
 #ifndef PERTURB_DISABLE_IO
 #  include <string>
 #endif
+
+#include "perturb/perturb.h"
+#include "perturb/tle.h"
+#include "perturb/sgp4.h"
 
 /// Primary namespace for the perturb C++ library wrapper, everything is in here.
 ///
@@ -51,6 +53,34 @@ using Vec3 = std::array<real_t, 3>;
 /// Lines can be longer for verification mode, but that's for internal testing
 /// purposes only and doesn't pertain to general usage.
 constexpr std::size_t TLE_LINE_LEN = 69;
+
+// TODO: Add a few static asserts for enums as a sanity check
+
+enum class TLEParseError {
+    NONE,               ///< If no issues when parsing
+    SHOULD_BE_SPACE,    ///< If there is a lack of space in the TLE
+    INVALID_FORMAT,     ///< If general parsing was unsuccessfully
+    INVALID_VALUE,      ///< If a parsed value doesn't make sense
+    CHECKSUM_MISMATCH,  ///< If the checksum doesn't match
+};
+
+enum class GravModel {
+    WGS72_OLD,
+    WGS72,
+    WGS84,
+};
+
+enum class Sgp4Error {
+    NONE,
+    MEAN_ELEMENTS,
+    MEAN_MOTION,
+    PERT_ELEMENTS,
+    SEMI_LATUS_RECTUM,
+    EPOCH_ELEMENTS_SUB_ORBITAL,
+    DECAYED,
+    INVALID_TLE,
+    UNKNOWN
+};
 
 struct DateTime {
     c_internal::perturb_date_time internal;  /// Internal C data
@@ -133,7 +163,41 @@ struct ClassicalOrbitalElements {
     ///
     /// @param sv A position-velocity state vector generated via SGP4
     /// TODO: param grav_model Gravity model used in SGP4 (default `GravModel::WGS72`)
-    explicit ClassicalOrbitalElements(StateVector sv);
+    explicit ClassicalOrbitalElements(StateVector sv, GravModel grav_model);
+};
+
+struct TwoLineElement {
+    c_internal::perturb_tle internal;  /// Internal C data
+
+#ifndef PERTURB_DISABLE_IO
+    /// Parse a TLE record string.
+    ///
+    /// You *probably* don't need this method. As I explain in the `TwoLineElement`
+    /// and and `Satellite()` constructor docs, you should probably just use the
+    /// `Satellite::from_tle` method directly. This method must be called on an
+    /// existing `TwoLineElement` variable, so it can return the error code.
+    ///
+    /// This currently uses my own implementation of a parser that doesn't
+    /// support every case that Vallado's impl does, so there may be the
+    /// occasional false error.
+    ///
+    /// @post See the `perturb::TLEParseError` docs for the guaranteed error ordering.
+    ///
+    /// @param line_1 First line of TLE as C-string of length `perturb::TLE_LINE_LEN`
+    /// @param line_2 Second line of TLE as C-string of length `perturb::TLE_LINE_LEN`
+    /// @return Issues with parsing, should usually be `TLEParseError::NONE`.
+    ///         The parsed values are written into the `TwoLineElement` instance.
+    TLEParseError parse(const char *line_1, const char *line_2);
+#endif  // PERTURB_DISABLE_IO
+
+#ifndef PERTURB_DISABLE_IO
+    /// Wrapper for `TwoLineElement::parse` that accepts C++ style strings.
+    ///
+    /// @param line_1 First line of TLE
+    /// @param line_2 Second line of TLE
+    /// @return Issues with parsing, should usually be `TLEParseError::NONE`
+    TLEParseError parse(const std::string &line_1, const std::string &line_2);
+#endif  // PERTURB_DISABLE_IO
 };
 
 class Satellite {
@@ -217,6 +281,7 @@ public:
     /// @return Issues during propagation, should usually be `Sgp4Error::NONE`
     Sgp4Error propagate(JulianDate jd, StateVector &sv);
 };
+
 }  // namespace perturb
 
 #endif  // PERTURB_PERTURB_HPP
