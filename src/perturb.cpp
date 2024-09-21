@@ -6,7 +6,7 @@
  * Licensed under the MIT License <http://opensource.org/licenses/MIT>.
  * SPDX-License-Identifier: MIT
  *
- * Copyright (c) 2022 Gunvir Ranu
+ * Copyright (c) 2022 Gunvir Singh Ranu
  */
 
 #include "perturb/perturb.hpp"
@@ -15,6 +15,10 @@
 #include <cstring>
 
 #include "perturb/sgp4.hpp"
+
+#ifdef __cplusplus
+#  error "Okay someone messed up haha, why u compiling C as C++"
+#endif
 
 namespace perturb {
 
