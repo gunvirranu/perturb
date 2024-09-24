@@ -6,134 +6,107 @@
  * Licensed under the MIT License <http://opensource.org/licenses/MIT>.
  * SPDX-License-Identifier: MIT
  *
- * Copyright (c) 2022 Gunvir Ranu
+ * Copyright (c) 2022 Gunvir Singh Ranu
  */
 
-//! @file
-//! Primary header file for the perturb library
-//! @author Gunvir Ranu
+//! @file Primary C++ header for the perturb library
+//! @author Gunvir Singh Ranu
 //! @version 1.0.0
-//! @copyright Gunvir Ranu, MIT License
+//! @copyright Gunvir Singh Ranu, MIT License
 
 #ifndef PERTURB_PERTURB_HPP
 #define PERTURB_PERTURB_HPP
 
-#include "perturb/sgp4.hpp"
-#include "perturb/tle.hpp"
+#ifndef __cplusplus
+#  error "This header is intended for C++, use perturb.h for C"
+#endif
+
+#ifndef PERTURB_ENABLE_CPP_INTERFACE
+#  error "Set the PERTURB_ENABLE_CPP_INTERFACE feature flag to support the C++ interface"
+#endif
 
 #include <array>
+#include <cstddef>
 #ifndef PERTURB_DISABLE_IO
 #  include <string>
 #endif
 
-/// Primary namespace for the perturb library, everything is in here.
+#include "perturb/perturb.h"
+#include "perturb/tle.h"
+#include "perturb/sgp4.h"
+
+/// Primary namespace for the perturb C++ library wrapper, everything is in here.
 ///
 /// See README for a brief intro to the main library types and basic usage.
+/// The C library interface is hidden in the `perturb::c_internal` namespace.
 namespace perturb {
 
-/// Alias for representing position and velocity vectors
-using Vec3 = std::array<double, 3>;
+/// Alias for general floating-point type (may be 32-bit or 64-bit)
+using real_t = c_internal::perturb_real_t;
 
-/// Possible issues during SGP4 propagation or even TLE parsing.
+/// Alias for representing 3D position and velocity vectors in [km]
+using Vec3 = std::array<real_t, 3>;
+
+/// Both lines of a TLE **must** be this length, for TLE constructors.
 ///
-/// This is important in two places:
-///   1. After construction of a `Satellite`, check `Satellite::last_error`
-///      for any issues with TLE parsing or SGP4 initialization.
-///   2. Calling `Satellite::propagate` returns a `perturb::Sgp4Error`,
-///      indicating any possible issues with propagation.
-///
-/// If everything is all good, the value should be `Sgp4Error::NONE`.
-/// The errors `Sgp4Error::MEAN_ELEMENTS` to `SGP4Error::DECAYED` directly
-/// correlate to errors in the underlying SGP4 impl, from the comments of
-/// `perturb::sgp4::sgp4`. The additional `Sgp4Error::INVALID_TLE` is for issues
-/// with reading the TLE strings.
-enum class Sgp4Error : int {
-    NONE = 0,
+/// It is assumed that this memory can be safely accessed.
+/// Lines can be longer for verification mode, but that's for internal testing
+/// purposes only and doesn't pertain to general usage.
+constexpr std::size_t TLE_LINE_LEN = 69;
+
+// TODO: Add a few static asserts for enums as a sanity check
+
+enum class TLEParseError {
+    NONE,               ///< If no issues when parsing
+    SHOULD_BE_SPACE,    ///< If there is a lack of space in the TLE
+    INVALID_FORMAT,     ///< If general parsing was unsuccessfully
+    INVALID_VALUE,      ///< If a parsed value doesn't make sense
+    CHECKSUM_MISMATCH,  ///< If the checksum doesn't match
+};
+
+enum class GravModel {
+    WGS72_OLD,
+    WGS72,
+    WGS84,
+};
+
+/// Convert C++ `GravModel` enum to internal C enum
+c_internal::perturb_grav_model convert_grav_model(const GravModel model);
+
+enum class Sgp4Error {
+    NONE,
     MEAN_ELEMENTS,
     MEAN_MOTION,
     PERT_ELEMENTS,
     SEMI_LATUS_RECTUM,
     EPOCH_ELEMENTS_SUB_ORBITAL,
     DECAYED,
-    INVALID_TLE,  // Not from base impl, added in
+    INVALID_TLE,
     UNKNOWN
 };
 
-/// Choice of gravity model / constants for the underlying SGP4 impl.
-///
-/// Corresponds to the `gravconsttype` type in `perturb::sgp4`.
-/// Generally, WGS72 is the standard choice, despite WGS84 being the newer and
-/// more accurate model. What is most important is that this is the exact same
-/// as the gravity model used to generate the TLE ephemeris. This can be
-/// confirmed from the source of your TLE data.
-enum class GravModel {
-    WGS72_OLD,
-    WGS72,
-    WGS84
-};
-
-/// A basic and human readable representation of a point in time.
-///
-/// The primary purpose of this type is to be constructed manually via
-/// aggregate initialization and the converted to a `JulianDate`.
-///
-/// @warning
-/// This type doesn't enforce a valid date and time upon construction; there
-/// are no checks. Additionally, the conversion to `JulianDate` values are only
-/// valid from years 1900 to 2100.
-///
-/// The question of what this time point represents gets complicated. In the
-/// "Revisiting Spacetrack Report #3" paper from Celestrak, it is discussed
-/// what this time represents. While UTC would make sense, the method
-/// `perturb::sgp4::gstime_SGP4` requires UT1 time to calculate GMST. This
-/// library makes the same assumption that the paper concludes:
-///
-/// @par
-///  "The error associated with approximating UT1 with UTC is within the
-///   theoretical uncertainty of the SGP4 theory itself. Except for the GMST
-///   calculation, this paper and code assumes time to be realized as UTC."
 struct DateTime {
-    int year;    ///< Year from 1900 to 2100
-    int month;   ///< Month from 1 to 12
-    int day;     ///< Day from 1 to {28, 29, 30, 31} (depending on month)
-    int hour;    ///< Hour from 0 to 23
-    int min;     ///< Minute from 0 to 59
-    double sec;  ///< Fractional seconds from 0.0 to 59.999...
+    c_internal::perturb_date_time internal;  /// Internal C data
+
+    // TODO: Add constructor anyways
 };
 
-/// Represents a specific point in time on the Julian calendar.
-///
-/// Generally not constructed manually, but instead converted from a `DateTime`
-/// or from `Satellite::epoch`. Supports some basic manipulation operations.
-/// For a human readable representation, can be converted back to `DateTime`.
-/// As for what time point this represents, see the comment on `DateTime`.
-///
-/// Internally, this is represented as the "theoretical" sum of two double
-/// precision floats. This is to preserve as much time accuracy as possible,
-/// since many bits are lost due to storing the number of the day. The smaller
-/// value is used to represent a more accurate time offset from that day. The
-/// "normalized" value restricts the larger value to entire days and the
-/// smaller to a [0.0, 1.0) time offset.
 struct JulianDate {
-    /// Fractional number of days since the epoch (4713 B.C.)
-    double jd;
-    /// Smaller fractional number of days
-    double jd_frac;
+    c_internal::perturb_julian_date internal;  /// Internal C data
 
-    /// Construct an empty julian date initialized to 0
-    JulianDate();
+    explicit JulianDate(c_internal::perturb_julian_date in);
 
-    /// Construct from a Julian number of days since epoch (4713 B.C.)
-    explicit JulianDate(double jd);
+    /// Construct from a Julian number of days since epoch
+    explicit JulianDate(real_t jd);
 
     /// Construct from a Julian day number and fractional day.
     ///
     /// The "true" Julian date value is the sum of the two. The motivation for
     /// separating into two parts is to preserve floating-point precision.
     ///
-    /// @param jd Larger Julian day value since epoch
-    /// @param jd_frac Smaller fractional Julian day value
-    explicit JulianDate(double jd, double jd_frac);
+    /// @param jd Larger Julian [day] value since epoch
+    /// @param jd_frac Smaller fractional Julian [day] value
+    explicit JulianDate(real_t jd, real_t jd_frac);
 
     /// Construct from a `DateTime` time point.
     ///
@@ -148,19 +121,20 @@ struct JulianDate {
     /// @return Same time point converted to a human readable representation
     DateTime to_datetime() const;
 
-    /// Normalizes a Julian date representation to a canonical representation.
+    /// Get a normalized / canonical julian date representation
     ///
-    /// Modifies the two julian day values to restrict the larger value to whole
-    /// days and the smaller value to a [0.0, 1.0) time offset. This is *not*
-    /// needed for the conversions as they will automatically normalize, but
-    /// you may want to do this for other reasons.
-    void normalize();
-
-    /// Get a normalized copy of a julian date
+    /// Larger value is restricted to a whole number of days and the smaller
+    /// value to a [0.0, 1.0) time offset. This is *not* generally needed for
+    /// conversions; they will automatically normalize.
     JulianDate normalized() const;
 
+    /// Normalize julian date representation in-place.
+    ///
+    /// See `JulianDate::normalized` for details.
+    void normalize();
+
     /// Returns the difference/delta in times as a fractional number of days
-    double operator-(const JulianDate &rhs) const;
+    real_t operator-(const JulianDate &rhs) const;
 
     /// Returns another time point offset by a number of days.
     ///
@@ -170,15 +144,15 @@ struct JulianDate {
     /// accordingly, but I defaulted to the former method for performance. If
     /// you think this wasn't the right move, lemme know.
     ///
-    /// @param delta_jd Number of fractional days to add
+    /// @param delta_jd Number of fractional [day] to add
     /// @return Sum of a time point and offset, *not* normalized
-    JulianDate operator+(const double &delta_jd) const;
+    JulianDate operator+(const real_t &delta_jd) const;
     /// Add a delta number of days offset to this time point
-    JulianDate &operator+=(const double &delta_jd);
+    JulianDate &operator+=(const real_t &delta_jd);
     /// Returns another time point offset backwards by a number of days
-    JulianDate operator-(const double &delta_jd) const;
+    JulianDate operator-(const real_t &delta_jd) const;
     /// Subtracts a delta number of days offset to this time point
-    JulianDate &operator-=(const double &delta_jd);
+    JulianDate &operator-=(const real_t &delta_jd);
 
     /// Compare if chronologically earlier than another time point
     bool operator<(const JulianDate &rhs) const;
@@ -190,63 +164,62 @@ struct JulianDate {
     bool operator>=(const JulianDate &rhs) const;
 };
 
-/// Represents the output prediction from SGP4.
-///
-/// Generated by `Satellite::propagate` method. The vectors are represented in
-/// the TEME (True Equator Mean Equinox) reference frame. Can be converted to
-/// classical orbital elements with the `ClassicalOrbitalElements` type.
 struct StateVector {
-    /// Time-stamp of the state vector
-    JulianDate epoch;
-    /// Position in the TEME frame in [km]
-    Vec3 position;
-    /// Velocity in the TEME frame in [km/s]
-    Vec3 velocity;
+    c_internal::perturb_state_vector internal;  /// Internal C data
 };
 
-/// Classical Keplerian orbital elements.
-///
-/// Names and values are from the underlying SGP4 implementation. Can be
-/// generated from a `StateVector` via the constructor.
 struct ClassicalOrbitalElements {
-    double semilatus_rectum;        ///< Samilatus rectum in [km]
-    double semimajor_axis;          ///< Semimajor axis in [km]
-    double eccentricity;            ///< Eccentricity (unitless)
-    double inclination;             ///< Inlination in [rad]
-    double raan;                    ///< Right ascension of ascending node in [rad]
-    double arg_of_perigee;          ///< Argument of perigee in [rad]
-    double true_anomaly;            ///< True anomaly in [rad]
-    double mean_anomaly;            ///< Mean anomaly in [rad]
-    double arg_of_latitude;         ///< Argument of latitude in [rad]
-    double true_longitude;          ///< True longitude in [rad]
-    double longitude_of_periapsis;  ///< Longitude of periapsis in [rad]
+    c_internal::perturb_classical_orbital_elements internal;  /// Internal C data
 
     /// Construct from a `StateVector` position and velocity in TEME.
     ///
     /// @param sv A position-velocity state vector generated via SGP4
-    /// @param grav_model Gravity model used in SGP4 (default `GravModel::WGS72`)
-    explicit ClassicalOrbitalElements(
-        StateVector sv, GravModel grav_model = GravModel::WGS72
-    );
+    /// TODO: param grav_model Gravity model used in SGP4 (default `GravModel::WGS72`)
+    explicit ClassicalOrbitalElements(StateVector sv, GravModel grav_model = GravModel::WGS72);
 };
 
-/// Represents a specific orbital ephemeris for an Earth-centered trajectory.
-///
-/// This is the primary type in this library. Wraps the internal SGP4 record
-/// type `perturb::sgp4::elsetrec`. Generally constructed via TLEs through
-/// `Satellite::from_tle` constructors. Of particular importance is the
-/// `Satellite::last_error` method which you can check to determine if there
-/// were any issues with TLE initialization or propagation. The primary method
-/// of running the SGP4 algorithm is the `Satellite::propagate` method.
+struct TwoLineElement {
+    c_internal::perturb_tle internal;  /// Internal C data
+
+#ifndef PERTURB_DISABLE_IO
+    /// Parse a TLE record string.
+    ///
+    /// You *probably* don't need this method. As I explain in the `TwoLineElement`
+    /// and and `Satellite()` constructor docs, you should probably just use the
+    /// `Satellite::from_tle` method directly. This method must be called on an
+    /// existing `TwoLineElement` variable, so it can return the error code.
+    ///
+    /// This currently uses my own implementation of a parser that doesn't
+    /// support every case that Vallado's impl does, so there may be the
+    /// occasional false error.
+    ///
+    /// @post See the `perturb::TLEParseError` docs for the guaranteed error ordering.
+    ///
+    /// @param line_1 First line of TLE as C-string of length `perturb::TLE_LINE_LEN`
+    /// @param line_2 Second line of TLE as C-string of length `perturb::TLE_LINE_LEN`
+    /// @return Issues with parsing, should usually be `TLEParseError::NONE`.
+    ///         The parsed values are written into the `TwoLineElement` instance.
+    TLEParseError parse(const char *line_1, const char *line_2);
+#endif  // PERTURB_DISABLE_IO
+
+#ifndef PERTURB_DISABLE_IO
+    /// Wrapper for `TwoLineElement::parse` that accepts C++ style strings.
+    ///
+    /// @param line_1 First line of TLE
+    /// @param line_2 Second line of TLE
+    /// @return Issues with parsing, should usually be `TLEParseError::NONE`
+    TLEParseError parse(const std::string &line_1, const std::string &line_2);
+#endif  // PERTURB_DISABLE_IO
+};
+
 class Satellite {
 public:
-    /// Internal SGP4 type
-    sgp4::elsetrec sat_rec;
+    c_internal::perturb_satellite internal;  /// Internal C data
 
     /// Construct from a raw SGP4 orbital record.
     ///
-    /// @param sat_rec Pre-initialized SGP4 orbital record
-    explicit Satellite(sgp4::elsetrec sat_rec);
+    /// @param sat Pre-initialized SGP4 orbital record
+    explicit Satellite(c_internal::perturb_satellite sat);
 
     /// Construct and initialize from a pre-parsed TLE record.
     ///
@@ -266,7 +239,7 @@ public:
     /// @pre The TLE must be valid and contain valid values.
     ///
     /// @param tle Parsed and valid TLE
-    /// @param grav_model Gravity constants to use (default `GravModel::WGS72`)
+    /// TODO: param grav_model Gravity constants to use (default `GravModel::WGS72`)
     explicit Satellite(
         const TwoLineElement &tle, GravModel grav_model = GravModel::WGS72
     );
@@ -311,7 +284,7 @@ public:
     /// @param mins_from_epoch Offset number of minutes around the epoch
     /// @param posvel Returned state vector in the TEME frame
     /// @return Issues during propagation, should usually be `Sgp4Error::NONE`
-    Sgp4Error propagate_from_epoch(double mins_from_epoch, StateVector &sv);
+    Sgp4Error propagate_from_epoch(real_t mins_from_epoch, StateVector &sv);
 
     /// Propagate the SGP4 model to a specific time point.
     ///
@@ -320,6 +293,7 @@ public:
     /// @return Issues during propagation, should usually be `Sgp4Error::NONE`
     Sgp4Error propagate(JulianDate jd, StateVector &sv);
 };
+
 }  // namespace perturb
 
 #endif  // PERTURB_PERTURB_HPP

@@ -15,22 +15,19 @@
 //! @version 1.0.0
 //! @copyright Gunvir Ranu, MIT License
 
-#ifndef PERTURB_TLE_HPP
-#define PERTURB_TLE_HPP
+#ifndef PERTURB_TLE_H
+#define PERTURB_TLE_H
 
-#include <cstddef>
-#ifndef PERTURB_DISABLE_IO
-#  include <string>
-#endif
+#include "perturb/perturb.h"
+#include "perturb/sgp4.h"
 
+#if __cplusplus
+#  ifdef PERTURB_ENABLE_CPP_INTERFACE
 namespace perturb {
-
-/// Both lines of a TLE **must** be this length, for TLE constructors.
-///
-/// The memory can and is accessed.
-/// Lines can be longer for verification mode, but that's for internal testing
-/// purposes only and doesn't pertain to general usage.
-constexpr std::size_t TLE_LINE_LEN = 69;
+namespace c_internal {
+#  endif
+extern "C" {
+#endif
 
 /// Possible errors when parsing a TLE.
 ///
@@ -42,13 +39,14 @@ constexpr std::size_t TLE_LINE_LEN = 69;
 /// values, and lastly checksum. This allows you to assume, for example, that
 /// if there is a `CHECKSUM_MISMATCH`, then none of the previous errors
 /// occurred first, and so the invalid checksum is the *only* issue.
-enum class TLEParseError {
-    NONE,               ///< If no issues when parsing
-    SHOULD_BE_SPACE,    ///< If there is a lack of space in the TLE
-    INVALID_FORMAT,     ///< If general parsing was unsuccessfully
-    INVALID_VALUE,      ///< If a parsed value doesn't make sense
-    CHECKSUM_MISMATCH,  ///< If the checksum doesn't match
+enum perturb_tle_parse_error {
+    PERTURB_TLE_PARSE_ERROR_NONE,               ///< If no issues when parsing
+    PERTURB_TLE_PARSE_ERROR_SHOULD_BE_SPACE,    ///< If there is a lack of space in the TLE
+    PERTURB_TLE_PARSE_ERROR_INVALID_FORMAT,     ///< If general parsing was unsuccessfully
+    PERTURB_TLE_PARSE_ERROR_INVALID_VALUE,      ///< If a parsed value doesn't make sense
+    PERTURB_TLE_PARSE_ERROR_CHECKSUM_MISMATCH,  ///< If the checksum doesn't match
 };
+
 
 /// Represents a pre-parsed TLE record.
 ///
@@ -62,8 +60,8 @@ enum class TLEParseError {
 /// a case where all I/O and string processing is removed, this type still
 /// allows you to construct and initialize a `Satellite` manually. However, you
 /// must handle your own method of creating the `TwoLineElement`s.
-struct TwoLineElement {
-    // clang-format off
+struct perturb_tle {
+// clang-format off
     // Line 1
     char catalog_number[6];             ///< Satellite catalog number
     char classification;                ///< Classification {U: Unclassified, C: Classified, S: Secret}
@@ -88,39 +86,29 @@ struct TwoLineElement {
     double mean_motion;                 ///< Mean motion, 0 < [rev/day]
     unsigned long revolution_number;    ///< Revolution number at epoch, 0 ≤ [rev] ≤ 99999
     unsigned char line_2_checksum;      ///< Line 2 check-sum
-    // clang-format on
-
-#ifndef PERTURB_DISABLE_IO
-    /// Parse a TLE record string.
-    ///
-    /// You *probably* don't need this method. As I explain in the `TwoLineElement`
-    /// and and `Satellite()` constructor docs, you should probably just use the
-    /// `Satellite::from_tle` method directly. This method must be called on an
-    /// existing `TwoLineElement` variable, so it can return the error code.
-    ///
-    /// This currently uses my own implementation of a parser that doesn't
-    /// support every case that Vallado's impl does, so there may be the
-    /// occasional false error.
-    ///
-    /// @post See the `perturb::TLEParseError` docs for the guaranteed error ordering.
-    ///
-    /// @param line_1 First line of TLE as C-string of length `perturb::TLE_LINE_LEN`
-    /// @param line_2 Second line of TLE as C-string of length `perturb::TLE_LINE_LEN`
-    /// @return Issues with parsing, should usually be `TLEParseError::NONE`.
-    ///         The parsed values are written into the `TwoLineElement` instance.
-    TLEParseError parse(const char *line_1, const char *line_2);
-#endif  // PERTURB_DISABLE_IO
-
-#ifndef PERTURB_DISABLE_IO
-    /// Wrapper for `TwoLineElement::parse` that accepts C++ style strings.
-    ///
-    /// @param line_1 First line of TLE
-    /// @param line_2 Second line of TLE
-    /// @return Issues with parsing, should usually be `TLEParseError::NONE`
-    TLEParseError parse(const std::string &line_1, const std::string &line_2);
-#endif  // PERTURB_DISABLE_IO
+// clang-format on
 };
 
-}  // namespace perturb
+enum perturb_tle_parse_error perturb_init_sat_from_tle(
+    struct perturb_tle tle, enum perturb_grav_model grav_model, struct perturb_satellite * sat
+);
 
-#endif  // PERTURB_TLE_HPP
+#ifndef PERTURB_DISABLE_IO
+enum perturb_tle_parse_error perturb_parse_tle(char * line_1, char * line_2, struct perturb_tle * tle);
+#endif
+
+#ifndef PERTURB_DISABLE_IO
+enum perturb_tle_parse_error perturb_parse_tle_and_init_sat(
+    char * line_1, char * line_2, enum perturb_grav_model grav_model, struct perturb_satellite * sat
+);
+#endif
+
+#if __cplusplus
+}  // extern "C"
+#  ifdef PERTURB_ENABLE_CPP_INTERFACE
+}  // namespace c_internal
+}  // namespace perturb
+#  endif
+#endif
+
+#endif  // PERTURB_TLE_H
