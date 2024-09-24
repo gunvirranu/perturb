@@ -89,14 +89,18 @@ struct perturb_tle {
 // clang-format on
 };
 
-enum perturb_tle_parse_error perturb_init_sat_from_tle(struct perturb_satellite sat, struct perturb_tle * tle);
+enum perturb_tle_parse_error perturb_init_sat_from_tle(
+    struct perturb_tle tle, enum perturb_grav_model grav_model, struct perturb_satellite * sat
+);
 
 #ifndef PERTURB_DISABLE_IO
 enum perturb_tle_parse_error perturb_parse_tle(char * line_1, char * line_2, struct perturb_tle * tle);
 #endif
 
 #ifndef PERTURB_DISABLE_IO
-bool perturb_parse_tle_and_init_sat(char *line_1, char *line_2, struct perturb_satellite * sat);
+enum perturb_tle_parse_error perturb_parse_tle_and_init_sat(
+    char * line_1, char * line_2, enum perturb_grav_model grav_model, struct perturb_satellite * sat
+);
 #endif
 
 #if __cplusplus

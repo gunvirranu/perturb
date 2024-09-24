@@ -18,7 +18,7 @@
 #define PERTURB_PERTURB_HPP
 
 #ifndef __cplusplus
-#  error "This header is intended for C++, use <perturb/perturb.h> for C"
+#  error "This header is intended for C++, use perturb.h for C"
 #endif
 
 #ifndef PERTURB_ENABLE_CPP_INTERFACE
@@ -70,6 +70,9 @@ enum class GravModel {
     WGS84,
 };
 
+/// Convert C++ `GravModel` enum to internal C enum
+c_internal::perturb_grav_model convert_grav_model(const GravModel model);
+
 enum class Sgp4Error {
     NONE,
     MEAN_ELEMENTS,
@@ -84,10 +87,14 @@ enum class Sgp4Error {
 
 struct DateTime {
     c_internal::perturb_date_time internal;  /// Internal C data
+
+    // TODO: Add constructor anyways
 };
 
 struct JulianDate {
     c_internal::perturb_julian_date internal;  /// Internal C data
+
+    explicit JulianDate(c_internal::perturb_julian_date in);
 
     /// Construct from a Julian number of days since epoch
     explicit JulianDate(real_t jd);
@@ -120,6 +127,11 @@ struct JulianDate {
     /// value to a [0.0, 1.0) time offset. This is *not* generally needed for
     /// conversions; they will automatically normalize.
     JulianDate normalized() const;
+
+    /// Normalize julian date representation in-place.
+    ///
+    /// See `JulianDate::normalized` for details.
+    void normalize();
 
     /// Returns the difference/delta in times as a fractional number of days
     real_t operator-(const JulianDate &rhs) const;
@@ -163,7 +175,7 @@ struct ClassicalOrbitalElements {
     ///
     /// @param sv A position-velocity state vector generated via SGP4
     /// TODO: param grav_model Gravity model used in SGP4 (default `GravModel::WGS72`)
-    explicit ClassicalOrbitalElements(StateVector sv, GravModel grav_model);
+    explicit ClassicalOrbitalElements(StateVector sv, GravModel grav_model = GravModel::WGS72);
 };
 
 struct TwoLineElement {
@@ -272,7 +284,7 @@ public:
     /// @param mins_from_epoch Offset number of minutes around the epoch
     /// @param posvel Returned state vector in the TEME frame
     /// @return Issues during propagation, should usually be `Sgp4Error::NONE`
-    Sgp4Error propagate_from_epoch(double mins_from_epoch, StateVector &sv);
+    Sgp4Error propagate_from_epoch(real_t mins_from_epoch, StateVector &sv);
 
     /// Propagate the SGP4 model to a specific time point.
     ///

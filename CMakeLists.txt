@@ -12,11 +12,11 @@ project(
     VERSION 1.0.0
     DESCRIPTION "A modern C++ wrapper for SGP4 orbit propagation"
     HOMEPAGE_URL "https://github.com/gunvirranu/perturb"
-    LANGUAGES C
+    LANGUAGES C CXX
 )
 
 option(perturb_DISABLE_IO "Disable I/O and string functionality" OFF)
-option(perturb_ENABLE_CPP_INTERFACE "Expose a small C++ wrapper interface" OFF)
+option(perturb_ENABLE_CPP_INTERFACE "Expose a small C++ wrapper interface" ON)  # TODO: Revert to default OFF after tested
 
 # For CMake 3.21+, variable is set by default by project()
 if(CMAKE_VERSION VERSION_LESS 3.21.0)
@@ -56,7 +56,7 @@ endif()
 
 add_library(
     perturb
-    src/perturb.c
+    src/perturb.c src/perturb.cpp
 )
 
 target_include_directories(
@@ -66,7 +66,7 @@ target_include_directories(
 )
 
 target_compile_features(perturb PUBLIC c_std_99)
-# target_compile_features(perturb PUBLIC cxx_std_11)
+target_compile_features(perturb PUBLIC cxx_std_11)
 
 if(perturb_DISABLE_IO)
     target_compile_definitions(perturb PUBLIC PERTURB_DISABLE_IO)

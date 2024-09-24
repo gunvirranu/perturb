@@ -77,7 +77,7 @@
 #  error "Cannot enable SGP4 debug without I/O functionality"
 #endif
 
-#if __cplusplus
+#ifdef __cplusplus
 #  ifdef PERTURB_ENABLE_CPP_INTERFACE
 namespace perturb {
 namespace c_internal {
@@ -108,19 +108,6 @@ enum perturb_sgp4_error {
     PERTURB_SGP4_ERROR_DECAYED,
     PERTURB_SGP4_ERROR_INVALID_TLE,  ///< Not from base impl, added in
     PERTURB_SGP4_ERROR_UNKNOWN
-};
-
-/// Choice of gravity model / constants for the underlying SGP4 impl.
-///
-/// Corresponds to the `gravconsttype` type in `perturb::sgp4`.
-/// Generally, WGS72 is the standard choice, despite WGS84 being the newer and
-/// more accurate model. What is most important is that this is the exact same
-/// as the gravity model used to generate the TLE ephemeris. This can be
-/// confirmed from the source of your TLE data.
-enum perturb_grav_model {
-    PERTURB_GRAV_MODEL_WGS72_OLD,
-    PERTURB_GRAV_MODEL_WGS72,
-    PERTURB_GRAV_MODEL_WGS84
 };
 
 /// Represents a specific orbital ephemeris for an Earth-centered trajectory.
@@ -178,11 +165,11 @@ struct perturb_satellite {
 
 struct perturb_julian_date perturb_epoch(struct perturb_satellite sat);
 
-struct perturb_state_vector perturb_propagate_days(
-    struct perturb_satellite sat, perturb_real_t days
+enum perturb_sgp4_error perturb_propagate(
+    struct perturb_satellite sat, struct perturb_julian_date t, struct perturb_state_vector * sv
 );
-struct perturb_state_vector perturb_propagate(
-    struct perturb_satellite sat, struct perturb_julian_date t
+enum perturb_sgp4_error perturb_propagate_days_from_epoch(
+    struct perturb_satellite sat, perturb_real_t days, struct perturb_state_vector * sv
 );
 
 //-------------------------------------------------------------------------//
@@ -191,25 +178,25 @@ bool sgp4init(
     enum perturb_grav_model whichconst, char opsmode, const char satn[5], const double epoch,
     const double xbstar, const double xndot, const double xnddot, const double xecco,
     const double xargpo, const double xinclo, const double xmo, const double xno,
-    const double xnodeo, perturb_satellite& satrec
+    const double xnodeo, struct perturb_satellite * satrec
 );
 
 bool sgp4(
     // no longer need gravconsttype whichconst, all data contained in satrec
-    perturb_satellite& satrec, double tsince, double r[3], double v[3]
+    struct perturb_satellite * satrec, double tsince, double r[3], double v[3]
 );
 
 void getgravconst(
-    enum perturb_grav_model whichconst, double& tumin, double& mus, double& radiusearthkm,
-    double& xke, double& j2, double& j3, double& j4, double& j3oj2
+    enum perturb_grav_model whichconst, double * tumin, double * mus, double * radiusearthkm,
+    double * xke, double * j2, double * j3, double * j4, double * j3oj2
 );
 
 #ifndef PERTURB_DISABLE_IO
 // older sgp4io methods
 void twoline2rv(
     char longstr1[130], char longstr2[130], char typerun, char typeinput, char opsmode,
-    enum perturb_grav_model whichconst, double& startmfe, double& stopmfe, double& deltamin,
-    perturb_satellite& satrec
+    enum perturb_grav_model whichconst, double * startmfe, double * stopmfe, double * deltamin,
+    struct perturb_satellite * satrec
 );
 #endif  // PERTURB_DISABLE_IO
 
@@ -225,31 +212,31 @@ double dot_SGP4(double x[3], double y[3]);
 
 double angle_SGP4(double vec1[3], double vec2[3]);
 
-void newtonnu_SGP4(double ecc, double nu, double& e0, double& m);
+void newtonnu_SGP4(double ecc, double nu, double * e0, double * m);
 
 double asinh_SGP4(double xval);
 
 void rv2coe_SGP4(
-    double r[3], double v[3], double mus, double& p, double& a, double& ecc,
-    double& incl, double& omega, double& argp, double& nu, double& m, double& arglat,
-    double& truelon, double& lonper
+    double r[3], double v[3], double mus, double * p, double * a, double * ecc,
+    double * incl, double * omega, double * argp, double * nu, double * m, double * arglat,
+    double * truelon, double * lonper
 );
 
 void jday_SGP4(
-    int year, int mon, int day, int hr, int minute, double sec, double& jd,
-    double& jdFrac
+    int year, int mon, int day, int hr, int minute, double sec,
+    double * jd, double * jdFrac
 );
 
 void days2mdhms_SGP4(
-    int year, double days, int& mon, int& day, int& hr, int& minute, double& sec
+    int year, double days, int * mon, int * day, int * hr, int * minute, double * sec
 );
 
 void invjday_SGP4(
-    double jd, double jdFrac, int& year, int& mon, int& day, int& hr, int& minute,
-    double& sec
+    double jd, double jdFrac, int * year, int * mon, int * day, int * hr, int * minute,
+    double * sec
 );
 
-#if __cplusplus
+#ifdef __cplusplus
 }  // extern "C"
 #  ifdef PERTURB_ENABLE_CPP_INTERFACE
 }  // namespace c_internal

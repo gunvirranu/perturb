@@ -46,6 +46,19 @@ extern "C" {  // Support header inclusion from C++
 /// TODO: Support float32_t and float64_t
 typedef double perturb_real_t;
 
+/// Choice of gravity model / constants for the underlying SGP4 impl.
+///
+/// Corresponds to the `gravconsttype` type in `perturb::sgp4`.
+/// Generally, WGS72 is the standard choice, despite WGS84 being the newer and
+/// more accurate model. What is most important is that this is the exact same
+/// as the gravity model used to generate the TLE ephemeris. This can be
+/// confirmed from the source of your TLE data.
+enum perturb_grav_model {
+    PERTURB_GRAV_MODEL_WGS72_OLD,
+    PERTURB_GRAV_MODEL_WGS72,
+    PERTURB_GRAV_MODEL_WGS84
+};
+
 /// A basic and human readable representation of a point in time.
 ///
 /// The primary purpose of this type is to be constructed manually via
@@ -123,9 +136,19 @@ struct perturb_classical_orbital_elements {
 };
 
 struct perturb_julian_date perturb_datetime_to_julian(struct perturb_date_time t);
+struct perturb_date_time perturb_julian_to_datetime(struct perturb_julian_date jd);
 
-struct perturb_julian_date perturb_add_days_to_julian(
+struct perturb_julian_date perturb_julian_normalized(struct perturb_julian_date t);
+struct perturb_julian_date perturb_julian_add_days(
     struct perturb_julian_date t, perturb_real_t days
+);
+perturb_real_t perturb_julian_subtract(
+    struct perturb_julian_date lhs, struct perturb_julian_date rhs
+);
+
+struct perturb_classical_orbital_elements perturb_state_vector_to_orbital_elements(struct perturb_state_vector sv);
+struct perturb_classical_orbital_elements perturb_state_vector_to_orbital_elements_with_grav(
+    struct perturb_state_vector sv, enum perturb_grav_model grav_model
 );
 
 #ifdef __cplusplus
