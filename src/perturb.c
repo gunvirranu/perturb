@@ -24,20 +24,20 @@ extern "C" {
 #include "perturb/sgp4.h"
 #include "common_private.h"
 
-struct perturb_julian_date perturb_datetime_to_julian(const struct perturb_date_time t) {
-    struct perturb_julian_date jd;
+struct perturb_JulianDate perturb_datetime_to_julian(const struct perturb_DateTime t) {
+    struct perturb_JulianDate jd;
     jday_SGP4(t.year, t.month, t.day, t.hour, t.min, t.sec, &jd.jd, &jd.jd_frac);
     return jd;
 }
 
-struct perturb_date_time perturb_julian_to_datetime(const struct perturb_julian_date jd) {
-    struct perturb_date_time t;
+struct perturb_DateTime perturb_julian_to_datetime(const struct perturb_JulianDate jd) {
+    struct perturb_DateTime t;
     invjday_SGP4(jd.jd, jd.jd_frac, &t.year, &t.month, &t.day, &t.hour, &t.min, &t.sec);
     return t;
 }
 
-struct perturb_julian_date perturb_julian_normalized(const struct perturb_julian_date t) {
-    struct perturb_julian_date out = t;
+struct perturb_JulianDate perturb_julian_normalized(const struct perturb_JulianDate t) {
+    struct perturb_JulianDate out = t;
 
     // Check for fractional days included in `jd` and put them in `jd`
     const real_t frac_days = t.jd - floor(t.jd) - 0.5;
@@ -56,10 +56,10 @@ struct perturb_julian_date perturb_julian_normalized(const struct perturb_julian
     return out;
 }
 
-struct perturb_julian_date perturb_julian_add_days(
-    const struct perturb_julian_date t, const perturb_real_t days
+struct perturb_JulianDate perturb_julian_add_days(
+    const struct perturb_JulianDate t, const perturb_real_t days
 ) {
-    struct perturb_julian_date t_new = t;
+    struct perturb_JulianDate t_new = t;
 
     // Just add entire offset to fractional value
     // Can be normalized later explicitly if needed
@@ -69,16 +69,17 @@ struct perturb_julian_date perturb_julian_add_days(
 
 /// lhs - rhs
 perturb_real_t perturb_julian_subtract(
-    const struct perturb_julian_date lhs, const struct perturb_julian_date rhs
+    const struct perturb_JulianDate lhs, const struct perturb_JulianDate rhs
 ) {
     // Grouping here is important to preserve precision
     return (lhs.jd - rhs.jd) + (lhs.jd_frac - rhs.jd_frac);
 }
 
-struct perturb_classical_orbital_elements perturb_state_vector_to_orbital_elements(const struct perturb_state_vector sv) {
-    struct perturb_classical_orbital_elements elems = { 0 };
+struct perturb_OrbitalElements perturb_state_vector_to_orbital_elements(const struct perturb_StateVector sv) {
+    struct perturb_OrbitalElements elems = { 0 };
 
-    const enum perturb_grav_model grav_model = PERTURB_GRAV_MODEL_WGS72_OLD;  // TODO: Explain why this default
+    const enum perturb_GravityModel grav_model =
+        PERTURB_GRAVITY_MODEL_WGS72_OLD;  // TODO: Explain why this default
     real_t mus, _tumin, _rekm, _xke, _j2, _j3, _j4, _j3oj2;
 
     getgravconst(
@@ -93,8 +94,8 @@ struct perturb_classical_orbital_elements perturb_state_vector_to_orbital_elemen
 
 }
 
-struct perturb_classical_orbital_elements perturb_state_vector_to_orbital_elements_with_grav(
-    struct perturb_state_vector sv, enum perturb_grav_model grav_model
+struct perturb_OrbitalElements perturb_state_vector_to_orbital_elements_with_grav(
+    struct perturb_StateVector sv, enum perturb_GravityModel grav_model
 ); // TODO
 
 ClassicalOrbitalElements::ClassicalOrbitalElements(

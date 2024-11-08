@@ -71,7 +71,7 @@ enum class GravModel {
 };
 
 /// Convert C++ `GravModel` enum to internal C enum
-c_internal::perturb_grav_model convert_grav_model(const GravModel model);
+c_internal::perturb_GravityModel convert_grav_model(const GravModel model);
 
 enum class Sgp4Error {
     NONE,
@@ -86,15 +86,15 @@ enum class Sgp4Error {
 };
 
 struct DateTime {
-    c_internal::perturb_date_time internal;  /// Internal C data
+    c_internal::perturb_DateTime internal;  /// Internal C data
 
     // TODO: Add constructor anyways
 };
 
 struct JulianDate {
-    c_internal::perturb_julian_date internal;  /// Internal C data
+    c_internal::perturb_JulianDate internal;  /// Internal C data
 
-    explicit JulianDate(c_internal::perturb_julian_date in);
+    explicit JulianDate(c_internal::perturb_JulianDate in);
 
     /// Construct from a Julian number of days since epoch
     explicit JulianDate(real_t jd);
@@ -165,11 +165,11 @@ struct JulianDate {
 };
 
 struct StateVector {
-    c_internal::perturb_state_vector internal;  /// Internal C data
+    c_internal::perturb_StateVector internal;  /// Internal C data
 };
 
 struct ClassicalOrbitalElements {
-    c_internal::perturb_classical_orbital_elements internal;  /// Internal C data
+    c_internal::perturb_OrbitalElements internal;  /// Internal C data
 
     /// Construct from a `StateVector` position and velocity in TEME.
     ///
@@ -179,7 +179,7 @@ struct ClassicalOrbitalElements {
 };
 
 struct TwoLineElement {
-    c_internal::perturb_tle internal;  /// Internal C data
+    c_internal::perturb_Tle internal;  /// Internal C data
 
 #ifndef PERTURB_DISABLE_IO
     /// Parse a TLE record string.
@@ -214,12 +214,12 @@ struct TwoLineElement {
 
 class Satellite {
 public:
-    c_internal::perturb_satellite internal;  /// Internal C data
+    c_internal::perturb_Satellite internal;  /// Internal C data
 
     /// Construct from a raw SGP4 orbital record.
     ///
     /// @param sat Pre-initialized SGP4 orbital record
-    explicit Satellite(c_internal::perturb_satellite sat);
+    explicit Satellite(c_internal::perturb_Satellite sat);
 
     /// Construct and initialize from a pre-parsed TLE record.
     ///

@@ -26,12 +26,12 @@ static Sgp4Error convert_sgp4_error_code(const int error_code) {
     return static_cast<Sgp4Error>(error_code);
 }
 
-c_internal::perturb_grav_model convert_grav_model(const GravModel model) {
+c_internal::perturb_GravityModel convert_grav_model(const GravModel model) {
     switch (model) {
-        case GravModel::WGS72_OLD:  return c_internal::PERTURB_GRAV_MODEL_WGS72_OLD;
-        case GravModel::WGS72:      return c_internal::PERTURB_GRAV_MODEL_WGS72;
-        case GravModel::WGS84:      return c_internal::PERTURB_GRAV_MODEL_WGS84;
-        default:                    return c_internal::PERTURB_GRAV_MODEL_WGS72;
+        case GravModel::WGS72_OLD:  return c_internal::PERTURB_GRAVITY_MODEL_WGS72_OLD;
+        case GravModel::WGS72:      return c_internal::PERTURB_GRAVITY_MODEL_WGS72;
+        case GravModel::WGS84:      return c_internal::PERTURB_GRAVITY_MODEL_WGS84;
+        default:                    return c_internal::PERTURB_GRAVITY_MODEL_WGS72;
     }
 }
 
@@ -39,7 +39,7 @@ c_internal::perturb_grav_model convert_grav_model(const GravModel model) {
 
 // JulianDate methods
 
-JulianDate::JulianDate(const c_internal::perturb_julian_date in) : internal(in) {}
+JulianDate::JulianDate(const c_internal::perturb_JulianDate in) : internal(in) {}
 
 JulianDate::JulianDate(const real_t jd) : internal({ jd, 0 }) {}
 
@@ -107,7 +107,7 @@ ClassicalOrbitalElements::ClassicalOrbitalElements(StateVector sv, GravModel gra
 
 // Satellite methods
 
-Satellite::Satellite(c_internal::perturb_satellite sat) : internal(sat) {}
+Satellite::Satellite(c_internal::perturb_Satellite sat) : internal(sat) {}
 
 Satellite::Satellite(const TwoLineElement &tle, const GravModel grav_model) {
     const auto _err = c_internal::perturb_init_sat_from_tle(
@@ -118,7 +118,7 @@ Satellite::Satellite(const TwoLineElement &tle, const GravModel grav_model) {
 
 #ifndef PERTURB_DISABLE_IO
 Satellite Satellite::from_tle(char * line_1, char * line_2, GravModel grav_model) {
-    c_internal::perturb_satellite sat {};
+    c_internal::perturb_Satellite sat {};
     c_internal::perturb_parse_tle_and_init_sat(line_1, line_2, convert_grav_model(grav_model), &sat);
     return Satellite(sat);
 }

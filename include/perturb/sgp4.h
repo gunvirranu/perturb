@@ -98,7 +98,7 @@ extern "C" {
 /// correlate to errors in the underlying SGP4 impl, from the comments of
 /// `perturb::sgp4::sgp4`. The additional `Sgp4Error::INVALID_TLE` is for issues
 /// with reading the TLE strings.
-enum perturb_sgp4_error {
+enum perturb_Sgp4Error {
     PERTURB_SGP4_ERROR_NONE,
     PERTURB_SGP4_ERROR_MEAN_ELEMENTS,
     PERTURB_SGP4_ERROR_MEAN_MOTION,
@@ -118,7 +118,7 @@ enum perturb_sgp4_error {
 /// `Satellite::last_error` method which you can check to determine if there
 /// were any issues with TLE initialization or propagation. The primary method
 /// of running the SGP4 algorithm is the `Satellite::propagate` method.
-struct perturb_satellite {
+struct perturb_Satellite {
     char satnum[6];  ///< Satellite number as an unparsed string
 
     int epochyr;        ///< [year] Two-digit epoch year in [1957, 2056]
@@ -163,31 +163,31 @@ struct perturb_satellite {
     perturb_real_t tumin, mus, radiusearthkm, xke, j2, j3, j4, j3oj2;
 };
 
-struct perturb_julian_date perturb_epoch(struct perturb_satellite sat);
+struct perturb_JulianDate perturb_epoch(struct perturb_Satellite sat);
 
-enum perturb_sgp4_error perturb_propagate(
-    struct perturb_satellite sat, struct perturb_julian_date t, struct perturb_state_vector * sv
+enum perturb_Sgp4Error perturb_propagate(
+    struct perturb_Satellite sat, struct perturb_JulianDate t, struct perturb_StateVector * sv
 );
-enum perturb_sgp4_error perturb_propagate_days_from_epoch(
-    struct perturb_satellite sat, perturb_real_t days, struct perturb_state_vector * sv
+enum perturb_Sgp4Error perturb_propagate_days_from_epoch(
+    struct perturb_Satellite sat, perturb_real_t days, struct perturb_StateVector * sv
 );
 
 //-------------------------------------------------------------------------//
 
 bool sgp4init(
-    enum perturb_grav_model whichconst, char opsmode, const char satn[5], const double epoch,
+    enum perturb_GravityModel whichconst, char opsmode, const char satn[5], const double epoch,
     const double xbstar, const double xndot, const double xnddot, const double xecco,
     const double xargpo, const double xinclo, const double xmo, const double xno,
-    const double xnodeo, struct perturb_satellite * satrec
+    const double xnodeo, struct perturb_Satellite * satrec
 );
 
 bool sgp4(
     // no longer need gravconsttype whichconst, all data contained in satrec
-    struct perturb_satellite * satrec, double tsince, double r[3], double v[3]
+    struct perturb_Satellite * satrec, double tsince, double r[3], double v[3]
 );
 
 void getgravconst(
-    enum perturb_grav_model whichconst, double * tumin, double * mus, double * radiusearthkm,
+    enum perturb_GravityModel whichconst, double * tumin, double * mus, double * radiusearthkm,
     double * xke, double * j2, double * j3, double * j4, double * j3oj2
 );
 
@@ -195,8 +195,8 @@ void getgravconst(
 // older sgp4io methods
 void twoline2rv(
     char longstr1[130], char longstr2[130], char typerun, char typeinput, char opsmode,
-    enum perturb_grav_model whichconst, double * startmfe, double * stopmfe, double * deltamin,
-    struct perturb_satellite * satrec
+    enum perturb_GravityModel whichconst, double * startmfe, double * stopmfe, double * deltamin,
+    struct perturb_Satellite * satrec
 );
 #endif  // PERTURB_DISABLE_IO
 

@@ -39,7 +39,7 @@ extern "C" {
 /// values, and lastly checksum. This allows you to assume, for example, that
 /// if there is a `CHECKSUM_MISMATCH`, then none of the previous errors
 /// occurred first, and so the invalid checksum is the *only* issue.
-enum perturb_tle_parse_error {
+enum perturb_TleParseError {
     PERTURB_TLE_PARSE_ERROR_NONE,               ///< If no issues when parsing
     PERTURB_TLE_PARSE_ERROR_SHOULD_BE_SPACE,    ///< If there is a lack of space in the TLE
     PERTURB_TLE_PARSE_ERROR_INVALID_FORMAT,     ///< If general parsing was unsuccessfully
@@ -60,7 +60,7 @@ enum perturb_tle_parse_error {
 /// a case where all I/O and string processing is removed, this type still
 /// allows you to construct and initialize a `Satellite` manually. However, you
 /// must handle your own method of creating the `TwoLineElement`s.
-struct perturb_tle {
+struct perturb_Tle {
 // clang-format off
     // Line 1
     char catalog_number[6];             ///< Satellite catalog number
@@ -89,17 +89,17 @@ struct perturb_tle {
 // clang-format on
 };
 
-enum perturb_tle_parse_error perturb_init_sat_from_tle(
-    struct perturb_tle tle, enum perturb_grav_model grav_model, struct perturb_satellite * sat
+enum perturb_TleParseError perturb_init_sat_from_tle(
+    struct perturb_Tle tle, enum perturb_GravityModel grav_model, struct perturb_Satellite * sat
 );
 
 #ifndef PERTURB_DISABLE_IO
-enum perturb_tle_parse_error perturb_parse_tle(char * line_1, char * line_2, struct perturb_tle * tle);
+enum perturb_TleParseError perturb_parse_tle(char * line_1, char * line_2, struct perturb_Tle * tle);
 #endif
 
 #ifndef PERTURB_DISABLE_IO
-enum perturb_tle_parse_error perturb_parse_tle_and_init_sat(
-    char * line_1, char * line_2, enum perturb_grav_model grav_model, struct perturb_satellite * sat
+enum perturb_TleParseError perturb_parse_tle_and_init_sat(
+    char * line_1, char * line_2, enum perturb_GravityModel grav_model, struct perturb_Satellite * sat
 );
 #endif
 
