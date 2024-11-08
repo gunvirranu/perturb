@@ -10,7 +10,7 @@
 */
 
 #ifndef __cplusplus
-// There's a small chance want the C version of perturb, but you glob compiled
+// There's a small chance you want the C version of perturb, but you glob compiled
 // the entire src/ directory. Just ignore the .cpp files and you're golden.
 #  error "Ok someone messed up haha, u may be accidentally compiling this C++ as C"
 #endif

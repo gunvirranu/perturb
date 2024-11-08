@@ -11,18 +11,16 @@
 
 #include "perturb/perturb.h"
 
-#ifdef __cplusplus
-#  ifdef PERTURB_ENABLE_CPP_INTERFACE
-namespace perturb {
-namespace c_internal {
-#  endif
-extern "C" {
-#endif
-
 #include <math.h>
 
 #include "perturb/sgp4.h"
 #include "common_private.h"
+
+#ifdef __cplusplus
+// You might be glob compiling this the src/ directory as C++.
+// Build the .c files as C and .cpp as C++, should be good.
+#  error "Hah someone messed up, why r u compiling this C as C++"
+#endif
 
 struct perturb_JulianDate perturb_datetime_to_julian(const struct perturb_DateTime t) {
     struct perturb_JulianDate jd;
@@ -92,12 +90,22 @@ struct perturb_OrbitalElements perturb_state_vector_to_orbital_elements(const st
         &elems.arg_of_latitude, &elems.true_longitude, &elems.longitude_of_periapsis
     );
 
+    return elems;
 }
 
 struct perturb_OrbitalElements perturb_state_vector_to_orbital_elements_with_grav(
     struct perturb_StateVector sv, enum perturb_GravityModel grav_model
 ); // TODO
 
+#ifdef __cplusplus
+}  // extern "C"
+#  ifdef PERTURB_ENABLE_CPP_INTERFACE
+}  // namespace c_internal
+}  // namespace perturb
+#  endif
+#endif
+
+/*
 ClassicalOrbitalElements::ClassicalOrbitalElements(
     StateVector sv, GravModel grav_model
 ) {
@@ -200,4 +208,4 @@ Sgp4Error Satellite::propagate(const JulianDate jd, StateVector &sv) {
     sv.epoch = jd;  // Can save some math, ignore value from `propagate_from_epoch`
     return err;
 }
-}  // namespace perturb
+*/

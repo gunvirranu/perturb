@@ -24,11 +24,13 @@
 #ifdef __cplusplus
 // Export real C interface w/o flag but hide in namespace if enabled
 #  ifdef PERTURB_ENABLE_CPP_INTERFACE
+// Library namespace for C++, see perturb.hpp for actual docs
 namespace perturb {
 /// Namespace to shove C interface into to not pollute globals
 namespace c_internal {
 #  endif
-extern "C" {  // Support header inclusion from C++
+// Support header inclusion from C++
+extern "C" {
 #endif  // __cplusplus
 
 #if !(defined(__cplusplus) && defined(PERTURB_ENABLE_CPP_INTERFACE))

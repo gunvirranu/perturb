@@ -18,7 +18,7 @@ using doctest::Approx;
     CHECK((a)[1] == Approx((b)[1]).scale(scl).epsilon(eps)); \
     CHECK((a)[2] == Approx((b)[2]).scale(scl).epsilon(eps))
 
-double norm(const Vec3 &v) {
+double norm(const real_t v[3]) {
     return std::sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
 }
 
@@ -39,10 +39,10 @@ Satellite sat_from_verif_tle(
     REQUIRE(line_2.length() >= TLE_LINE_LEN);
 
     // Initialize empty `sat_rec` and let `twoline2rv` fill out
-    sgp4::elsetrec sat_rec;
-    sgp4::twoline2rv(
-        &line_1[0], &line_2[0], RUN_TYPE, INPUT_TYPE, OPS_MODE, sgp4::wgs72, startmfe,
-        stopmfe, deltamin, sat_rec
+    c_internal::perturb_Satellite sat_rec;
+    c_internal::twoline2rv(
+        &line_1[0], &line_2[0], RUN_TYPE, INPUT_TYPE, OPS_MODE, c_internal::PERTURB_GRAVITY_MODEL_WGS72,
+        &startmfe, &stopmfe, &deltamin, &sat_rec
     );
 
     // Construct `Satellite` using pre-parsed `sat_rec`, bypassing perturb's usual TLE parser
@@ -58,38 +58,38 @@ TEST_CASE("test_julian_date_type") {
 
     // Check subtraction of two JDs
     auto t2 = t;
-    t2.day = 17;
-    t2.hour = 15;
-    t2.min = 45;
+    t2.internal.day = 17;
+    t2.internal.hour = 15;
+    t2.internal.min = 45;
     const auto jd2 = JulianDate(t2);
     const double dt = jd2 - jd;
     const double expected_dt =
-        (t2.day - t.day) + ((t2.hour - t.hour) + (t2.min - t.min) / 60.0) / 24.0;
+        (t2.internal.day - t.internal.day) + ((t2.internal.hour - t.internal.hour) + (t2.internal.min - t.internal.min) / 60.0) / 24.0;
     CHECK(dt == Approx(expected_dt).epsilon(EPS));
 
     // Check that normalization works
     const auto jd_unnorm = jd + dt;
     const auto jd_norm = jd_unnorm.normalized();
-    CHECK(jd_norm.jd - 0.5 == std::floor(jd_norm.jd));
-    CHECK(0 <= jd_norm.jd_frac);
-    CHECK(jd_norm.jd_frac < 1);
+    CHECK(jd_norm.internal.jd - 0.5 == std::floor(jd_norm.internal.jd));
+    CHECK(0 <= jd_norm.internal.jd_frac);
+    CHECK(jd_norm.internal.jd_frac < 1);
 
     // Check addition of JD and offset
     const auto jd3 = (jd + dt).normalized();
-    CHECK(jd2.jd == jd3.jd);
-    CHECK(jd2.jd_frac == Approx(jd3.jd_frac).epsilon(EPS));
+    CHECK(jd2.internal.jd == jd3.internal.jd);
+    CHECK(jd2.internal.jd_frac == Approx(jd3.internal.jd_frac).epsilon(EPS));
 
     // Check addition assignment
     auto jd4 = jd;
     jd4 += dt;
     jd4.normalize();
-    CHECK(jd3.jd == jd4.jd);
-    CHECK(jd3.jd_frac == jd4.jd_frac);
+    CHECK(jd3.internal.jd == jd4.internal.jd);
+    CHECK(jd3.internal.jd_frac == jd4.internal.jd_frac);
 
     // Check subtraction of JD and offset
     const auto jd5 = (jd3 - dt).normalized();
-    CHECK(jd5.jd == jd.jd);
-    CHECK(jd5.jd_frac == Approx(jd.jd_frac).epsilon(EPS));
+    CHECK(jd5.internal.jd == jd.internal.jd);
+    CHECK(jd5.internal.jd_frac == Approx(jd.internal.jd_frac).epsilon(EPS));
 
     // Check ordering overloads
     CHECK(jd < jd2);
@@ -120,10 +120,10 @@ TEST_CASE(
         const auto jd = (JD_START + i * DELTA_JD).normalized();
         const DateTime t = jd.to_datetime();
         const auto jd_conv = JulianDate(t);
-        CHECK_MESSAGE(jd.jd == jd_conv.jd, t.year, "-", t.month, "-", t.day);
+        CHECK_MESSAGE(jd.internal.jd == jd_conv.internal.jd, t.internal.year, "-", t.internal.month, "-", t.internal.day);
         CHECK_MESSAGE(
-            jd.jd_frac == Approx(jd_conv.jd_frac).epsilon(1e-12), t.hour, ":", t.min,
-            ":", t.sec
+            jd.internal.jd_frac == Approx(jd_conv.internal.jd_frac).epsilon(1e-12), t.internal.hour, ":", t.internal.min,
+            ":", t.internal.sec
         );
     }
 }
@@ -140,40 +140,40 @@ TEST_CASE("test_tle_parse") {
         const auto err1 = tle.parse(TLE_1, TLE_2);
         CHECK(err1 == TLEParseError::NONE);
 
-        CHECK(tle.catalog_number == "25544");
-        CHECK(tle.classification == 'U');
-        CHECK(tle.launch_year == 98U);
-        CHECK(tle.launch_number == 67U);
-        CHECK(tle.launch_piece == "A");
-        CHECK(tle.epoch_year == 22U);
-        CHECK(tle.epoch_day_of_year == 71.78032407);
-        CHECK(tle.n_dot == 0.00021395);
-        CHECK(tle.n_ddot == 0.0e0);
-        CHECK(tle.b_star == 0.39008e-3);
-        CHECK(tle.ephemeris_type == 0U);
-        CHECK(tle.element_set_number == 999U);
-        CHECK(tle.line_1_checksum == 6U);
+        CHECK(tle.internal.catalog_number == "25544");
+        CHECK(tle.internal.classification == 'U');
+        CHECK(tle.internal.launch_year == 98U);
+        CHECK(tle.internal.launch_number == 67U);
+        CHECK(tle.internal.launch_piece == "A");
+        CHECK(tle.internal.epoch_year == 22U);
+        CHECK(tle.internal.epoch_day_of_year == 71.78032407);
+        CHECK(tle.internal.n_dot == 0.00021395);
+        CHECK(tle.internal.n_ddot == 0.0e0);
+        CHECK(tle.internal.b_star == 0.39008e-3);
+        CHECK(tle.internal.ephemeris_type == 0U);
+        CHECK(tle.internal.element_set_number == 999U);
+        CHECK(tle.internal.line_1_checksum == 6U);
 
-        CHECK(tle.inclination == 51.6424);
-        CHECK(tle.raan == 94.0370);
-        CHECK(tle.eccentricity == 0.0004047);
-        CHECK(tle.arg_of_perigee == 256.5103);
-        CHECK(tle.mean_anomaly == 89.8846);
-        CHECK(tle.mean_motion == 15.49386383);
-        CHECK(tle.revolution_number == 33022UL);
-        CHECK(tle.line_2_checksum == 7U);
+        CHECK(tle.internal.inclination == 51.6424);
+        CHECK(tle.internal.raan == 94.0370);
+        CHECK(tle.internal.eccentricity == 0.0004047);
+        CHECK(tle.internal.arg_of_perigee == 256.5103);
+        CHECK(tle.internal.mean_anomaly == 89.8846);
+        CHECK(tle.internal.mean_motion == 15.49386383);
+        CHECK(tle.internal.revolution_number == 33022UL);
+        CHECK(tle.internal.line_2_checksum == 7U);
 
         const auto err2 = tle.parse(
             "1 25544U 98067 BA 22071.78032407  .00021395 .00000-0 .39008-3 0 39999",
             "2 25544  51.6424  94.0370 0004047 256.5103  89.8846  5.49386383 30223"
         );
         CHECK(err2 == TLEParseError::NONE);
-        CHECK(tle.launch_piece == "BA");
-        CHECK(tle.n_ddot == 0.0e0);
-        CHECK(tle.b_star == 0.39008e-3);
-        CHECK(tle.mean_motion == 5.49386383);
-        CHECK(tle.revolution_number == 3022UL);
-        CHECK(tle.line_2_checksum == 3U);
+        CHECK(tle.internal.launch_piece == "BA");
+        CHECK(tle.internal.n_ddot == 0.0e0);
+        CHECK(tle.internal.b_star == 0.39008e-3);
+        CHECK(tle.internal.mean_motion == 5.49386383);
+        CHECK(tle.internal.revolution_number == 3022UL);
+        CHECK(tle.internal.line_2_checksum == 3U);
     }
 
     // FIXME: Test some weird combinations with spaces, +/-, etc.
@@ -242,12 +242,12 @@ TEST_CASE(
     SUBCASE("test_epoch") {
         const DateTime epoch = sat.epoch().to_datetime();
 
-        CHECK(epoch.year == 2022);
-        CHECK(epoch.month == 3);
-        CHECK(epoch.day == 12);
-        CHECK(epoch.hour == 18);
-        CHECK(epoch.min == 43);
-        CHECK(epoch.sec == Approx(40).epsilon(1e-5));
+        CHECK(epoch.internal.year == 2022);
+        CHECK(epoch.internal.month == 3);
+        CHECK(epoch.internal.day == 12);
+        CHECK(epoch.internal.hour == 18);
+        CHECK(epoch.internal.min == 43);
+        CHECK(epoch.internal.sec == Approx(40).epsilon(1e-5));
     }
 
     // Check height above Earth and speed roughly stay the same over a week.
@@ -266,10 +266,10 @@ TEST_CASE(
             const auto err = sat.propagate_from_epoch(mins, sv);
             CHECK(err == Sgp4Error::NONE);
 
-            const double dist = norm(sv.position) - AVG_EARTH_RADIUS;
+            const double dist = norm(sv.internal.position) - AVG_EARTH_RADIUS;
             CHECK(dist == Approx(AVG_ISS_HEIGHT).epsilon(0.05));
 
-            const double speed = norm(sv.velocity);
+            const double speed = norm(sv.internal.velocity);
             CHECK(speed == Approx(AVG_ISS_SPEED).epsilon(0.05));
 
             mins += CHECK_EVERY_MINS;
@@ -288,8 +288,8 @@ TEST_CASE(
             sat.propagate_from_epoch(t, sv_1);
             sat.propagate_from_epoch(t + AVG_ISS_ORBITAL, sv_2);
 
-            const auto &pos_1 = sv_1.position, &pos_2 = sv_2.position;
-            const auto &vel_1 = sv_1.velocity, &vel_2 = sv_2.velocity;
+            const auto &pos_1 = sv_1.internal.position, &pos_2 = sv_2.internal.position;
+            const auto &vel_1 = sv_1.internal.velocity, &vel_2 = sv_2.internal.velocity;
             CHECK_VEC(pos_1, pos_2, 0.05, 1000);
             CHECK_VEC(vel_1, vel_2, 0.05, 5);
         }
@@ -309,12 +309,12 @@ TEST_CASE(
 
             // Flip `sv_2` so it can be compared against `sv_1`
             for (std::size_t j = 0; j < 3; ++j) {
-                sv_2.position[j] *= -1;
-                sv_2.velocity[j] *= -1;
+                sv_2.internal.position[j] *= -1;
+                sv_2.internal.velocity[j] *= -1;
             }
 
-            const auto &pos_1 = sv_1.position, &pos_2 = sv_2.position;
-            const auto &vel_1 = sv_1.velocity, &vel_2 = sv_2.velocity;
+            const auto &pos_1 = sv_1.internal.position, &pos_2 = sv_2.internal.position;
+            const auto &vel_1 = sv_1.internal.velocity, &vel_2 = sv_2.internal.velocity;
             CHECK_VEC(pos_1, pos_2, 0.05, 1000);
             CHECK_VEC(vel_1, vel_2, 0.05, 5);
         }
@@ -351,13 +351,13 @@ TEST_CASE(
 
         StateVector sv;
         sat.propagate_from_epoch(0.0, sv);  // Initialize maybe??
-        auto pos = sv.position;
-        auto vel = sv.velocity;
+        auto pos = sv.internal.position;
+        auto vel = sv.internal.velocity;
 
-        std::fprintf(out_file, "%s xx\n", sat.sat_rec.satnum);
+        std::fprintf(out_file, "%s xx\n", sat.internal.satnum);
         std::fprintf(
             out_file, " %16.8f %16.8f %16.8f %16.8f %12.9f %12.9f %12.9f\n",
-            sat.sat_rec.t, pos[0], pos[1], pos[2], vel[0], vel[1], vel[2]
+            sat.internal.t, pos[0], pos[1], pos[2], vel[0], vel[1], vel[2]
         );
 
         double tsince = startmfe;
@@ -371,8 +371,8 @@ TEST_CASE(
             if (sat.propagate_from_epoch(tsince, sv) != Sgp4Error::NONE) {
                 continue;
             }
-            pos = sv.position;
-            vel = sv.velocity;
+            pos = sv.internal.position;
+            vel = sv.internal.velocity;
 
             const auto jd = (sat.epoch() + tsince / 1440.0).normalized();
             const auto ymdhms = jd.to_datetime();
@@ -383,24 +383,24 @@ TEST_CASE(
             );
 
             double p, a, ecc, incl, node, argp, nu, m, arglat, truelon, lonper;
-            sgp4::rv2coe_SGP4(
-                pos.data(), vel.data(), sat.sat_rec.mus, p, a, ecc, incl, node, argp, nu,
-                m, arglat, truelon, lonper
+            c_internal::rv2coe_SGP4(
+                pos, vel, sat.internal.mus, &p, &a, &ecc, &incl, &node, &argp, &nu,
+                &m, &arglat, &truelon, &lonper
             );
 
             std::fprintf(
                 out_file,
                 " %14.6f %8.6f %10.5f %10.5f %10.5f %10.5f %10.5f %5i%3i%3i %2i:%2i:%9.6f\n",
                 a, ecc, incl * RAD_TO_DEG, node * RAD_TO_DEG, argp * RAD_TO_DEG,
-                nu * RAD_TO_DEG, m * RAD_TO_DEG, ymdhms.year, ymdhms.month, ymdhms.day,
-                ymdhms.hour, ymdhms.min, ymdhms.sec
+                nu * RAD_TO_DEG, m * RAD_TO_DEG, ymdhms.internal.year, ymdhms.internal.month, ymdhms.internal.day,
+                ymdhms.internal.hour, ymdhms.internal.min, ymdhms.internal.sec
             );
         }
     }
 
     // Useless scope so it can be visually folded
     {
-        sgp4::elsetrec sat_rec {};
+        c_internal::perturb_Satellite sat_rec {};
         std::strcpy(sat_rec.satnum, "8195");
         sat_rec.jdsatepoch = 2453911.0;
         sat_rec.jdsatepochF = 0.8321544402;
@@ -431,11 +431,11 @@ TEST_CASE(
         double startmfe = 0;
         double stopmfe = 2880;
         double deltamin = 120;
-        sgp4::sgp4init(
-            sgp4::wgs72, 'a', sat_rec.satnum,
+        c_internal::sgp4init(
+            perturb::c_internal::PERTURB_GRAVITY_MODEL_WGS72, 'a', sat_rec.satnum,
             sat_rec.jdsatepoch + sat_rec.jdsatepochF - 2433281.5, sat_rec.bstar,
             sat_rec.ndot, sat_rec.nddot, sat_rec.ecco, sat_rec.argpo, sat_rec.inclo,
-            sat_rec.mo, sat_rec.no_kozai, sat_rec.nodeo, sat_rec
+            sat_rec.mo, sat_rec.no_kozai, sat_rec.nodeo, &sat_rec
         );
         auto sat = Satellite(sat_rec);
 
@@ -446,8 +446,8 @@ TEST_CASE(
             StateVector sv;
             CHECK(sat.propagate_from_epoch(tsince, sv) == Sgp4Error::NONE);
 
-            const auto &pos = sv.position;
-            const auto &vel = sv.velocity;
+            const auto &pos = sv.internal.position;
+            const auto &vel = sv.internal.velocity;
             std::fprintf(
                 out_file, " %16.8f %16.8f %16.8f %16.8f %12.9f %12.9f %12.9f", tsince,
                 pos[0], pos[1], pos[2], vel[0], vel[1], vel[2]
@@ -502,32 +502,32 @@ TEST_CASE(
         CHECK(sat_orig.last_error() != Sgp4Error::INVALID_TLE);
 
         // Correct some unimportant differences
-        sat_tle.sat_rec.elnum = (sat_tle.sat_rec.elnum * 10 + tle.line_1_checksum);
-        sat_tle.sat_rec.revnum = (sat_tle.sat_rec.revnum * 10 + tle.line_2_checksum);
+        sat_tle.internal.elnum = (sat_tle.internal.elnum * 10 + tle.internal.line_1_checksum);
+        sat_tle.internal.revnum = (sat_tle.internal.revnum * 10 + tle.internal.line_2_checksum);
 
         // Check that a subset of the member vars match. Others are based off these.
-        const auto &a = sat_tle.sat_rec, &b = sat_orig.sat_rec;
+        const auto &a = sat_tle, &b = sat_orig;
         // Line 1
-        CHECK_AB_MEMBER(satnum);
-        CHECK_AB_MEMBER(classification);
+        CHECK_AB_MEMBER(internal.satnum);
+        CHECK_AB_MEMBER(internal.classification);
         // `Satellite(const TLE &)` doesn't set `sat_rec.intldesg`, so ignore
         // CHECK_SAT_MEMBER(intldesg);
-        CHECK_AB_MEMBER(epochyr);
-        CHECK_AB_MEMBER(epochdays);
-        CHECK_AB_MEMBER(epochdays);
-        CHECK_AB_MEMBER(ndot);
-        CHECK_AB_MEMBER_EPS(nddot, 1e-16);
-        CHECK_AB_MEMBER_EPS(bstar, 1e-16);
-        CHECK_AB_MEMBER(ephtype);
-        CHECK_AB_MEMBER(elnum);
+        CHECK_AB_MEMBER(internal.epochyr);
+        CHECK_AB_MEMBER(internal.epochdays);
+        CHECK_AB_MEMBER(internal.epochdays);
+        CHECK_AB_MEMBER(internal.ndot);
+        CHECK_AB_MEMBER_EPS(internal.nddot, 1e-16);
+        CHECK_AB_MEMBER_EPS(internal.bstar, 1e-16);
+        CHECK_AB_MEMBER(internal.ephtype);
+        CHECK_AB_MEMBER(internal.elnum);
         // Line 2
-        CHECK_AB_MEMBER(inclo);
-        CHECK_AB_MEMBER(nodeo);
-        CHECK_AB_MEMBER(ecco);
-        CHECK_AB_MEMBER(argpo);
-        CHECK_AB_MEMBER(mo);
-        CHECK_AB_MEMBER(no_kozai);
-        CHECK_AB_MEMBER(revnum);
+        CHECK_AB_MEMBER(internal.inclo);
+        CHECK_AB_MEMBER(internal.nodeo);
+        CHECK_AB_MEMBER(internal.ecco);
+        CHECK_AB_MEMBER(internal.argpo);
+        CHECK_AB_MEMBER(internal.mo);
+        CHECK_AB_MEMBER(internal.no_kozai);
+        CHECK_AB_MEMBER(internal.revnum);
 
         // Try propagating to check that output predictions match
         for (const double mins : { 0.0, 0.5, 5.0, 30.0, 1440.0, 20000.0 }) {
@@ -537,10 +537,10 @@ TEST_CASE(
             (void) sat_tle.propagate_from_epoch(mins, sv_a);
             (void) sat_orig.propagate_from_epoch(mins, sv_b);
 
-            CHECK(sv_a.epoch.jd == sv_b.epoch.jd);
-            CHECK(sv_a.epoch.jd_frac == sv_b.epoch.jd_frac);
-            CHECK_VEC(sv_a.position, sv_b.position, 1e-14, 1000);
-            CHECK_VEC(sv_a.velocity, sv_b.velocity, 1e-14, 10);
+            CHECK(sv_a.internal.epoch.jd == sv_b.internal.epoch.jd);
+            CHECK(sv_a.internal.epoch.jd_frac == sv_b.internal.epoch.jd_frac);
+            CHECK_VEC(sv_a.internal.position, sv_b.internal.position, 1e-14, 1000);
+            CHECK_VEC(sv_a.internal.velocity, sv_b.internal.velocity, 1e-14, 10);
         }
     }
 }

@@ -223,16 +223,16 @@ void rv2coe_SGP4(
 );
 
 void jday_SGP4(
-    int year, int mon, int day, int hr, int minute, double sec,
+    uint16_t year, uint8_t mon, uint8_t day, uint8_t hr, uint8_t minute, double sec,
     double * jd, double * jdFrac
 );
 
 void days2mdhms_SGP4(
-    int year, double days, int * mon, int * day, int * hr, int * minute, double * sec
+    uint16_t year, double days, uint8_t * mon, uint8_t * day, uint8_t * hr, uint8_t * minute, double * sec
 );
 
 void invjday_SGP4(
-    double jd, double jdFrac, int * year, int * mon, int * day, int * hr, int * minute,
+    double jd, double jdFrac, uint16_t * year, uint8_t * mon, uint8_t * day, uint8_t * hr, uint8_t * minute,
     double * sec
 );
 
