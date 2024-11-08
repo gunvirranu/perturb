@@ -30,7 +30,7 @@ struct perturb_julian_date perturb_datetime_to_julian(const struct perturb_date_
     return jd;
 }
 
-struct perturb_date_time perturb_julian_to_datetime(struct perturb_julian_date jd) {
+struct perturb_date_time perturb_julian_to_datetime(const struct perturb_julian_date jd) {
     struct perturb_date_time t;
     invjday_SGP4(jd.jd, jd.jd_frac, &t.year, &t.month, &t.day, &t.hour, &t.min, &t.sec);
     return t;
@@ -56,32 +56,60 @@ struct perturb_julian_date perturb_julian_normalized(const struct perturb_julian
     return out;
 }
 
-double JulianDate::operator-(const JulianDate &rhs) const {
-    // Grouping here is very important to preserve precision
-    return (this->jd - rhs.jd) + (this->jd_frac - rhs.jd_frac);
-}
+struct perturb_julian_date perturb_julian_add_days(
+    const struct perturb_julian_date t, const perturb_real_t days
+) {
+    struct perturb_julian_date t_new = t;
 
-JulianDate JulianDate::operator+(const double &delta_jd) const {
     // Just add entire offset to fractional value
     // Can be normalized later explicitly if needed
-    return JulianDate(jd, jd_frac + delta_jd);
+    t_new.jd_frac += days;
+    return t_new;
 }
+
+/// lhs - rhs
+perturb_real_t perturb_julian_subtract(
+    const struct perturb_julian_date lhs, const struct perturb_julian_date rhs
+) {
+    // Grouping here is important to preserve precision
+    return (lhs.jd - rhs.jd) + (lhs.jd_frac - rhs.jd_frac);
+}
+
+struct perturb_classical_orbital_elements perturb_state_vector_to_orbital_elements(const struct perturb_state_vector sv) {
+    struct perturb_classical_orbital_elements elems = { 0 };
+
+    const enum perturb_grav_model grav_model = PERTURB_GRAV_MODEL_WGS72_OLD;  // TODO: Explain why this default
+    real_t mus, _tumin, _rekm, _xke, _j2, _j3, _j4, _j3oj2;
+
+    getgravconst(
+        grav_model, &_tumin, &mus, &_rekm, &_xke, &_j2, &_j3, &_j4, &_j3oj2
+    );
+
+    rv2coe_SGP4(
+        sv.position, sv.velocity, mus, &elems.semilatus_rectum, &elems.semimajor_axis,
+        &elems.eccentricity, &elems.inclination, &elems.raan, &elems.arg_of_perigee, &elems.true_anomaly, &elems.mean_anomaly,
+        &elems.arg_of_latitude, &elems.true_longitude, &elems.longitude_of_periapsis
+    );
+
+}
+
+struct perturb_classical_orbital_elements perturb_state_vector_to_orbital_elements_with_grav(
+    struct perturb_state_vector sv, enum perturb_grav_model grav_model
+); // TODO
 
 ClassicalOrbitalElements::ClassicalOrbitalElements(
     StateVector sv, GravModel grav_model
 ) {
-    double mus, _tumin, _rekm, _xke, _j2, _j3, _j4, _j3oj2;
-    sgp4::getgravconst(
+    real_t mus, _tumin, _rekm, _xke, _j2, _j3, _j4, _j3oj2;
+    getgravconst(
         convert_grav_model(grav_model), _tumin, mus, _rekm, _xke, _j2, _j3, _j4, _j3oj2
     );
-    sgp4::rv2coe_SGP4(
+    rv2coe_SGP4(
         sv.position.data(), sv.velocity.data(), mus, semilatus_rectum, semimajor_axis,
         eccentricity, inclination, raan, arg_of_perigee, true_anomaly, mean_anomaly,
         arg_of_latitude, true_longitude, longitude_of_periapsis
     );
 }
-
-Satellite::Satellite(const sgp4::elsetrec _sat_rec) : sat_rec(_sat_rec) {}
 
 Satellite::Satellite(const TwoLineElement &tle, GravModel grav_model) : sat_rec({}) {
     constexpr double DEG_TO_RAD = PI / 180.0;
@@ -155,10 +183,6 @@ Satellite Satellite::from_tle(char *line_1, char *line_2, GravModel grav_model) 
     return Satellite(sat_rec);
 }
 #endif  // PERTURB_DISABLE_IO
-
-JulianDate Satellite::epoch() const {
-    return JulianDate(sat_rec.jdsatepoch, sat_rec.jdsatepochF);
-}
 
 Sgp4Error Satellite::propagate_from_epoch(double mins_from_epoch, StateVector &sv) {
     sv.epoch = epoch() + (mins_from_epoch / MINS_PER_DAY);

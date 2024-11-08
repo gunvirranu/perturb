@@ -217,7 +217,7 @@ void newtonnu_SGP4(double ecc, double nu, double * e0, double * m);
 double asinh_SGP4(double xval);
 
 void rv2coe_SGP4(
-    double r[3], double v[3], double mus, double * p, double * a, double * ecc,
+    const double r[3], const double v[3], double mus, double * p, double * a, double * ecc,
     double * incl, double * omega, double * argp, double * nu, double * m, double * arglat,
     double * truelon, double * lonper
 );

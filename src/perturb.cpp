@@ -113,12 +113,13 @@ Satellite::Satellite(const TwoLineElement &tle, const GravModel grav_model) {
     const auto _err = c_internal::perturb_init_sat_from_tle(
         tle.internal, convert_grav_model(grav_model), &internal
     );
+    static_cast<void>(_err);  // Unused, accessible via `last_error`
 }
 
 #ifndef PERTURB_DISABLE_IO
 Satellite Satellite::from_tle(char * line_1, char * line_2, GravModel grav_model) {
     c_internal::perturb_satellite sat {};
-    c_internal::perturb_parse_tle_and_init_sat(line_1, line_2, convert_grav_model(grav_model), &sat.internal);
+    c_internal::perturb_parse_tle_and_init_sat(line_1, line_2, convert_grav_model(grav_model), &sat);
     return Satellite(sat);
 }
 #endif  // PERTURB_DISABLE_IO
