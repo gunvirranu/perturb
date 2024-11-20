@@ -9,7 +9,7 @@
  * Copyright (c) 2022 Gunvir Singh Ranu
  */
 
-//! @file Primary C++ header for the perturb library
+//! @file Primary header for the C++ wrapper of the perturb library
 //! @author Gunvir Singh Ranu
 //! @version 1.0.0
 //! @copyright Gunvir Singh Ranu, MIT License
@@ -35,7 +35,7 @@
 #include "perturb/tle.h"
 #include "perturb/sgp4.h"
 
-/// Primary namespace for the perturb C++ library wrapper, everything is in here.
+/// Primary namespace for the perturb library C++ wrapper, everything is in here.
 ///
 /// See README for a brief intro to the main library types and basic usage.
 /// The C library interface is hidden in the `perturb::c_internal` namespace.
@@ -53,8 +53,6 @@ using Vec3 = std::array<real_t, 3>;
 /// Lines can be longer for verification mode, but that's for internal testing
 /// purposes only and doesn't pertain to general usage.
 constexpr std::size_t TLE_LINE_LEN = 69;
-
-// TODO: Add a few static asserts for enums as a sanity check
 
 enum class TLEParseError {
     NONE,               ///< If no issues when parsing
