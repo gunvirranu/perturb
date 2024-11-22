@@ -173,15 +173,4 @@ TLEParseError TwoLineElement::parse(const char *line_1, const char *line_2) {
 }
 #endif  // PERTURB_DISABLE_IO
 
-#ifndef PERTURB_DISABLE_IO
-TLEParseError TwoLineElement::parse(
-    const std::string &line_1, const std::string &line_2
-) {
-    if (line_1.length() < TLE_LINE_LEN || line_2.length() < TLE_LINE_LEN) {
-        return TLEParseError::INVALID_FORMAT;
-    }
-    return this->parse(line_1.c_str(), line_2.c_str());
-}
-#endif  // PERTURB_DISABLE_IO
-
 }  // namespace perturb

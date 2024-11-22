@@ -94,7 +94,7 @@ enum perturb_TleParseError perturb_init_sat_from_tle(
 );
 
 #ifndef PERTURB_DISABLE_IO
-enum perturb_TleParseError perturb_parse_tle(char * line_1, char * line_2, struct perturb_Tle * tle);
+enum perturb_TleParseError perturb_parse_tle(const char * line_1, const char * line_2, struct perturb_Tle * tle);
 #endif
 
 #ifndef PERTURB_DISABLE_IO

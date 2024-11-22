@@ -128,6 +128,29 @@ ClassicalOrbitalElements::ClassicalOrbitalElements(StateVector sv, GravModel gra
     );
 }
 
+// TwoLineElement methods
+
+#ifndef PERTURB_DISABLE_IO
+TLEParseError TwoLineElement::parse(const char * line_1, const char * line_2) {
+    // Pass parsing call directly to underlying C impl
+    c_internal::perturb_Tle * tle = &this->internal;
+    const c_internal::perturb_TleParseError err = c_internal::perturb_parse_tle(line_1, line_2,  tle);
+    return static_cast<TLEParseError>(err);
+}
+#endif  // PERTURB_DISABLE_IO
+
+#ifndef PERTURB_DISABLE_IO
+TLEParseError TwoLineElement::parse(
+    const std::string &line_1, const std::string &line_2
+) {
+    // Delegate to C-sting parsing, which assumes a minimum length
+    if (line_1.length() < TLE_LINE_LEN || line_2.length() < TLE_LINE_LEN) {
+        return TLEParseError::INVALID_FORMAT;
+    }
+    return this->parse(line_1.c_str(), line_2.c_str());
+}
+#endif  // PERTURB_DISABLE_IO
+
 // Satellite methods
 
 Satellite::Satellite(c_internal::perturb_Satellite sat) : internal(sat) {}
