@@ -56,10 +56,11 @@ constexpr std::size_t TLE_LINE_LEN = 69;
 
 enum class TLEParseError {
     NONE,               ///< If no issues when parsing
-    SHOULD_BE_SPACE,    ///< If there is a lack of space in the TLE
-    INVALID_FORMAT,     ///< If general parsing was unsuccessfully
-    INVALID_VALUE,      ///< If a parsed value doesn't make sense
     CHECKSUM_MISMATCH,  ///< If the checksum doesn't match
+    INVALID_VALUE,      ///< If a parsed value doesn't make sense
+    INVALID_FORMAT,     ///< If general parsing was unsuccessfully
+    SHOULD_BE_SPACE,    ///< If there is a lack of space in the TLE
+    INVALID_INPUT,      ///< If any inputs are null pointers
 };
 
 enum class GravModel {
@@ -79,7 +80,7 @@ enum class Sgp4Error {
     SEMI_LATUS_RECTUM,
     EPOCH_ELEMENTS_SUB_ORBITAL,
     DECAYED,
-    INVALID_TLE,
+    INVALID_INPUT,
     UNKNOWN
 };
 
@@ -177,7 +178,7 @@ struct ClassicalOrbitalElements {
 };
 
 struct TwoLineElement {
-    c_internal::perturb_Tle internal;  /// Internal C data
+    c_internal::perturb_TwoLineElement internal;  /// Internal C data
 
 #ifndef PERTURB_DISABLE_IO
     /// Parse a TLE record string.

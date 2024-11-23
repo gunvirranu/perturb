@@ -11,20 +11,102 @@
 
 #include "perturb/tle.h"
 
-#include <array>
+#include <stddef.h>
 #ifndef PERTURB_DISABLE_IO
-#  include <cctype>
-#  include <cmath>
-#  include <cstdio>
-#  include <cstring>
+#  include <stdio.h>
 #endif
 
-namespace perturb {
+#include "common_private.h"
+
+#ifdef __cplusplus
+#  error "I kindly request you compile this as C instead of C++"
+#endif
+
+static bool check_for_missing_spaces(
+    const char * line,
+    const size_t * spaces,
+    const size_t n_spaces
+) {
+    for (size_t i = 0U; i < n_spaces; ++i) {
+        const size_t idx_space = spaces[i];
+
+        if (line[idx_space] != ' ') {
+            return true;
+        }
+    }
+    return false;
+}
+
+enum perturb_Sgp4Error perturb_init_sat_from_tle(
+    const struct perturb_TwoLineElement tle,
+    const enum perturb_GravityModel grav_model,
+    struct perturb_Satellite * sat
+) {
+    if (sat == NULL) {
+        return PERTURB_SGP4_ERROR_INVALID_INPUT;
+    }
+
+    // FIXME: impl
+    return PERTURB_SGP4_ERROR_INVALID_INPUT;
+}
 
 #ifndef PERTURB_DISABLE_IO
+enum perturb_TleParseError perturb_parse_tle(
+    const char * line_1, const char * line_2,
+    struct perturb_TwoLineElement * tle
+) {
+    const bool bad_ptrs = (line_1 == NULL) || (line_2 == NULL) || (tle == NULL);
+    if (bad_ptrs) {
+        return PERTURB_TLE_PARSE_ERROR_INVALID_INPUT;
+    }
+
+    // Make sure there are spaces in the right places
+    const size_t LINE_1_SPACES[] = { 1, 8, 17, 32, 43, 52, 61, 64 };
+    const size_t LINE_2_SPACES[] = { 1, 7, 16, 25, 33, 42, 51 };
+
+    const bool is_space_missing = (
+        check_for_missing_spaces(line_1, LINE_1_SPACES, ARRAY_SIZE(LINE_1_SPACES)) ||
+        check_for_missing_spaces(line_2, LINE_2_SPACES, ARRAY_SIZE(LINE_2_SPACES))
+    );
+    if (is_space_missing) {
+        return PERTURB_TLE_PARSE_ERROR_SHOULD_BE_SPACE;
+    }
+
+    // Parse format - Line 1
+    const char LINE_1_FMT_STR[] = "%1hhu %5s %1c %2u %3u %3s %2u %12lf %10lf %6lf %2d %6lf %2d %1hhu %4u %n %1hhu";
+
+    // FIXME: swap these to use normal int types and then convert to fixed-size for saving
+    unsigned char line1_num;
+    int n_ddot_exp, b_star_exp, l1_pre_checksum;
+
+    int l1_scanned = sscanf(  // bruh C and C++ both suck at string processing :(
+        line_1, LINE_1_FMT_STR, &line1_num, tle.catalog_number, &tle.classification,
+        &tle.launch_year, &tle.launch_number, tle.launch_piece, &tle.epoch_year,
+        &tle.epoch_day_of_year, &tle.n_dot, &tle.n_ddot, &n_ddot_exp,
+        &tle.b_star, &b_star_exp, &tle.ephemeris_type, &tle.element_set_number,
+        &l1_pre_checksum, &tle.line_1_checksum
+    );
+
+
+    return PERTURB_TLE_PARSE_ERROR_INVALID_INPUT;
+}
+#endif
+
+#ifndef PERTURB_DISABLE_IO
+enum perturb_TleParseError perturb_parse_tle_and_init_sat(
+    char * line_1, char * line_2,
+    enum perturb_GravityModel grav_model,
+    struct perturb_Satellite * sat
+) {
+    // FIXME: impl
+}
+#endif
+
+// FIXME: clean up
+#if 1
 static unsigned int calc_tle_line_checksum(const char *line) {
     unsigned int checksum = 0U;
-    for (std::size_t i = 0; i < (TLE_LINE_LEN - 1); ++i) {
+    for (size_t i = 0; i < (PERTURB_TLE_LINE_LEN - 1); ++i) {
         if (std::isdigit(line[i])) {
             checksum += static_cast<unsigned int>(line[i] - '0');
         }
@@ -34,7 +116,6 @@ static unsigned int calc_tle_line_checksum(const char *line) {
     }
     return (checksum % 10U);
 }
-#endif  // PERTURB_DISABLE_IO
 
 #ifndef PERTURB_DISABLE_IO
 // FIXME: Use a more robust parsing method. I wish string_view existed :(
@@ -172,5 +253,4 @@ TLEParseError TwoLineElement::parse(const char *line_1, const char *line_2) {
     return TLEParseError::NONE;
 }
 #endif  // PERTURB_DISABLE_IO
-
-}  // namespace perturb
+#endif

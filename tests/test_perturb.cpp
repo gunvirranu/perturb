@@ -499,7 +499,7 @@ TEST_CASE(
 
         // Parse and construct `sat_orig` using Vallado's impl
         auto sat_orig = Satellite::from_tle(line_1, line_2);
-        CHECK(sat_orig.last_error() != Sgp4Error::INVALID_TLE);
+        CHECK(sat_orig.last_error() != Sgp4Error::INVALID_INPUT);
 
         // Correct some unimportant differences
         sat_tle.internal.elnum = (sat_tle.internal.elnum * 10 + tle.internal.line_1_checksum);

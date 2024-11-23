@@ -23,10 +23,11 @@ namespace perturb {
 #define CHECK_ENUM_MATCHES(A, B)  static_assert(static_cast<int>(A) == c_internal::PERTURB_ ## B, "Enum mismatch!")
 
 CHECK_ENUM_MATCHES(TLEParseError::NONE, TLE_PARSE_ERROR_NONE);
-CHECK_ENUM_MATCHES(TLEParseError::SHOULD_BE_SPACE, TLE_PARSE_ERROR_SHOULD_BE_SPACE);
-CHECK_ENUM_MATCHES(TLEParseError::INVALID_FORMAT, TLE_PARSE_ERROR_INVALID_FORMAT);
-CHECK_ENUM_MATCHES(TLEParseError::INVALID_VALUE, TLE_PARSE_ERROR_INVALID_VALUE);
 CHECK_ENUM_MATCHES(TLEParseError::CHECKSUM_MISMATCH, TLE_PARSE_ERROR_CHECKSUM_MISMATCH);
+CHECK_ENUM_MATCHES(TLEParseError::INVALID_VALUE, TLE_PARSE_ERROR_INVALID_VALUE);
+CHECK_ENUM_MATCHES(TLEParseError::INVALID_FORMAT, TLE_PARSE_ERROR_INVALID_FORMAT);
+CHECK_ENUM_MATCHES(TLEParseError::SHOULD_BE_SPACE, TLE_PARSE_ERROR_SHOULD_BE_SPACE);
+CHECK_ENUM_MATCHES(TLEParseError::INVALID_INPUT, TLE_PARSE_ERROR_INVALID_INPUT);
 
 CHECK_ENUM_MATCHES(GravModel::WGS72_OLD, GRAVITY_MODEL_WGS72_OLD);
 CHECK_ENUM_MATCHES(GravModel::WGS72, GRAVITY_MODEL_WGS72);
@@ -39,7 +40,7 @@ CHECK_ENUM_MATCHES(Sgp4Error::PERT_ELEMENTS, SGP4_ERROR_PERT_ELEMENTS);
 CHECK_ENUM_MATCHES(Sgp4Error::SEMI_LATUS_RECTUM, SGP4_ERROR_SEMI_LATUS_RECTUM);
 CHECK_ENUM_MATCHES(Sgp4Error::EPOCH_ELEMENTS_SUB_ORBITAL, SGP4_ERROR_EPOCH_ELEMENTS_SUB_ORBITAL);
 CHECK_ENUM_MATCHES(Sgp4Error::DECAYED, SGP4_ERROR_DECAYED);
-CHECK_ENUM_MATCHES(Sgp4Error::INVALID_TLE, SGP4_ERROR_INVALID_TLE);
+CHECK_ENUM_MATCHES(Sgp4Error::INVALID_INPUT, SGP4_ERROR_INVALID_INPUT);
 CHECK_ENUM_MATCHES(Sgp4Error::UNKNOWN, SGP4_ERROR_UNKNOWN);
 
 static Sgp4Error convert_sgp4_error_code(const int error_code) {
@@ -133,7 +134,7 @@ ClassicalOrbitalElements::ClassicalOrbitalElements(StateVector sv, GravModel gra
 #ifndef PERTURB_DISABLE_IO
 TLEParseError TwoLineElement::parse(const char * line_1, const char * line_2) {
     // Pass parsing call directly to underlying C impl
-    c_internal::perturb_Tle * tle = &this->internal;
+    c_internal::perturb_TwoLineElement * tle = &this->internal;
     const c_internal::perturb_TleParseError err = c_internal::perturb_parse_tle(line_1, line_2,  tle);
     return static_cast<TLEParseError>(err);
 }

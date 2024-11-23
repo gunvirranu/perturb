@@ -17,13 +17,15 @@
 #ifndef PERTURB_COMMON_PRIVATE_H
 #define PERTURB_COMMON_PRIVATE_H
 
-typedef perturb_real_t real_t;
-
 #define PI  3.14159265358979323846
 
 #define MINS_PER_DAY  (24 * 60)
 
 #define FABS(x)     fabs(x)
 #define FLOOR(x)    floor(x)
+
+#define ARRAY_SIZE(x)   (sizeof(x) / sizeof(x[0]))
+
+typedef perturb_real_t real_t;
 
 #endif  // PERTURB_COMMON_PRIVATE_H

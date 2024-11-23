@@ -22,6 +22,8 @@
 #  error "Hah someone messed up, why r u compiling this C as C++"
 #endif
 
+// FIXME: Reformat files for C and C++
+
 struct perturb_JulianDate perturb_datetime_to_julian(const struct perturb_DateTime t) {
     struct perturb_JulianDate jd;
     jday_SGP4(t.year, t.month, t.day, t.hour, t.min, t.sec, &jd.jd, &jd.jd_frac);

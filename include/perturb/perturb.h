@@ -33,16 +33,6 @@ namespace c_internal {
 extern "C" {
 #endif  // __cplusplus
 
-#if !(defined(__cplusplus) && defined(PERTURB_ENABLE_CPP_INTERFACE))
-/// Both lines of a TLE **must** be this length, for TLE constructors.
-///
-/// It is assumed that this memory can be safely accessed.
-/// Lines can be longer for verification mode, but that's for internal testing
-/// purposes only and doesn't pertain to general usage.
-/// Macro definition is excluded in C++ cases to not pollute globals.
-#  define PERTURB_TLE_LINE_LEN  69U
-#endif
-
 /// Alias to allow possibility of supporting 32-bit and 64-bit floating point
 ///
 /// TODO: Support float32_t and float64_t
