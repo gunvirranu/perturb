@@ -14,6 +14,7 @@
 #include <stddef.h>
 #ifndef PERTURB_DISABLE_IO
 #  include <stdio.h>
+#  include <inttypes.h>
 #endif
 
 #include "common_private.h"
@@ -73,20 +74,35 @@ enum perturb_TleParseError perturb_parse_tle(
     }
 
     // Parse format - Line 1
-    const char LINE_1_FMT_STR[] = "%1hhu %5s %1c %2u %3u %3s %2u %12lf %10lf %6lf %2d %6lf %2d %1hhu %4u %n %1hhu";
-
-    // FIXME: swap these to use normal int types and then convert to fixed-size for saving
-    unsigned char line1_num;
-    int n_ddot_exp, b_star_exp, l1_pre_checksum;
-
-    int l1_scanned = sscanf(  // bruh C and C++ both suck at string processing :(
-        line_1, LINE_1_FMT_STR, &line1_num, tle.catalog_number, &tle.classification,
-        &tle.launch_year, &tle.launch_number, tle.launch_piece, &tle.epoch_year,
-        &tle.epoch_day_of_year, &tle.n_dot, &tle.n_ddot, &n_ddot_exp,
-        &tle.b_star, &b_star_exp, &tle.ephemeris_type, &tle.element_set_number,
-        &l1_pre_checksum, &tle.line_1_checksum
+    // TODO: Use a more robust parsing method. I wish from_chars existed :(
+    const char LINE_1_FMT_STR[] = (
+        "%1c %5s %1c "
+        "%2" SCNu8 " %3" SCNu16 " %3s "
+        "%2" SCNu8 " %12lf "
+        "%10lf %6lf %2" SCNd8 " "
+        "%6lf %2" SCNd8 " "
+        "%1" SCNu8 " %4" SCNu16 " "
+        "%n %1" SCNu8
     );
 
+    // FIXME: swap these to use normal int types and then convert to fixed-size for saving
+    char line1_num = '0';
+    int8_t n_ddot_exp = 0;
+    int8_t b_star_exp = 0;
+    unsigned int line1_pre_checksum = 0U;
+
+    int line1_scanned = sscanf(  // bruh C and C++ both suck at string processing :(
+        line_1, LINE_1_FMT_STR,
+        &line1_num, tle->catalog_number, &tle->classification,
+        &tle->launch_year, &tle->launch_number, tle->launch_piece,
+        &tle->epoch_year, &tle->epoch_day_of_year,
+        &tle->n_dot, &tle->n_ddot, &n_ddot_exp,
+        &tle->b_star, &b_star_exp,
+        &tle->ephemeris_type, &tle->element_set_number,
+        &line1_pre_checksum, &tle->line_1_checksum
+    );
+
+    (void) line1_scanned;
 
     return PERTURB_TLE_PARSE_ERROR_INVALID_INPUT;
 }
@@ -118,37 +134,7 @@ static unsigned int calc_tle_line_checksum(const char *line) {
 }
 
 #ifndef PERTURB_DISABLE_IO
-// FIXME: Use a more robust parsing method. I wish string_view existed :(
 TLEParseError TwoLineElement::parse(const char *line_1, const char *line_2) {
-    // Make sure there are spaces in the right places
-    constexpr std::array<int, 8> LINE_1_SPACES = { 2, 9, 18, 33, 44, 53, 62, 64 };
-    for (const int i : LINE_1_SPACES) {
-        if (line_1[i - 1] != ' ') {
-            return TLEParseError::SHOULD_BE_SPACE;
-        }
-    }
-    constexpr std::array<int, 7> LINE_2_SPACES = { 2, 8, 17, 26, 34, 43, 52 };
-    for (const int i : LINE_2_SPACES) {
-        if (line_2[i - 1] != ' ') {
-            return TLEParseError::SHOULD_BE_SPACE;
-        }
-    }
-
-    // Parse format
-
-    // Line 1
-    constexpr auto LINE_1_FMT_STR =
-        "%1hhu %5s %1c %2u %3u %3s %2u %12lf %10lf %6lf %2d %6lf %2d %1hhu %4u %n %1hhu";
-    unsigned char line1_num;
-    int n_ddot_exp, b_star_exp, l1_pre_checksum;
-    int l1_scanned = std::sscanf(  // Brooo C++ sucks at string processing :(
-        line_1, LINE_1_FMT_STR, &line1_num, this->catalog_number, &this->classification,
-        &this->launch_year, &this->launch_number, this->launch_piece, &this->epoch_year,
-        &this->epoch_day_of_year, &this->n_dot, &this->n_ddot, &n_ddot_exp,
-        &this->b_star, &b_star_exp, &this->ephemeris_type, &this->element_set_number,
-        &l1_pre_checksum, &this->line_1_checksum
-    );
-
     // Line 2
     constexpr auto LINE_2_FMT_STR_NO_SPACE =
         "%1hhu %5s %8lf %8lf %7lu %8lf %8lf %11lf %5lu %n %1hhu";
