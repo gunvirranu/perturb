@@ -106,7 +106,7 @@ struct perturb_TwoLineElement {
 
     // Line 2 - Metadata
     uint32_t  revolution_number;        ///< Revolution number at epoch, 0 ≤ [rev] ≤ 99999
-    int8_t    line_2_checksum;          ///< Line 2 check-sum
+    uint8_t   line_2_checksum;          ///< Line 2 check-sum
 
     // clang-format on
 };

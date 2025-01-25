@@ -24,6 +24,8 @@
 
 #define ARRAY_SIZE(x)   (sizeof(x) / sizeof(x[0]))
 
+#define UNUSED(x)       (void) (x)
+
 typedef perturb_real_t real_t;
 
 #endif  // PERTURB_COMMON_PRIVATE_H
