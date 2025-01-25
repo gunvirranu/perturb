@@ -133,7 +133,7 @@ enum perturb_TleParseError perturb_parse_tle_and_init_sat(
 );
 #endif
 
-#if __cplusplus
+#ifdef __cplusplus
 }  // extern "C"
 #  ifdef PERTURB_ENABLE_CPP_INTERFACE
 }  // namespace c_internal
