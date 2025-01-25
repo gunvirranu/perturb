@@ -41,15 +41,20 @@ CHECK_ENUM_MATCHES(Sgp4Error::DECAYED, SGP4_ERROR_DECAYED);
 CHECK_ENUM_MATCHES(Sgp4Error::INVALID_INPUT, SGP4_ERROR_INVALID_INPUT);
 CHECK_ENUM_MATCHES(Sgp4Error::UNKNOWN, SGP4_ERROR_UNKNOWN);
 
-static Sgp4Error convert_sgp4_error_code(const int error_code) {
-    if (error_code < 0 || error_code >= static_cast<int>(Sgp4Error::UNKNOWN)) {
+// FIXME: change from int error code to perturb_Sgp4Error
+static Sgp4Error convert_sgp4_error_code(const int error_code)
+{
+    if (error_code < 0 || error_code >= static_cast<int>(Sgp4Error::UNKNOWN))
+    {
         return Sgp4Error::UNKNOWN;
     }
     return static_cast<Sgp4Error>(error_code);
 }
 
-c_internal::perturb_GravityModel convert_grav_model(const GravModel model) {
-    switch (model) {
+c_internal::perturb_GravityModel convert_grav_model(const GravModel model)
+{
+    switch (model)
+    {
         case GravModel::WGS72_OLD:  return c_internal::PERTURB_GRAVITY_MODEL_WGS72_OLD;
         case GravModel::WGS72:      return c_internal::PERTURB_GRAVITY_MODEL_WGS72;
         case GravModel::WGS84:      return c_internal::PERTURB_GRAVITY_MODEL_WGS84;
@@ -67,61 +72,75 @@ JulianDate::JulianDate(const real_t jd) : internal({ jd, 0 }) {}
 
 JulianDate::JulianDate(const real_t jd, const real_t jd_frac) : internal({ jd, jd_frac }) {}
 
-JulianDate::JulianDate(const DateTime t) {
+JulianDate::JulianDate(const DateTime t)
+{
     this->internal = c_internal::perturb_datetime_to_julian(t.internal);
 }
 
-DateTime JulianDate::to_datetime() const {
+DateTime JulianDate::to_datetime() const
+{
     return DateTime { perturb_julian_to_datetime(this->internal) };
 }
 
-void JulianDate::normalize() {
+void JulianDate::normalize()
+{
     internal = c_internal::perturb_julian_normalized(internal);
 }
 
-JulianDate JulianDate::normalized() const {
+JulianDate JulianDate::normalized() const
+{
     return JulianDate { c_internal::perturb_julian_normalized(internal) };
 }
 
-real_t JulianDate::operator-(const JulianDate &rhs) const {
+real_t JulianDate::operator-(const JulianDate &rhs) const
+{
     return c_internal::perturb_julian_subtract(this->internal, rhs.internal);
 }
 
-JulianDate JulianDate::operator+(const real_t &delta_jd) const {
+JulianDate JulianDate::operator+(const real_t &delta_jd) const
+{
     return JulianDate { c_internal::perturb_julian_add_days(internal, delta_jd) };
 }
 
-JulianDate &JulianDate::operator+=(const real_t &delta_jd) {
+JulianDate &JulianDate::operator+=(const real_t &delta_jd)
+{
     return *this = *this + delta_jd;
 }
 
-JulianDate JulianDate::operator-(const real_t &delta_jd) const {
+JulianDate JulianDate::operator-(const real_t &delta_jd) const
+{
     return *this + (-delta_jd);
 }
 
-JulianDate &JulianDate::operator-=(const real_t &delta_jd) {
+JulianDate &JulianDate::operator-=(const real_t &delta_jd)
+{
     return *this = *this - delta_jd;
 }
 
-bool JulianDate::operator<(const JulianDate &rhs) const {
+bool JulianDate::operator<(const JulianDate &rhs) const
+{
     return (*this - rhs) < 0;
 }
 
-bool JulianDate::operator>(const JulianDate &rhs) const {
+bool JulianDate::operator>(const JulianDate &rhs) const
+{
     return (*this - rhs) > 0;
 }
 
-bool JulianDate::operator<=(const JulianDate &rhs) const {
+bool JulianDate::operator<=(const JulianDate &rhs) const
+{
     return (*this - rhs) <= 0;
 }
 
-bool JulianDate::operator>=(const JulianDate &rhs) const {
+bool JulianDate::operator>=(const JulianDate &rhs) const
+{
     return (*this - rhs) >= 0;
 }
 
 // ClassicalOrbitalElements methods
 
-ClassicalOrbitalElements::ClassicalOrbitalElements(StateVector sv, GravModel grav_model) {
+ClassicalOrbitalElements::ClassicalOrbitalElements(StateVector sv, GravModel grav_model)
+{
     internal = c_internal::perturb_state_vector_to_orbital_elements_with_grav(
         sv.internal, convert_grav_model(grav_model)
     );
@@ -130,10 +149,13 @@ ClassicalOrbitalElements::ClassicalOrbitalElements(StateVector sv, GravModel gra
 // TwoLineElement methods
 
 #ifndef PERTURB_DISABLE_IO
-TLEParseError TwoLineElement::parse(const char * line_1, const char * line_2) {
-    // Pass parsing call directly to underlying C impl
+TLEParseError TwoLineElement::parse(const char * line_1, const char * line_2)
+{
     c_internal::perturb_TwoLineElement * tle = &this->internal;
+
+    // Pass parsing call directly to underlying C impl
     const c_internal::perturb_TleParseError err = c_internal::perturb_parse_tle(line_1, line_2,  tle);
+
     return static_cast<TLEParseError>(err);
 }
 #endif  // PERTURB_DISABLE_IO
@@ -143,9 +165,11 @@ TLEParseError TwoLineElement::parse(
     const std::string &line_1, const std::string &line_2
 ) {
     // Delegate to C-sting parsing, which assumes a minimum length
-    if (line_1.length() < TLE_LINE_LEN || line_2.length() < TLE_LINE_LEN) {
+    if (line_1.length() < TLE_LINE_LEN || line_2.length() < TLE_LINE_LEN)
+    {
         return TLEParseError::INVALID_FORMAT;
     }
+
     return this->parse(line_1.c_str(), line_2.c_str());
 }
 #endif  // PERTURB_DISABLE_IO
@@ -154,7 +178,8 @@ TLEParseError TwoLineElement::parse(
 
 Satellite::Satellite(c_internal::perturb_Satellite sat) : internal(sat) {}
 
-Satellite::Satellite(const TwoLineElement &tle, const GravModel grav_model) {
+Satellite::Satellite(const TwoLineElement &tle, const GravModel grav_model)
+{
     const auto _err = c_internal::perturb_init_sat_from_tle(
         tle.internal, convert_grav_model(grav_model), &internal
     );
@@ -162,7 +187,8 @@ Satellite::Satellite(const TwoLineElement &tle, const GravModel grav_model) {
 }
 
 #ifndef PERTURB_DISABLE_IO
-Satellite Satellite::from_tle(char * line_1, char * line_2, GravModel grav_model) {
+Satellite Satellite::from_tle(char * line_1, char * line_2, GravModel grav_model)
+{
     c_internal::perturb_Satellite sat {};
     c_internal::perturb_parse_tle_and_init_sat(line_1, line_2, convert_grav_model(grav_model), &sat);
     return Satellite(sat);
@@ -173,29 +199,36 @@ Satellite Satellite::from_tle(char * line_1, char * line_2, GravModel grav_model
 Satellite Satellite::from_tle(
     std::string &line_1, std::string &line_2, GravModel grav_model
 ) {
-    if (line_1.length() < TLE_LINE_LEN || line_2.length() < TLE_LINE_LEN) {
+    if (line_1.length() < TLE_LINE_LEN || line_2.length() < TLE_LINE_LEN)
+    {
         return from_tle(nullptr, nullptr);
     }
+
     // FIXME: Find a way to remove usage of &str[0]
     return from_tle(&line_1[0], &line_2[0], grav_model);
 }
 #endif  // PERTURB_DISABLE_IO
 
-Sgp4Error Satellite::last_error() const {
+Sgp4Error Satellite::last_error() const
+{
     return convert_sgp4_error_code(internal.error);
 }
 
-JulianDate Satellite::epoch() const {
+JulianDate Satellite::epoch() const
+{
     return JulianDate(c_internal::perturb_epoch(internal));
 }
 
-Sgp4Error Satellite::propagate_from_epoch(const real_t mins_from_epoch, StateVector &sv) {
+Sgp4Error Satellite::propagate_from_epoch(const real_t mins_from_epoch, StateVector &sv)
+{
     const real_t days_from_epoch = (mins_from_epoch / (24 * 60));
+
     const auto err = c_internal::perturb_propagate_days_from_epoch(internal, days_from_epoch, &sv.internal);
     return convert_sgp4_error_code(err);
 }
 
-Sgp4Error Satellite::propagate(const JulianDate jd, StateVector &sv) {
+Sgp4Error Satellite::propagate(const JulianDate jd, StateVector &sv)
+{
     const auto err = c_internal::perturb_propagate(internal, jd.internal, &sv.internal);
     return convert_sgp4_error_code(err);
 }
