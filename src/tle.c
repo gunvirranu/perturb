@@ -123,7 +123,6 @@ enum perturb_Sgp4Error perturb_init_sat_from_tle(
 
     // Convert (date & time) to (julian date)
     const struct perturb_JulianDate jd = perturb_datetime_to_julian(t);
-    // TODO: Make Satellite just store `JulianDate` instead of seperate `jdsatepoch`
     sat->jdsatepoch = jd.jd;
     sat->jdsatepochF = jd.jd_frac;
     const real_t days_since_1950 = (jd.jd - JULIAN_DATE_1950) + jd.jd_frac;

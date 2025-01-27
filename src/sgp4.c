@@ -1,4 +1,12 @@
-// clang-format off
+/*
+ * perturb -- A modern C++11 wrapper for the SGP4 orbit propagator
+ * version 1.0.0
+ * https://github.com/gunvirranu/perturb
+ *
+ * Copyright (c) 2022 Gunvir Singh Ranu
+ * SPDX-License-Identifier: MIT
+ */
+
 /*     ----------------------------------------------------------------
 *
 *                               sgp4unit.cpp
@@ -56,20 +64,63 @@
 *                           original baseline
 *       ----------------------------------------------------------------      */
 
-#include "perturb/sgp4.hpp"
+#include "perturb/sgp4.h"
 
-// NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers)
-
-// NOLINTBEGIN(hicpp-deprecated-headers, modernize-deprecated-headers)
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
-// NOLINTEND(hicpp-deprecated-headers, modernize-deprecated-headers)
 
-#define pi 3.14159265358979323846  // NOLINT(cppcoreguidelines-macro-usage)
+#include "common_private.h"
 
-namespace perturb {
-namespace sgp4 {
+struct perturb_JulianDate perturb_epoch(const struct perturb_Satellite sat)
+{
+    struct perturb_JulianDate jd = { 0 };
+    // TODO: Make Satellite just store `JulianDate` instead of seperate `jdsatepoch`
+    jd.jd = sat.jdsatepoch;
+    jd.jd_frac = sat.jdsatepochF;
+    return jd;
+}
+
+enum perturb_Sgp4Error perturb_propagate(
+    const struct perturb_Satellite sat,
+    const struct perturb_JulianDate t,
+    struct perturb_StateVector * const sv
+) {
+    if (sv == NULL)
+    {
+        return PERTURB_SGP4_ERROR_INVALID_INPUT;
+    }
+
+    // Convert timestamp to days from epoch and pass through for computation
+    const real_t days_since_epoch = perturb_julian_subtract(t, perturb_epoch(sat));
+    const enum perturb_Sgp4Error err = perturb_propagate_days_from_epoch(sat, days_since_epoch, sv);
+
+    sv->epoch = t;  // Save some math and overwrite, ignore value from `propagate_from_epoch`
+    return err;
+}
+
+enum perturb_Sgp4Error perturb_propagate_days_from_epoch(
+    const struct perturb_Satellite sat,
+    const perturb_real_t days_since_epoch,
+    struct perturb_StateVector * const sv
+) {
+    if (sv == NULL)
+    {
+        return PERTURB_SGP4_ERROR_INVALID_INPUT;
+    }
+
+    // Compute epoch (i.e. timestamp) of state vector in future
+    sv->epoch = perturb_julian_add_days(perturb_epoch(sat), days_since_epoch);
+
+    // Convert to mins from epoch and pass through for computation
+    const real_t mins_since_epoch = days_since_epoch * MINS_PER_DAY;
+    const bool err = sgp4(&sat, mins_since_epoch, sv->position, sv->velocity);
+
+    UNUSED(err);  // Not needed b/c it is consistent with error code
+    return sat.error;
+}
+
+// clang-format on
 
 /* ----------- local functions - only ever used internally by sgp4 ---------- */
 static void dpper
@@ -3280,8 +3331,4 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
 
 // } // namespace SGP4Funcs
 
-}  // namesapce sgp4
-}  // namespace perturb
-
-// NOLINTEND(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers)
 // clang-format on
