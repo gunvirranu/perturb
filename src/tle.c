@@ -24,6 +24,8 @@
 #  error "I kindly request you compile this as C instead of C++"
 #endif
 
+static const real_t JULIAN_DATE_1950 = 2433281.5;  ///< [julian date] Jan 1, 1950  00:00:00.000
+
 #ifndef PERTURB_DISABLE_IO
 /// Check a string has spaces in specific indices
 ///
@@ -50,11 +52,12 @@ static bool check_for_missing_spaces(
 
 #ifndef PERTURB_DISABLE_IO
 /// Compute [0, 10] integer checksum of a TLE line based on their standard rules
-static unsigned int calc_tle_line_checksum(const char * line)
+static uint8_t calc_tle_line_checksum(const char * line)
 {
     unsigned int checksum = 0U;
     for (size_t i = 0U; i < (PERTURB_TLE_LINE_LEN - 1U); ++i)
     {
+        // SAFETY: Assumes `line` is valid buffer of at least length `PERTURB_TLE_LINE_LEN`
         if (isdigit(line[i]))
         {
             checksum += (unsigned int) (line[i] - '0');
@@ -68,7 +71,7 @@ static unsigned int calc_tle_line_checksum(const char * line)
             // Nothing
         }
     }
-    return checksum % 10U;
+    return (uint8_t) (checksum % 10U);
 }
 #endif  // PERTURB_DISABLE_IO
 
@@ -82,10 +85,58 @@ enum perturb_Sgp4Error perturb_init_sat_from_tle(
         return PERTURB_SGP4_ERROR_INVALID_INPUT;
     }
 
-    // FIXME: impl
-    UNUSED(tle);
-    UNUSED(grav_model);
-    return PERTURB_SGP4_ERROR_INVALID_INPUT;
+    // Line 1
+    memcpy(sat->satnum, tle.catalog_number, sizeof(sat->satnum));
+    sat->classification = tle.classification;
+    UNUSED(sat->intldesg);  // Don't bother converting to set `sat.intldesg` b/c it has no effects
+    sat->epochyr = tle.epoch_year;
+    sat->epochdays = tle.epoch_day_of_year;
+    sat->ndot = tle.n_dot;
+    sat->nddot = tle.n_ddot;
+    sat->bstar = tle.b_star;
+    sat->ephtype = tle.ephemeris_type;
+    sat->elnum = tle.element_set_number;
+
+    // Line 2
+    sat->inclo = tle.inclination;
+    sat->nodeo = tle.raan;
+    sat->ecco = tle.eccentricity;
+    sat->argpo = tle.arg_of_perigee;
+    sat->mo = tle.mean_anomaly;
+    sat->no_kozai = tle.mean_motion;
+    sat->revnum = tle.revolution_number;
+
+    // Post-process same as how Vallado does it
+    sat->error = 0;
+    sat->no_kozai /= XP_DOT_P;  // [rad/min]
+    sat->ndot  /= (XP_DOT_P * MINS_PER_DAY);
+    sat->nddot /= ((XP_DOT_P * MINS_PER_DAY) * MINS_PER_DAY);
+    sat->inclo *= DEG_TO_RAD;
+    sat->nodeo *= DEG_TO_RAD;
+    sat->argpo *= DEG_TO_RAD;
+    sat->mo    *= DEG_TO_RAD;
+
+    // Convert (year & fractional day of year) to (date & time)
+    struct perturb_DateTime t = { 0 };
+    t.year = (uint16_t) (sat->epochyr + ((sat->epochyr < 57) ? 2000 : 1900));
+    days2mdhms_SGP4(t.year, sat->epochdays, &t.month, &t.day, &t.hour, &t.min, &t.sec);
+
+    // Convert (date & time) to (julian date)
+    const struct perturb_JulianDate jd = perturb_datetime_to_julian(t);
+    // TODO: Make Satellite just store `JulianDate` instead of seperate `jdsatepoch`
+    sat->jdsatepoch = jd.jd;
+    sat->jdsatepochF = jd.jd_frac;
+    const real_t days_since_1950 = (jd.jd - JULIAN_DATE_1950) + jd.jd_frac;
+
+    // Initialize orbit
+    const bool ret = sgp4init(
+        grav_model, 'i', sat->satnum, days_since_1950, sat->bstar,
+        sat->ndot, sat->nddot, sat->ecco, sat->argpo, sat->inclo,
+        sat->mo, sat->no_kozai, sat->nodeo, sat
+    );
+    UNUSED(ret);  // Not used, error code is saved internally
+
+    return (enum perturb_Sgp4Error) sat->error;
 }
 
 #ifndef PERTURB_DISABLE_IO
@@ -263,7 +314,7 @@ enum perturb_TleParseError perturb_parse_tle(
     // Post-process
     tle->n_ddot *= pow(10.0, n_ddot_exp);
     tle->b_star *= pow(10.0, b_star_exp);
-    tle->eccentricity = ((double) eccentricity_int) / 1.0e7;
+    tle->eccentricity = ((real_t) eccentricity_int) / ((real_t) 1.0e7);
 
     // Calculate and compare checksums
     const bool checksum_matches = (

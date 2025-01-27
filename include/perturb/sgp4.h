@@ -170,6 +170,24 @@ enum perturb_Sgp4Error perturb_propagate_days_from_epoch(
     struct perturb_Satellite sat, perturb_real_t days, struct perturb_StateVector * sv
 );
 
+#if 0
+Sgp4Error Satellite::propagate_from_epoch(double mins_from_epoch, StateVector &sv) {
+    sv.epoch = epoch() + (mins_from_epoch / MINS_PER_DAY);
+    const bool is_valid =
+        sgp4::sgp4(sat_rec, mins_from_epoch, sv.position.data(), sv.velocity.data());
+    (void) is_valid;  // Unused because it is consistent with error code
+    return last_error();
+}
+
+Sgp4Error Satellite::propagate(const JulianDate jd, StateVector &sv) {
+    const double delta_jd = jd - epoch();
+    const double mins_from_epoch = delta_jd * MINS_PER_DAY;
+    const auto err = propagate_from_epoch(mins_from_epoch, sv);
+    sv.epoch = jd;  // Can save some math, ignore value from `propagate_from_epoch`
+    return err;
+}
+#endif
+
 //-------------------------------------------------------------------------//
 
 bool sgp4init(
