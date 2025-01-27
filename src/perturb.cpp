@@ -154,7 +154,7 @@ TLEParseError TwoLineElement::parse(const char * line_1, const char * line_2)
     c_internal::perturb_TwoLineElement * tle = &this->internal;
 
     // Pass parsing call directly to underlying C impl
-    const c_internal::perturb_TleParseError err = c_internal::perturb_parse_tle(line_1, line_2,  tle);
+    const c_internal::perturb_TleParseError err = c_internal::perturb_parse_tle(line_1, line_2, tle);
 
     return static_cast<TLEParseError>(err);
 }
@@ -185,29 +185,6 @@ Satellite::Satellite(const TwoLineElement &tle, const GravModel grav_model)
     );
     static_cast<void>(_err);  // Unused, accessible via `last_error`
 }
-
-#ifndef PERTURB_DISABLE_IO
-Satellite Satellite::from_tle(char * line_1, char * line_2, GravModel grav_model)
-{
-    c_internal::perturb_Satellite sat {};
-    c_internal::perturb_parse_tle_and_init_sat(line_1, line_2, convert_grav_model(grav_model), &sat);
-    return Satellite(sat);
-}
-#endif  // PERTURB_DISABLE_IO
-
-#ifndef PERTURB_DISABLE_IO
-Satellite Satellite::from_tle(
-    std::string &line_1, std::string &line_2, GravModel grav_model
-) {
-    if (line_1.length() < TLE_LINE_LEN || line_2.length() < TLE_LINE_LEN)
-    {
-        return from_tle(nullptr, nullptr);
-    }
-
-    // FIXME: Find a way to remove usage of &str[0]
-    return from_tle(&line_1[0], &line_2[0], grav_model);
-}
-#endif  // PERTURB_DISABLE_IO
 
 Sgp4Error Satellite::last_error() const
 {

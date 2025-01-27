@@ -79,8 +79,8 @@ perturb_real_t perturb_julian_subtract(
 
 struct perturb_OrbitalElements perturb_state_vector_to_orbital_elements(const struct perturb_StateVector sv)
 {
-    // TODO: Explain why this default
-    const enum perturb_GravityModel grav_model = PERTURB_GRAVITY_MODEL_WGS72_OLD;
+    // FIXME: Explain why this default
+    const enum perturb_GravityModel grav_model = PERTURB_GRAVITY_MODEL_WGS72;
     return perturb_state_vector_to_orbital_elements_with_grav(sv, grav_model);
 }
 

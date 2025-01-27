@@ -11,7 +11,6 @@
 #include <fstream>
 
 #include "perturb/perturb.hpp"
-#include "perturb/tle.h"
 
 using namespace perturb;
 
@@ -22,16 +21,58 @@ using doctest::Approx;
     CHECK((a)[1] == Approx((b)[1]).scale(scl).epsilon(eps)); \
     CHECK((a)[2] == Approx((b)[2]).scale(scl).epsilon(eps))
 
-double norm(const real_t v[3]) {
+static double norm(const real_t v[3]) {
     return std::sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
 }
+
+#ifndef PERTURB_DISABLE_IO
+/// Construct and initialise a `Satellite` from TLE strings and confirm no errors
+static Satellite sat_from_tle(const std::string &line_1, const std::string &line_2)
+{
+    TwoLineElement tle {};
+    const auto err_tle = tle.parse(line_1, line_2);
+    REQUIRE(err_tle == TLEParseError::NONE);
+
+    auto sat = Satellite(tle);
+    REQUIRE(sat.last_error() == Sgp4Error::NONE);
+    return sat;
+}
+#endif  // PERTURB_DISABLE_IO
+
+#ifndef PERTURB_DISABLE_IO
+/// Construct and initialise a `Satellite` from TLE via Vallado's original parsing implementation
+///
+/// Input strings are mutable b/c Vallado's impl can potentially modify them
+static Satellite sat_from_vallado_tle(std::string &line_1, std::string &line_2)
+{
+    // Specific to verification TLEs
+    constexpr char RUN_TYPE = ' ';
+    constexpr char INPUT_TYPE = ' ';
+    constexpr char OPS_MODE = 'i';
+
+    // Check received string buffers are of extended length (don't know exact)
+    REQUIRE(line_1.length() >= TLE_LINE_LEN);
+    REQUIRE(line_2.length() >= TLE_LINE_LEN);
+
+    // Initialize empty `sat_rec` and let `twoline2rv` fill out
+    c_internal::perturb_Satellite sat_rec;
+    double _startmfe, _stopmfe, _deltamin;
+    c_internal::twoline2rv(
+        &line_1[0], &line_2[0], RUN_TYPE, INPUT_TYPE, OPS_MODE, c_internal::PERTURB_GRAVITY_MODEL_WGS72,
+        &_startmfe, &_stopmfe, &_deltamin, &sat_rec
+    );
+
+    // Construct `Satellite` using pre-parsed `sat_rec`, bypassing perturb's usual TLE parser
+    return Satellite(sat_rec);
+}
+#endif  // PERTURB_DISABLE_IO
 
 // Verification mode TLE parsing is excluded by default
 #ifdef PERTURB_SGP4_ENABLE_DEBUG
 /// Construct a `Satellite` from special extended verification mode ('v') TLEs
 static Satellite sat_from_verif_tle(
-    std::string &line_1, std::string &line_2, double &startmfe, double &stopmfe,
-    double &deltamin
+    std::string &line_1, std::string &line_2,
+    double &startmfe, double &stopmfe, double &deltamin
 ) {
     // Specific to verification TLEs
     constexpr char RUN_TYPE = 'v';
@@ -239,8 +280,7 @@ TEST_CASE(
         "2 25544  51.6424  94.0370 0004047 256.5103  89.8846 15.49386383330227"
     );
 
-    auto sat = Satellite::from_tle(ISS_TLE_1, ISS_TLE_2);
-    REQUIRE(sat.last_error() == Sgp4Error::NONE);
+    auto sat = sat_from_tle(ISS_TLE_1, ISS_TLE_2);
 
     // Check that the epoch is correct based off manual calculations
     SUBCASE("test_epoch") {
@@ -502,7 +542,7 @@ TEST_CASE(
         auto sat_tle = Satellite(tle);
 
         // Parse and construct `sat_orig` using Vallado's impl
-        auto sat_orig = Satellite::from_tle(line_1, line_2);
+        auto sat_orig = sat_from_vallado_tle(line_1, line_2);
         CHECK(sat_orig.last_error() != Sgp4Error::INVALID_INPUT);
 
         // Correct some unimportant differences

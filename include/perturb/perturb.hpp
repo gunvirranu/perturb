@@ -216,6 +216,7 @@ public:
     /// Construct from a raw SGP4 orbital record.
     ///
     /// @param sat Pre-initialized SGP4 orbital record
+    /// @return A potentially initialized `Satellite`
     explicit Satellite(c_internal::perturb_Satellite sat);
 
     /// Construct and initialize from a pre-parsed TLE record.
@@ -236,41 +237,15 @@ public:
     /// @pre The TLE must be valid and contain valid values.
     ///
     /// @param tle Parsed and valid TLE
-    /// TODO: param grav_model Gravity constants to use (default `GravModel::WGS72`)
+    /// @param grav_model Gravity constants to use (default `GravModel::WGS72`)
+    /// @return An initialized `Satellite`
     explicit Satellite(
         const TwoLineElement &tle, GravModel grav_model = GravModel::WGS72
     );
 
-#ifndef PERTURB_DISABLE_IO
-    /// Construct and initialize a `Satellite` from a TLE record.
-    ///
-    /// The strings are mutable because the underlying implementation in
-    /// `perturb::sgp4::twoline2rv` may modify the string during parsing.
-    /// Left as mutable instead of internally copying for efficiency reasons as
-    /// this may be okay for the caller.
-    ///
-    /// @param line_1 First line of TLE as C-string of length `perturb::TLE_LINE_LEN`
-    /// @param line_2 Second line of TLE as C-string of length `perturb::TLE_LINE_LEN`
-    /// @param grav_model Gravity constants to use (default `GravModel::WGS72`)
-    /// @return An initialized `Satellite`
-    static Satellite from_tle(
-        char *line_1, char *line_2, GravModel grav_model = GravModel::WGS72
-    );
-#endif  // PERTURB_DISABLE_IO
-
-#ifndef PERTURB_DISABLE_IO
-    /// Wrapper for `Satellite::from_tle` that accepts C++ style strings.
-    ///
-    /// @param line_1 First line of TLE
-    /// @param line_2 Second line of TLE
-    /// @param grav_model Gravity constants to use (default `GravModel::WGS72`)
-    /// @return An initialized `Satellite`
-    static Satellite from_tle(
-        std::string &line_1, std::string &line_2, GravModel grav_model = GravModel::WGS72
-    );
-#endif  // PERTURB_DISABLE_IO
-
     /// Return the last recorded error in the internal SGP4 record
+    ///
+    /// Yeah, I know, having to use this kinda sucks. Try n avoid please.
     Sgp4Error last_error() const;
 
     /// Return the epoch of the orbital ephemeris, likely from a TLE
