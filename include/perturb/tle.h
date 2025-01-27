@@ -124,15 +124,6 @@ enum perturb_TleParseError perturb_parse_tle(
 );
 #endif
 
-#ifndef PERTURB_DISABLE_IO
-/// TODO: Think about if there's value to having this
-enum perturb_TleParseError perturb_parse_tle_and_init_sat(
-    char * line_1, char * line_2,
-    enum perturb_GravityModel grav_model,
-    struct perturb_Satellite * sat
-);
-#endif
-
 #ifdef __cplusplus
 }  // extern "C"
 #  ifdef PERTURB_ENABLE_CPP_INTERFACE

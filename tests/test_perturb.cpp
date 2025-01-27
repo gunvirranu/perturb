@@ -29,7 +29,7 @@ double norm(const real_t v[3]) {
 // Verification mode TLE parsing is excluded by default
 #ifdef PERTURB_SGP4_ENABLE_DEBUG
 /// Construct a `Satellite` from special extended verification mode ('v') TLEs
-Satellite sat_from_verif_tle(
+static Satellite sat_from_verif_tle(
     std::string &line_1, std::string &line_2, double &startmfe, double &stopmfe,
     double &deltamin
 ) {

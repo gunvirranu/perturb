@@ -39,7 +39,8 @@ static bool check_for_missing_spaces(
         const size_t idx_space = spaces[i];
 
         // SAFETY: Assume indices from `spaces` are valid. Should be fixed at compile-time.
-        if (line[idx_space] != ' ') {
+        if (line[idx_space] != ' ')
+        {
             return true;
         }
     }
@@ -275,20 +276,5 @@ enum perturb_TleParseError perturb_parse_tle(
     }
 
     return PERTURB_TLE_PARSE_ERROR_NONE;
-}
-#endif  // PERTURB_DISABLE_IO
-
-#ifndef PERTURB_DISABLE_IO
-enum perturb_TleParseError perturb_parse_tle_and_init_sat(
-    char * line_1, char * line_2,
-    enum perturb_GravityModel grav_model,
-    struct perturb_Satellite * sat
-) {
-    // FIXME: impl
-    UNUSED(line_1);
-    UNUSED(line_2);
-    UNUSED(grav_model);
-    UNUSED(sat);
-    return PERTURB_TLE_PARSE_ERROR_INVALID_INPUT;
 }
 #endif  // PERTURB_DISABLE_IO
