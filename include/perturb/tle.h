@@ -112,7 +112,7 @@ struct perturb_TwoLineElement {
 };
 
 enum perturb_Sgp4Error perturb_init_sat_from_tle(
-    struct perturb_TwoLineElement tle,
+    const struct perturb_TwoLineElement * tle,
     enum perturb_GravityModel grav_model,
     struct perturb_Satellite * sat
 );

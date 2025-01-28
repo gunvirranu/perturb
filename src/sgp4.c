@@ -74,21 +74,24 @@
 
 #include "common_private.h"
 
-struct perturb_JulianDate perturb_epoch(const struct perturb_Satellite sat)
+struct perturb_JulianDate perturb_epoch(const struct perturb_Satellite * const sat)
 {
     struct perturb_JulianDate jd = { 0 };
-    // TODO: Make Satellite just store `JulianDate` instead of seperate `jdsatepoch`
-    jd.jd = sat.jdsatepoch;
-    jd.jd_frac = sat.jdsatepochF;
+    if (sat != NULL)
+    {
+        // TODO: Make Satellite just store `JulianDate` instead of seperate `jdsatepoch`
+        jd.jd = sat->jdsatepoch;
+        jd.jd_frac = sat->jdsatepochF;
+    }
     return jd;
 }
 
 enum perturb_Sgp4Error perturb_propagate(
-    const struct perturb_Satellite sat,
+    struct perturb_Satellite * const sat,
     const struct perturb_JulianDate t,
     struct perturb_StateVector * const sv
 ) {
-    if (sv == NULL)
+    if ((sat == NULL) || (sv == NULL))
     {
         return PERTURB_SGP4_ERROR_INVALID_INPUT;
     }
@@ -102,11 +105,11 @@ enum perturb_Sgp4Error perturb_propagate(
 }
 
 enum perturb_Sgp4Error perturb_propagate_days_from_epoch(
-    const struct perturb_Satellite sat,
+    struct perturb_Satellite * const sat,
     const perturb_real_t days_since_epoch,
     struct perturb_StateVector * const sv
 ) {
-    if (sv == NULL)
+    if ((sat == NULL) || (sv == NULL))
     {
         return PERTURB_SGP4_ERROR_INVALID_INPUT;
     }
@@ -116,10 +119,10 @@ enum perturb_Sgp4Error perturb_propagate_days_from_epoch(
 
     // Convert to mins from epoch and pass through for computation
     const real_t mins_since_epoch = days_since_epoch * MINS_PER_DAY;
-    const bool err = sgp4(&sat, mins_since_epoch, sv->position, sv->velocity);
+    const bool err = sgp4(sat, mins_since_epoch, sv->position, sv->velocity);
 
     UNUSED(err);  // Not needed b/c it is consistent with error code
-    return sat.error;
+    return (enum perturb_Sgp4Error) sat.error;
 }
 
 // clang-format on

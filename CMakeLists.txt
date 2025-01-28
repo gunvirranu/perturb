@@ -56,7 +56,7 @@ endif()
 
 add_library(
     perturb
-    src/perturb.c src/perturb.cpp src/tle.c
+    src/perturb.c src/perturb.cpp src/tle.c src/sgp4.c
 )
 
 target_include_directories(

@@ -76,7 +76,7 @@ static uint8_t calc_tle_line_checksum(const char * line)
 #endif  // PERTURB_DISABLE_IO
 
 enum perturb_Sgp4Error perturb_init_sat_from_tle(
-    const struct perturb_TwoLineElement tle,
+    const struct perturb_TwoLineElement * const tle,
     const enum perturb_GravityModel grav_model,
     struct perturb_Satellite * sat
 ) {
@@ -86,25 +86,25 @@ enum perturb_Sgp4Error perturb_init_sat_from_tle(
     }
 
     // Line 1
-    memcpy(sat->satnum, tle.catalog_number, sizeof(sat->satnum));
-    sat->classification = tle.classification;
+    memcpy(sat->satnum, tle->catalog_number, sizeof(sat->satnum));
+    sat->classification = tle->classification;
     UNUSED(sat->intldesg);  // Don't bother converting to set `sat.intldesg` b/c it has no effects
-    sat->epochyr = tle.epoch_year;
-    sat->epochdays = tle.epoch_day_of_year;
-    sat->ndot = tle.n_dot;
-    sat->nddot = tle.n_ddot;
-    sat->bstar = tle.b_star;
-    sat->ephtype = tle.ephemeris_type;
-    sat->elnum = tle.element_set_number;
+    sat->epochyr = tle->epoch_year;
+    sat->epochdays = tle->epoch_day_of_year;
+    sat->ndot = tle->n_dot;
+    sat->nddot = tle->n_ddot;
+    sat->bstar = tle->b_star;
+    sat->ephtype = tle->ephemeris_type;
+    sat->elnum = tle->element_set_number;
 
     // Line 2
-    sat->inclo = tle.inclination;
-    sat->nodeo = tle.raan;
-    sat->ecco = tle.eccentricity;
-    sat->argpo = tle.arg_of_perigee;
-    sat->mo = tle.mean_anomaly;
-    sat->no_kozai = tle.mean_motion;
-    sat->revnum = tle.revolution_number;
+    sat->inclo = tle->inclination;
+    sat->nodeo = tle->raan;
+    sat->ecco = tle->eccentricity;
+    sat->argpo = tle->arg_of_perigee;
+    sat->mo = tle->mean_anomaly;
+    sat->no_kozai = tle->mean_motion;
+    sat->revnum = tle->revolution_number;
 
     // Post-process same as how Vallado does it
     sat->error = 0;

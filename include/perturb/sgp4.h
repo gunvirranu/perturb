@@ -161,13 +161,13 @@ struct perturb_Satellite {
     perturb_real_t tumin, mus, radiusearthkm, xke, j2, j3, j4, j3oj2;
 };
 
-struct perturb_JulianDate perturb_epoch(struct perturb_Satellite sat);
+struct perturb_JulianDate perturb_epoch(const struct perturb_Satellite * sat);
 
 enum perturb_Sgp4Error perturb_propagate(
-    struct perturb_Satellite sat, struct perturb_JulianDate t, struct perturb_StateVector * sv
+    struct perturb_Satellite * sat, struct perturb_JulianDate t, struct perturb_StateVector * sv
 );
 enum perturb_Sgp4Error perturb_propagate_days_from_epoch(
-    struct perturb_Satellite sat, perturb_real_t days_since_epoch, struct perturb_StateVector * sv
+    struct perturb_Satellite * sat, perturb_real_t days_since_epoch, struct perturb_StateVector * sv
 );
 
 bool sgp4init(
