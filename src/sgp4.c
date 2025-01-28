@@ -3,6 +3,8 @@
  * version 1.0.0
  * https://github.com/gunvirranu/perturb
  *
+ * The original comments from Vallado's cpp source are preserved.
+ *
  * Copyright (c) 2022 Gunvir Singh Ranu
  * SPDX-License-Identifier: MIT
  */
@@ -2307,47 +2309,28 @@ real_t& rp, real_t& rteosq, real_t& sinio, real_t& gsto, char opsmode
         if (longstr1[68] == ' ')
             longstr1[68] = '0';
 
-#ifdef _MSC_VER // chk if compiling in MSVS c++
-        sscanf_s(longstr1, "%2d %5s %1c %10s %2d %12lf %11lf %7lf %2d %7lf %2d %2d %6ld ",
-            &cardnumb, &satrec.satnum, 6 * sizeof(char), &satrec.classification, sizeof(char), &satrec.intldesg, 11 * sizeof(char), &satrec.epochyr,
-            &satrec.epochdays, &satrec.ndot, &satrec.nddot, &nexp, &satrec.bstar, &ibexp, &satrec.ephtype, &satrec.elnum);
-#else
         sscanf(longstr1, "%2d %5s %1c %10s %2d %12lf %11lf %7lf %2d %7lf %2d %2d %6ld ",
             &cardnumb, satrec.satnum, &satrec.classification, satrec.intldesg, &satrec.epochyr,
             &satrec.epochdays, &satrec.ndot, &satrec.nddot, &nexp, &satrec.bstar,
             &ibexp, &satrec.ephtype, &satrec.elnum);
-#endif
+
         if (typerun == 'v')  // run for specified times from the file
         {
 // This is a brutal section lol
 #ifdef PERTURB_SGP4_ENABLE_DEBUG
             if (longstr2[52] == ' ')
             {
-#ifdef _MSC_VER
-                sscanf_s(longstr2, "%2d %5s %9lf %9lf %8lf %9lf %9lf %10lf %6ld %lf %lf %lf \n",
-                    &cardnumb, &satrec.satnum, 6 * sizeof(char), &satrec.inclo,
-                    &satrec.nodeo, &satrec.ecco, &satrec.argpo, &satrec.mo, &satrec.no_kozai,
-                    &satrec.revnum, &startmfe, &stopmfe, &deltamin);
-#else
                 sscanf(longstr2, "%2d %5s %9lf %9lf %8lf %9lf %9lf %10lf %6ld %lf %lf %lf \n",
                     &cardnumb, satrec.satnum, &satrec.inclo,
                     &satrec.nodeo, &satrec.ecco, &satrec.argpo, &satrec.mo, &satrec.no_kozai,
                     &satrec.revnum, &startmfe, &stopmfe, &deltamin);
-#endif
             }
             else
             {
-#ifdef _MSC_VER
-                sscanf_s(longstr2, "%2d %5s %9lf %9lf %8lf %9lf %9lf %11lf %6ld %lf %lf %lf \n",
-                    &cardnumb, &satrec.satnum, 6 * sizeof(char), &satrec.inclo,
-                    &satrec.nodeo, &satrec.ecco, &satrec.argpo, &satrec.mo, &satrec.no_kozai,
-                    &satrec.revnum, &startmfe, &stopmfe, &deltamin);
-#else
                 sscanf(longstr2, "%2d %5s %9lf %9lf %8lf %9lf %9lf %11lf %6ld %lf %lf %lf \n",
                     &cardnumb, satrec.satnum, &satrec.inclo,
                     &satrec.nodeo, &satrec.ecco, &satrec.argpo, &satrec.mo, &satrec.no_kozai,
                     &satrec.revnum, &startmfe, &stopmfe, &deltamin);
-#endif
             }
 #endif  // PERTURB_SGP4_ENABLE_DEBUG
         }
@@ -2355,31 +2338,17 @@ real_t& rp, real_t& rteosq, real_t& sinio, real_t& gsto, char opsmode
         {
             if (longstr2[52] == ' ')
             {
-#ifdef _MSC_VER
-                sscanf_s(longstr2, "%2d %5s %9lf %9lf %8lf %9lf %9lf %10lf %6ld \n",
-                    &cardnumb, &satrec.satnum, 6 * sizeof(char), &satrec.inclo,
-                    &satrec.nodeo, &satrec.ecco, &satrec.argpo, &satrec.mo, &satrec.no_kozai,
-                    &satrec.revnum);
-#else
                 sscanf(longstr2, "%2d %5s %9lf %9lf %8lf %9lf %9lf %10lf %6ld \n",
                     &cardnumb, satrec.satnum, &satrec.inclo,
                     &satrec.nodeo, &satrec.ecco, &satrec.argpo, &satrec.mo, &satrec.no_kozai,
                     &satrec.revnum);
-#endif
             }
             else
             {
-#ifdef _MSC_VER
-                sscanf_s(longstr2, "%2d %5s %9lf %9lf %8lf %9lf %9lf %11lf %6ld \n",
-                    &cardnumb, &satrec.satnum, 6 * sizeof(char), &satrec.inclo,
-                    &satrec.nodeo, &satrec.ecco, &satrec.argpo, &satrec.mo, &satrec.no_kozai,
-                    &satrec.revnum);
-#else
                 sscanf(longstr2, "%2d %5s %9lf %9lf %8lf %9lf %9lf %11lf %6ld \n",
                     &cardnumb, satrec.satnum, &satrec.inclo,
                     &satrec.nodeo, &satrec.ecco, &satrec.argpo, &satrec.mo, &satrec.no_kozai,
                     &satrec.revnum);
-#endif
             }
         }
 
@@ -2430,20 +2399,15 @@ real_t& rp, real_t& rteosq, real_t& sinio, real_t& gsto, char opsmode
             {
                 printf("input start prop year mon day hr min sec \n");
                 // make sure there is no space at the end of the format specifiers in scanf!
-#ifdef _MSC_VER
-                scanf_s("%i %i %i %i %i %lf", &startyear, &startmon, &startday, &starthr, &startmin, &startsec);
-#else
+
                 scanf("%i %i %i %i %i %lf", &startyear, &startmon, &startday, &starthr, &startmin, &startsec);
-#endif
                 fflush(stdin);
                 jday_SGP4(startyear, startmon, startday, starthr, startmin, startsec, jdstart, jdstartF);
 
                 printf("input stop prop year mon day hr min sec \n");
-#ifdef _MSC_VER
-                scanf_s("%i %i %i %i %i %lf", &stopyear, &stopmon, &stopday, &stophr, &stopmin, &stopsec);
-#else
+
                 scanf("%i %i %i %i %i %lf", &stopyear, &stopmon, &stopday, &stophr, &stopmin, &stopsec);
-#endif
+
                 fflush(stdin);
                 jday_SGP4(stopyear, stopmon, stopday, stophr, stopmin, stopsec, jdstop, jdstopF);
 
@@ -2451,27 +2415,19 @@ real_t& rp, real_t& rteosq, real_t& sinio, real_t& gsto, char opsmode
                 stopmfe = (jdstop - satrec.jdsatepoch) * 1440.0 + (jdstopF - satrec.jdsatepochF) * 1440.0;
 
                 printf("input time step in minutes \n");
-#ifdef _MSC_VER
-                scanf_s("%lf", &deltamin);
-#else
+
                 scanf("%lf", &deltamin);
-#endif
+
             }
             // -------- enter start/stop year and days of year values -----------
             if (typeinput == 'd')
             {
                 printf("input start year dayofyr \n");
-#ifdef _MSC_VER
-                scanf_s("%i %lf", &startyear, &startdayofyr);
-#else
                 scanf("%i %lf", &startyear, &startdayofyr);
-#endif
+
                 printf("input stop year dayofyr \n");
-#ifdef _MSC_VER
-                scanf_s("%i %lf", &stopyear, &stopdayofyr);
-#else
+
                 scanf("%i %lf", &stopyear, &stopdayofyr);
-#endif
 
                 days2mdhms_SGP4(startyear, startdayofyr, mon, day, hr, minute, sec);
                 jday_SGP4(startyear, mon, day, hr, minute, sec, jdstart, jdstartF);
@@ -2482,31 +2438,18 @@ real_t& rp, real_t& rteosq, real_t& sinio, real_t& gsto, char opsmode
                 stopmfe = (jdstop - satrec.jdsatepoch) * 1440.0 + (jdstopF - satrec.jdsatepochF) * 1440.0;
 
                 printf("input time step in minutes \n");
-#ifdef _MSC_VER
-                scanf_s("%lf", &deltamin);
-#else
 
                 scanf("%lf", &deltamin);
-#endif
             }
             // ------------------ enter start/stop mfe values -------------------
             if (typeinput == 'm')
             {
-#ifdef _MSC_VER
-                printf("input start min from epoch \n");
-                scanf_s("%lf", &startmfe);
-                printf("input stop min from epoch \n");
-                scanf_s("%lf", &stopmfe);
-                printf("input time step in minutes \n");
-                scanf_s("%lf", &deltamin);
-#else
                 printf("input start min from epoch \n");
                 scanf("%lf", &startmfe);
                 printf("input stop min from epoch \n");
                 scanf("%lf", &stopmfe);
                 printf("input time step in minutes \n");
                 scanf("%lf", &deltamin);
-#endif
             }
         }
 
@@ -2970,11 +2913,7 @@ real_t& rp, real_t& rteosq, real_t& sinio, real_t& gsto, char opsmode
 
             // --------  determine type of orbit for later use  --------
             // ------ elliptical, parabolic, hyperbolic inclined -------
-            //#ifdef _MSC_VER  // chk if compiling under MSVS
-            //		   strcpy_s(typeorbit, 2 * sizeof(char), "ei");
-            //#else
             //		   strcpy(typeorbit, "ei");
-            //#endif
             typeorbit = 1;
 
             if (ecc < small)
@@ -2982,21 +2921,13 @@ real_t& rp, real_t& rteosq, real_t& sinio, real_t& gsto, char opsmode
                 // ----------------  circular equatorial ---------------
                 if ((incl < small) | (fabs(incl - pi) < small))
                 {
-                    //#ifdef _MSC_VER
-                    //				   strcpy_s(typeorbit, sizeof(typeorbit), "ce");
-                    //#else
                     //				   strcpy(typeorbit, "ce");
-                    //#endif
                     typeorbit = 2;
                 }
                 else
                 {
                     // --------------  circular inclined ---------------
-                    //#ifdef _MSC_VER
-                    //				   strcpy_s(typeorbit, sizeof(typeorbit), "ci");
-                    //#else
                     //				   strcpy(typeorbit, "ci");
-                    //#endif
                     typeorbit = 3;
                 }
             }
@@ -3004,11 +2935,7 @@ real_t& rp, real_t& rteosq, real_t& sinio, real_t& gsto, char opsmode
             {
                 // - elliptical, parabolic, hyperbolic equatorial --
                 if ((incl < small) | (fabs(incl - pi) < small)){
-                    //#ifdef _MSC_VER
-                    //				   strcpy_s(typeorbit, sizeof(typeorbit), "ee");
-                    //#else
                     //				   strcpy(typeorbit, "ee");
-                    //#endif
                     typeorbit = 4;
                 }
             }
