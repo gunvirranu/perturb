@@ -125,75 +125,75 @@ enum perturb_Sgp4Error perturb_propagate_days_from_epoch(
 /* ----------- local functions - only ever used internally by sgp4 ---------- */
 static void dpper
 (
-double e3, double ee2, double peo, double pgho, double pho,
-double pinco, double plo, double se2, double se3, double sgh2,
-double sgh3, double sgh4, double sh2, double sh3, double si2,
-double si3, double sl2, double sl3, double sl4, double t,
-double xgh2, double xgh3, double xgh4, double xh2, double xh3,
-double xi2, double xi3, double xl2, double xl3, double xl4,
-double zmol, double zmos, double inclo,
+real_t e3, real_t ee2, real_t peo, real_t pgho, real_t pho,
+real_t pinco, real_t plo, real_t se2, real_t se3, real_t sgh2,
+real_t sgh3, real_t sgh4, real_t sh2, real_t sh3, real_t si2,
+real_t si3, real_t sl2, real_t sl3, real_t sl4, real_t t,
+real_t xgh2, real_t xgh3, real_t xgh4, real_t xh2, real_t xh3,
+real_t xi2, real_t xi3, real_t xl2, real_t xl3, real_t xl4,
+real_t zmol, real_t zmos, real_t inclo,
 char init,
-double& ep, double& inclp, double& nodep, double& argpp, double& mp,
+real_t& ep, real_t& inclp, real_t& nodep, real_t& argpp, real_t& mp,
 char opsmode
 );
 
 static void dscom
 (
-double epoch, double ep, double argpp, double tc, double inclp,
-double nodep, double np,
-double& snodm, double& cnodm, double& sinim, double& cosim, double& sinomm,
-double& cosomm, double& day, double& e3, double& ee2, double& em,
-double& emsq, double& gam, double& peo, double& pgho, double& pho,
-double& pinco, double& plo, double& rtemsq, double& se2, double& se3,
-double& sgh2, double& sgh3, double& sgh4, double& sh2, double& sh3,
-double& si2, double& si3, double& sl2, double& sl3, double& sl4,
-double& s1, double& s2, double& s3, double& s4, double& s5,
-double& s6, double& s7, double& ss1, double& ss2, double& ss3,
-double& ss4, double& ss5, double& ss6, double& ss7, double& sz1,
-double& sz2, double& sz3, double& sz11, double& sz12, double& sz13,
-double& sz21, double& sz22, double& sz23, double& sz31, double& sz32,
-double& sz33, double& xgh2, double& xgh3, double& xgh4, double& xh2,
-double& xh3, double& xi2, double& xi3, double& xl2, double& xl3,
-double& xl4, double& nm, double& z1, double& z2, double& z3,
-double& z11, double& z12, double& z13, double& z21, double& z22,
-double& z23, double& z31, double& z32, double& z33, double& zmol,
-double& zmos
+real_t epoch, real_t ep, real_t argpp, real_t tc, real_t inclp,
+real_t nodep, real_t np,
+real_t& snodm, real_t& cnodm, real_t& sinim, real_t& cosim, real_t& sinomm,
+real_t& cosomm, real_t& day, real_t& e3, real_t& ee2, real_t& em,
+real_t& emsq, real_t& gam, real_t& peo, real_t& pgho, real_t& pho,
+real_t& pinco, real_t& plo, real_t& rtemsq, real_t& se2, real_t& se3,
+real_t& sgh2, real_t& sgh3, real_t& sgh4, real_t& sh2, real_t& sh3,
+real_t& si2, real_t& si3, real_t& sl2, real_t& sl3, real_t& sl4,
+real_t& s1, real_t& s2, real_t& s3, real_t& s4, real_t& s5,
+real_t& s6, real_t& s7, real_t& ss1, real_t& ss2, real_t& ss3,
+real_t& ss4, real_t& ss5, real_t& ss6, real_t& ss7, real_t& sz1,
+real_t& sz2, real_t& sz3, real_t& sz11, real_t& sz12, real_t& sz13,
+real_t& sz21, real_t& sz22, real_t& sz23, real_t& sz31, real_t& sz32,
+real_t& sz33, real_t& xgh2, real_t& xgh3, real_t& xgh4, real_t& xh2,
+real_t& xh3, real_t& xi2, real_t& xi3, real_t& xl2, real_t& xl3,
+real_t& xl4, real_t& nm, real_t& z1, real_t& z2, real_t& z3,
+real_t& z11, real_t& z12, real_t& z13, real_t& z21, real_t& z22,
+real_t& z23, real_t& z31, real_t& z32, real_t& z33, real_t& zmol,
+real_t& zmos
 );
 
 static void dsinit
 (
 //sgp4fix no longer needed pass in xke
 //gravconsttype whichconst,
-double xke,
-double cosim, double emsq, double argpo, double s1, double s2,
-double s3, double s4, double s5, double sinim, double ss1,
-double ss2, double ss3, double ss4, double ss5, double sz1,
-double sz3, double sz11, double sz13, double sz21, double sz23,
-double sz31, double sz33, double t, double tc, double gsto,
-double mo, double mdot, double no, double nodeo, double nodedot,
-double xpidot, double z1, double z3, double z11, double z13,
-double z21, double z23, double z31, double z33, double ecco,
-double eccsq, double& em, double& argpm, double& inclm, double& mm,
-double& nm, double& nodem,
+real_t xke,
+real_t cosim, real_t emsq, real_t argpo, real_t s1, real_t s2,
+real_t s3, real_t s4, real_t s5, real_t sinim, real_t ss1,
+real_t ss2, real_t ss3, real_t ss4, real_t ss5, real_t sz1,
+real_t sz3, real_t sz11, real_t sz13, real_t sz21, real_t sz23,
+real_t sz31, real_t sz33, real_t t, real_t tc, real_t gsto,
+real_t mo, real_t mdot, real_t no, real_t nodeo, real_t nodedot,
+real_t xpidot, real_t z1, real_t z3, real_t z11, real_t z13,
+real_t z21, real_t z23, real_t z31, real_t z33, real_t ecco,
+real_t eccsq, real_t& em, real_t& argpm, real_t& inclm, real_t& mm,
+real_t& nm, real_t& nodem,
 int& irez,
-double& atime, double& d2201, double& d2211, double& d3210, double& d3222,
-double& d4410, double& d4422, double& d5220, double& d5232, double& d5421,
-double& d5433, double& dedt, double& didt, double& dmdt, double& dndt,
-double& dnodt, double& domdt, double& del1, double& del2, double& del3,
-double& xfact, double& xlamo, double& xli, double& xni
+real_t& atime, real_t& d2201, real_t& d2211, real_t& d3210, real_t& d3222,
+real_t& d4410, real_t& d4422, real_t& d5220, real_t& d5232, real_t& d5421,
+real_t& d5433, real_t& dedt, real_t& didt, real_t& dmdt, real_t& dndt,
+real_t& dnodt, real_t& domdt, real_t& del1, real_t& del2, real_t& del3,
+real_t& xfact, real_t& xlamo, real_t& xli, real_t& xni
 );
 
 static void dspace
 (
 int irez,
-double d2201, double d2211, double d3210, double d3222, double d4410,
-double d4422, double d5220, double d5232, double d5421, double d5433,
-double dedt, double del1, double del2, double del3, double didt,
-double dmdt, double dnodt, double domdt, double argpo, double argpdot,
-double t, double tc, double gsto, double xfact, double xlamo,
-double no,
-double& atime, double& em, double& argpm, double& inclm, double& xli,
-double& mm, double& xni, double& nodem, double& dndt, double& nm
+real_t d2201, real_t d2211, real_t d3210, real_t d3222, real_t d4410,
+real_t d4422, real_t d5220, real_t d5232, real_t d5421, real_t d5433,
+real_t dedt, real_t del1, real_t del2, real_t del3, real_t didt,
+real_t dmdt, real_t dnodt, real_t domdt, real_t argpo, real_t argpdot,
+real_t t, real_t tc, real_t gsto, real_t xfact, real_t xlamo,
+real_t no,
+real_t& atime, real_t& em, real_t& argpm, real_t& inclm, real_t& xli,
+real_t& mm, real_t& xni, real_t& nodem, real_t& dndt, real_t& nm
 );
 
 // Unused
@@ -204,12 +204,12 @@ static void initl
 // int satn,
 // sgp4fix assin xke and j2
 // gravconsttype whichconst,
-double xke, double j2,
-double ecco, double epoch, double inclo, double& no,
+real_t xke, real_t j2,
+real_t ecco, real_t epoch, real_t inclo, real_t& no,
 char& method,
-double& ainv, double& ao, double& con41, double& con42, double& cosio,
-double& cosio2, double& eccsq, double& omeosq, double& posq,
-double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
+real_t& ainv, real_t& ao, real_t& con41, real_t& con42, real_t& cosio,
+real_t& cosio2, real_t& eccsq, real_t& omeosq, real_t& posq,
+real_t& rp, real_t& rteosq, real_t& sinio, real_t& gsto, char opsmode
 );
 #endif
 
@@ -285,22 +285,22 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
 
     static void dpper
         (
-        double e3, double ee2, double peo, double pgho, double pho,
-        double pinco, double plo, double se2, double se3, double sgh2,
-        double sgh3, double sgh4, double sh2, double sh3, double si2,
-        double si3, double sl2, double sl3, double sl4, double t,
-        double xgh2, double xgh3, double xgh4, double xh2, double xh3,
-        double xi2, double xi3, double xl2, double xl3, double xl4,
-        double zmol, double zmos, double inclo,
+        real_t e3, real_t ee2, real_t peo, real_t pgho, real_t pho,
+        real_t pinco, real_t plo, real_t se2, real_t se3, real_t sgh2,
+        real_t sgh3, real_t sgh4, real_t sh2, real_t sh3, real_t si2,
+        real_t si3, real_t sl2, real_t sl3, real_t sl4, real_t t,
+        real_t xgh2, real_t xgh3, real_t xgh4, real_t xh2, real_t xh3,
+        real_t xi2, real_t xi3, real_t xl2, real_t xl3, real_t xl4,
+        real_t zmol, real_t zmos, real_t inclo,
         char init,
-        double& ep, double& inclp, double& nodep, double& argpp, double& mp,
+        real_t& ep, real_t& inclp, real_t& nodep, real_t& argpp, real_t& mp,
         char opsmode
         )
     {
         (void) inclo;
         /* --------------------- local variables ------------------------ */
-        const double twopi = 2.0 * pi;
-        double alfdp, betdp, cosip, cosop, dalf, dbet, dls,
+        const real_t twopi = 2.0 * pi;
+        real_t alfdp, betdp, cosip, cosop, dalf, dbet, dls,
             f2, f3, pe, pgh, ph, pinc, pl,
             sel, ses, sghl, sghs, shll, shs, sil,
             sinip, sinop, sinzf, sis, sll, sls, xls,
@@ -488,41 +488,41 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
 
     static void dscom
         (
-        double epoch, double ep, double argpp, double tc, double inclp,
-        double nodep, double np,
-        double& snodm, double& cnodm, double& sinim, double& cosim, double& sinomm,
-        double& cosomm, double& day, double& e3, double& ee2, double& em,
-        double& emsq, double& gam, double& peo, double& pgho, double& pho,
-        double& pinco, double& plo, double& rtemsq, double& se2, double& se3,
-        double& sgh2, double& sgh3, double& sgh4, double& sh2, double& sh3,
-        double& si2, double& si3, double& sl2, double& sl3, double& sl4,
-        double& s1, double& s2, double& s3, double& s4, double& s5,
-        double& s6, double& s7, double& ss1, double& ss2, double& ss3,
-        double& ss4, double& ss5, double& ss6, double& ss7, double& sz1,
-        double& sz2, double& sz3, double& sz11, double& sz12, double& sz13,
-        double& sz21, double& sz22, double& sz23, double& sz31, double& sz32,
-        double& sz33, double& xgh2, double& xgh3, double& xgh4, double& xh2,
-        double& xh3, double& xi2, double& xi3, double& xl2, double& xl3,
-        double& xl4, double& nm, double& z1, double& z2, double& z3,
-        double& z11, double& z12, double& z13, double& z21, double& z22,
-        double& z23, double& z31, double& z32, double& z33, double& zmol,
-        double& zmos
+        real_t epoch, real_t ep, real_t argpp, real_t tc, real_t inclp,
+        real_t nodep, real_t np,
+        real_t& snodm, real_t& cnodm, real_t& sinim, real_t& cosim, real_t& sinomm,
+        real_t& cosomm, real_t& day, real_t& e3, real_t& ee2, real_t& em,
+        real_t& emsq, real_t& gam, real_t& peo, real_t& pgho, real_t& pho,
+        real_t& pinco, real_t& plo, real_t& rtemsq, real_t& se2, real_t& se3,
+        real_t& sgh2, real_t& sgh3, real_t& sgh4, real_t& sh2, real_t& sh3,
+        real_t& si2, real_t& si3, real_t& sl2, real_t& sl3, real_t& sl4,
+        real_t& s1, real_t& s2, real_t& s3, real_t& s4, real_t& s5,
+        real_t& s6, real_t& s7, real_t& ss1, real_t& ss2, real_t& ss3,
+        real_t& ss4, real_t& ss5, real_t& ss6, real_t& ss7, real_t& sz1,
+        real_t& sz2, real_t& sz3, real_t& sz11, real_t& sz12, real_t& sz13,
+        real_t& sz21, real_t& sz22, real_t& sz23, real_t& sz31, real_t& sz32,
+        real_t& sz33, real_t& xgh2, real_t& xgh3, real_t& xgh4, real_t& xh2,
+        real_t& xh3, real_t& xi2, real_t& xi3, real_t& xl2, real_t& xl3,
+        real_t& xl4, real_t& nm, real_t& z1, real_t& z2, real_t& z3,
+        real_t& z11, real_t& z12, real_t& z13, real_t& z21, real_t& z22,
+        real_t& z23, real_t& z31, real_t& z32, real_t& z33, real_t& zmol,
+        real_t& zmos
         )
     {
         /* -------------------------- constants ------------------------- */
-        const double zes = 0.01675;
-        const double zel = 0.05490;
-        const double c1ss = 2.9864797e-6;
-        const double c1l = 4.7968065e-7;
-        const double zsinis = 0.39785416;
-        const double zcosis = 0.91744867;
-        const double zcosgs = 0.1945905;
-        const double zsings = -0.98088458;
-        const double twopi = 2.0 * pi;
+        const real_t zes = 0.01675;
+        const real_t zel = 0.05490;
+        const real_t c1ss = 2.9864797e-6;
+        const real_t c1l = 4.7968065e-7;
+        const real_t zsinis = 0.39785416;
+        const real_t zcosis = 0.91744867;
+        const real_t zcosgs = 0.1945905;
+        const real_t zsings = -0.98088458;
+        const real_t twopi = 2.0 * pi;
 
         /* --------------------- local variables ------------------------ */
         int lsflg;
-        double a1, a2, a3, a4, a5, a6, a7,
+        real_t a1, a2, a3, a4, a5, a6, a7,
             a8, a9, a10, betasq, cc, ctem, stem,
             x1, x2, x3, x4, x5, x6, x7,
             x8, xnodce, xnoi, zcosg, zcosgl, zcosh, zcoshl,
@@ -771,29 +771,29 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
         (
         // sgp4fix just send in xke as a constant and eliminate getgravconst call
         // gravconsttype whichconst,
-        double xke,
-        double cosim, double emsq, double argpo, double s1, double s2,
-        double s3, double s4, double s5, double sinim, double ss1,
-        double ss2, double ss3, double ss4, double ss5, double sz1,
-        double sz3, double sz11, double sz13, double sz21, double sz23,
-        double sz31, double sz33, double t, double tc, double gsto,
-        double mo, double mdot, double no, double nodeo, double nodedot,
-        double xpidot, double z1, double z3, double z11, double z13,
-        double z21, double z23, double z31, double z33, double ecco,
-        double eccsq, double& em, double& argpm, double& inclm, double& mm,
-        double& nm, double& nodem,
+        real_t xke,
+        real_t cosim, real_t emsq, real_t argpo, real_t s1, real_t s2,
+        real_t s3, real_t s4, real_t s5, real_t sinim, real_t ss1,
+        real_t ss2, real_t ss3, real_t ss4, real_t ss5, real_t sz1,
+        real_t sz3, real_t sz11, real_t sz13, real_t sz21, real_t sz23,
+        real_t sz31, real_t sz33, real_t t, real_t tc, real_t gsto,
+        real_t mo, real_t mdot, real_t no, real_t nodeo, real_t nodedot,
+        real_t xpidot, real_t z1, real_t z3, real_t z11, real_t z13,
+        real_t z21, real_t z23, real_t z31, real_t z33, real_t ecco,
+        real_t eccsq, real_t& em, real_t& argpm, real_t& inclm, real_t& mm,
+        real_t& nm, real_t& nodem,
         int& irez,
-        double& atime, double& d2201, double& d2211, double& d3210, double& d3222,
-        double& d4410, double& d4422, double& d5220, double& d5232, double& d5421,
-        double& d5433, double& dedt, double& didt, double& dmdt, double& dndt,
-        double& dnodt, double& domdt, double& del1, double& del2, double& del3,
-        double& xfact, double& xlamo, double& xli, double& xni
+        real_t& atime, real_t& d2201, real_t& d2211, real_t& d3210, real_t& d3222,
+        real_t& d4410, real_t& d4422, real_t& d5220, real_t& d5232, real_t& d5421,
+        real_t& d5433, real_t& dedt, real_t& didt, real_t& dmdt, real_t& dndt,
+        real_t& dnodt, real_t& domdt, real_t& del1, real_t& del2, real_t& del3,
+        real_t& xfact, real_t& xlamo, real_t& xli, real_t& xni
         )
     {
         /* --------------------- local variables ------------------------ */
-        const double twopi = 2.0 * pi;
+        const real_t twopi = 2.0 * pi;
 
-        double ainv2, aonv = 0.0, cosisq, eoc, f220, f221, f311,
+        real_t ainv2, aonv = 0.0, cosisq, eoc, f220, f221, f311,
             f321, f322, f330, f441, f442, f522, f523,
             f542, f543, g200, g201, g211, g300, g310,
             g322, g410, g422, g520, g521, g532, g533,
@@ -1069,19 +1069,19 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
     static void dspace
         (
         int irez,
-        double d2201, double d2211, double d3210, double d3222, double d4410,
-        double d4422, double d5220, double d5232, double d5421, double d5433,
-        double dedt, double del1, double del2, double del3, double didt,
-        double dmdt, double dnodt, double domdt, double argpo, double argpdot,
-        double t, double tc, double gsto, double xfact, double xlamo,
-        double no,
-        double& atime, double& em, double& argpm, double& inclm, double& xli,
-        double& mm, double& xni, double& nodem, double& dndt, double& nm
+        real_t d2201, real_t d2211, real_t d3210, real_t d3222, real_t d4410,
+        real_t d4422, real_t d5220, real_t d5232, real_t d5421, real_t d5433,
+        real_t dedt, real_t del1, real_t del2, real_t del3, real_t didt,
+        real_t dmdt, real_t dnodt, real_t domdt, real_t argpo, real_t argpdot,
+        real_t t, real_t tc, real_t gsto, real_t xfact, real_t xlamo,
+        real_t no,
+        real_t& atime, real_t& em, real_t& argpm, real_t& inclm, real_t& xli,
+        real_t& mm, real_t& xni, real_t& nodem, real_t& dndt, real_t& nm
         )
     {
-        const double twopi = 2.0 * pi;
+        const real_t twopi = 2.0 * pi;
         int iretn, iret;
-        double delt, ft, theta, x2li, x2omi, xl, xldot, xnddt, xndt, xomi, g22, g32,
+        real_t delt, ft, theta, x2li, x2omi, xl, xldot, xnddt, xndt, xomi, g22, g32,
             g44, g52, g54, fasx2, fasx4, fasx6, rptim, step2, stepn, stepp;
 
         fasx2 = 0.13130908;
@@ -1275,21 +1275,21 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
         // int satn,
         // sgp4fix just pass in xke and j2
         // gravconsttype whichconst,
-        double xke, double j2,
-        double ecco, double epoch, double inclo, double no_kozai, char opsmode,
-        char& method, double& ainv, double& ao, double& con41, double& con42, double& cosio,
-        double& cosio2, double& eccsq, double& omeosq, double& posq,
-        double& rp, double& rteosq, double& sinio, double& gsto, double& no_unkozai
+        real_t xke, real_t j2,
+        real_t ecco, real_t epoch, real_t inclo, real_t no_kozai, char opsmode,
+        char& method, real_t& ainv, real_t& ao, real_t& con41, real_t& con42, real_t& cosio,
+        real_t& cosio2, real_t& eccsq, real_t& omeosq, real_t& posq,
+        real_t& rp, real_t& rteosq, real_t& sinio, real_t& gsto, real_t& no_unkozai
         )
     {
         (void) opsmode;
         /* --------------------- local variables ------------------------ */
-        double ak, d1, del, adel, po, x2o3;
+        real_t ak, d1, del, adel, po, x2o3;
 
         // sgp4fix use old way of finding gst
-        double ds70;
-        double ts70, tfrac, c1, thgr70, fk5r, c1p2p;
-        const double twopi = 2.0 * pi;
+        real_t ds70;
+        real_t ts70, tfrac, c1, thgr70, fk5r, c1p2p;
+        const real_t twopi = 2.0 * pi;
 
         /* ----------------------- earth constants ---------------------- */
         // sgp4fix identify constants and allow alternate values
@@ -1336,7 +1336,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
         thgr70 = 1.7321343856509374;
         fk5r = 5.07551419432269442e-15;
         c1p2p = c1 + twopi;
-        double gsto1 = fmod(thgr70 + c1*ds70 + c1p2p*tfrac + ts70*ts70*fk5r, twopi);
+        real_t gsto1 = fmod(thgr70 + c1*ds70 + c1p2p*tfrac + ts70*ts70*fk5r, twopi);
         if (gsto1 < 0.0)
         {
             gsto1 = gsto1 + twopi;
@@ -1433,14 +1433,14 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
 
     bool sgp4init
         (
-        gravconsttype whichconst, char opsmode, const char satn[5], const double epoch,
-        const double xbstar, const double xndot, const double xnddot, const double xecco, const double xargpo,
-        const double xinclo, const double xmo, const double xno_kozai,
-        const double xnodeo, elsetrec& satrec
+        gravconsttype whichconst, char opsmode, const char satn[5], const real_t epoch,
+        const real_t xbstar, const real_t xndot, const real_t xnddot, const real_t xecco, const real_t xargpo,
+        const real_t xinclo, const real_t xmo, const real_t xno_kozai,
+        const real_t xnodeo, elsetrec& satrec
         )
     {
         /* --------------------- local variables ------------------------ */
-        double ao, ainv, con42, cosio, sinio, cosio2, eccsq,
+        real_t ao, ainv, con42, cosio, sinio, cosio2, eccsq,
             omeosq, posq, rp, rteosq,
             cnodm, snodm, cosim, sinim, cosomm, sinomm, cc1sq,
             cc2, cc3, coef, coef1, cosio4, day, dndt,
@@ -1460,7 +1460,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
         // sgp4fix divisor for divide by zero check on inclination
         // the old check used 1.0 + cos(pi-1.0e-9), but then compared it to
         // 1.5 e-12, so the threshold was changed to 1.5e-12 for consistency
-        const double temp4 = 1.5e-12;
+        const real_t temp4 = 1.5e-12;
 
         /* ----------- set all near earth variables to zero ------------ */
         satrec.isimp = 0;   satrec.method = 'n'; satrec.aycof = 0.0;
@@ -1819,11 +1819,11 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
 
     bool sgp4
         (
-        elsetrec& satrec, double tsince,
-        double r[3], double v[3]
+        elsetrec& satrec, real_t tsince,
+        real_t r[3], real_t v[3]
         )
     {
-        double am, axnl, aynl, betal, cosim, cnod,
+        real_t am, axnl, aynl, betal, cosim, cnod,
             cos2u, coseo1, cosi, cosip, cosisq, cossu, cosu,
             delm, delomg, em, emsq, ecose, el2, eo1,
             ep, esine, argpm, argpp, argpdf, pl, mrt = 0.0,
@@ -1841,7 +1841,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
         // sgp4fix divisor for divide by zero check on inclination
         // the old check used 1.0 + cos(pi-1.0e-9), but then compared it to
         // 1.5 e-12, so the threshold was changed to 1.5e-12 for consistency
-        const double temp4 = 1.5e-12;
+        const real_t temp4 = 1.5e-12;
         twopi = 2.0 * pi;
         x2o3 = 2.0 / 3.0;
         // sgp4fix identify constants and allow alternate values
@@ -2152,14 +2152,14 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
     void getgravconst
         (
         gravconsttype whichconst,
-        double& tumin,
-        double& mus,
-        double& radiusearthkm,
-        double& xke,
-        double& j2,
-        double& j3,
-        double& j4,
-        double& j3oj2
+        real_t& tumin,
+        real_t& mus,
+        real_t& radiusearthkm,
+        real_t& xke,
+        real_t& j2,
+        real_t& j3,
+        real_t& j4,
+        real_t& j3oj2
         )
     {
 
@@ -2254,15 +2254,15 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
         char longstr1[130], char longstr2[130],
         char typerun, char typeinput, char opsmode,
         gravconsttype whichconst,
-        double& startmfe, double& stopmfe, double& deltamin,
+        real_t& startmfe, real_t& stopmfe, real_t& deltamin,
         elsetrec& satrec
         )
     {
-        const double deg2rad = pi / 180.0;         //   0.0174532925199433
-        const double xpdotp = 1440.0 / (2.0 *pi);  // 229.1831180523293
+        const real_t deg2rad = pi / 180.0;         //   0.0174532925199433
+        const real_t xpdotp = 1440.0 / (2.0 *pi);  // 229.1831180523293
 
-        double sec;
-        double startsec, stopsec, startdayofyr, stopdayofyr, jdstart, jdstop, jdstartF, jdstopF;
+        real_t sec;
+        real_t startsec, stopsec, startdayofyr, stopdayofyr, jdstart, jdstop, jdstartF, jdstopF;
         int startyear, stopyear, startmon, stopmon, startday, stopday,
             starthr, stophr, startmin, stopmin;
         int cardnumb, j;
@@ -2543,7 +2543,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
     *    gstime      - greenwich sidereal time        0 to 2pi rad
     *
     *  locals        :
-    *    temp        - temporary variable for doubles   rad
+    *    temp        - temporary variable for real_ts   rad
     *    tut1        - julian centuries from the
     *                  jan 1, 2000 12 h epoch (ut1)
     *
@@ -2554,14 +2554,14 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
     *    vallado       2013, 187, eq 3-45
     * --------------------------------------------------------------------------- */
 
-    double  gstime_SGP4
+    real_t  gstime_SGP4
         (
-        double jdut1
+        real_t jdut1
         )
     {
-        const double twopi = 2.0 * pi;
-        const double deg2rad = pi / 180.0;
-        double       temp, tut1;
+        const real_t twopi = 2.0 * pi;
+        const real_t deg2rad = pi / 180.0;
+        real_t       temp, tut1;
 
         tut1 = (jdut1 - 2451545.0) / 36525.0;
         temp = -6.2e-6* tut1 * tut1 * tut1 + 0.093104 * tut1 * tut1 +
@@ -2575,9 +2575,9 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
         return temp;
     }  // gstime
 
-    double  sgn_SGP4
+    real_t  sgn_SGP4
         (
-        double x
+        real_t x
         )
     {
         if (x < 0.0)
@@ -2612,9 +2612,9 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
     *    none.
     * --------------------------------------------------------------------------- */
 
-    double  mag_SGP4
+    real_t  mag_SGP4
         (
-        double x[3]
+        real_t x[3]
         )
     {
         return sqrt(x[0] * x[0] + x[1] * x[1] + x[2] * x[2]);
@@ -2644,7 +2644,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
 
     void    cross_SGP4
         (
-        double vec1[3], double vec2[3], double outvec[3]
+        real_t vec1[3], real_t vec2[3], real_t outvec[3]
         )
     {
         outvec[0] = vec1[1] * vec2[2] - vec1[2] * vec2[1];
@@ -2675,9 +2675,9 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
     *    none.
     * --------------------------------------------------------------------------- */
 
-    double  dot_SGP4
+    real_t  dot_SGP4
         (
-        double x[3], double y[3]
+        real_t x[3], real_t y[3]
         )
     {
         return (x[0] * y[0] + x[1] * y[1] + x[2] * y[2]);
@@ -2707,13 +2707,13 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
     *    dot           dot product of two vectors
     * --------------------------------------------------------------------------- */
 
-    double  angle_SGP4
+    real_t  angle_SGP4
         (
-        double vec1[3],
-        double vec2[3]
+        real_t vec1[3],
+        real_t vec2[3]
         )
     {
-        double small, undefined, magv1, magv2, temp;
+        real_t small, undefined, magv1, magv2, temp;
         small = 0.00000001;
         undefined = 999999.1;
 
@@ -2753,9 +2753,9 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
     *    none.
     * --------------------------------------------------------------------------- */
 
-    double  asinh_SGP4
+    real_t  asinh_SGP4
         (
-        double xval
+        real_t xval
         )
     {
         return log(xval + sqrt(xval*xval + 1.0));
@@ -2769,7 +2769,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
     *  this function solves keplers equation when the true anomaly is known.
     *    the mean and eccentric, parabolic, or hyperbolic anomaly is also found.
     *    the parabolic limit at 168ø is arbitrary. the hyperbolic anomaly is also
-    *    limited. the hyperbolic sine is used because it's not double valued.
+    *    limited. the hyperbolic sine is used because it's not real_t valued.
     *
     *  author        : david vallado                  719-573-2600   27 may 2002
     *
@@ -2799,11 +2799,11 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
 
     void newtonnu_SGP4
         (
-        double ecc, double nu,
-        double& e0, double& m
+        real_t ecc, real_t nu,
+        real_t& e0, real_t& m
         )
     {
-        double small, sine, cose;
+        real_t small, sine, cose;
 
         // ---------------------  implementation   ---------------------
         e0 = 999999.9;
@@ -2913,12 +2913,12 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
 
     void rv2coe_SGP4
         (
-        double r[3], double v[3], double mus,
-        double& p, double& a, double& ecc, double& incl, double& omega, double& argp,
-        double& nu, double& m, double& arglat, double& truelon, double& lonper
+        real_t r[3], real_t v[3], real_t mus,
+        real_t& p, real_t& a, real_t& ecc, real_t& incl, real_t& omega, real_t& argp,
+        real_t& nu, real_t& m, real_t& arglat, real_t& truelon, real_t& lonper
         )
     {
-        double undefined, small, hbar[3], nbar[3], magr, magv, magn, ebar[3], sme,
+        real_t undefined, small, hbar[3], nbar[3], magr, magv, magn, ebar[3], sme,
             rdotv, infinite, temp, c1, hk, twopi, magh, halfpi, e;
 
         int i;
@@ -3150,8 +3150,8 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
 
     void    jday_SGP4
         (
-        uint16_t year, uint8_t mon, uint8_t day, uint8_t hr, uint8_t minute, double sec,
-        double * jd, double * jdFrac
+        uint16_t year, uint8_t mon, uint8_t day, uint8_t hr, uint8_t minute, real_t sec,
+        real_t * jd, real_t * jdFrac
         )
     {
         jd = 367.0 * year -
@@ -3163,7 +3163,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
         // check that the day and fractional day are correct
         if (fabs(jdFrac) > 1.0)
         {
-            double dtt = floor(jdFrac);
+            real_t dtt = floor(jdFrac);
             jd = jd + dtt;
             jdFrac = jdFrac - dtt;
         }
@@ -3211,12 +3211,12 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
 
     void    days2mdhms_SGP4
         (
-        uint16_t year, double days,
-        uint8_t * mon, uint8_t * day, uint8_t * hr, uint8_t * minute, double * sec
+        uint16_t year, real_t days,
+        uint8_t * mon, uint8_t * day, uint8_t * hr, uint8_t * minute, real_t * sec
         )
     {
         int i, inttemp, dayofyr;
-        double    temp;
+        real_t    temp;
         int lmonth[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
         dayofyr = (int)floor(days);
@@ -3273,7 +3273,7 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
     *                  portion of a day               days
     *    tu          - julian centuries from 0 h
     *                  jan 0, 1900
-    *    temp        - temporary double values
+    *    temp        - temporary real_t values
     *    leapyrs     - number of leap years from 1900
     *
     *  coupling      :
@@ -3285,13 +3285,13 @@ double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
 
     void    invjday_SGP4
         (
-        double jd, double jdFrac,
+        real_t jd, real_t jdFrac,
         uint16_t * year, uint8_t * mon, uint8_t * day,
-        uint8_t * hr, uint8_t * minute, double * sec
+        uint8_t * hr, uint8_t * minute, real_t * sec
         )
     {
         int leapyrs;
-        double dt, days, tu, temp;
+        real_t dt, days, tu, temp;
 
         // check jdfrac for multiple days
         if (fabs(jdfrac) >= 1.0)

@@ -117,9 +117,9 @@ enum perturb_Sgp4Error {
 /// were any issues with TLE initialization or propagation. The primary method
 /// of running the SGP4 algorithm is the `Satellite::propagate` method.
 struct perturb_Satellite {
-    char satnum[6];  ///< Satellite number as an unparsed string
+    char satnum[6];
 
-    int epochyr;        ///< [year] Two-digit epoch year in [1957, 2056]
+    int epochyr;
     int epochtynumrev;  ///< ???
 
     int error;  ///< Latched error code from previous function call
@@ -171,65 +171,65 @@ enum perturb_Sgp4Error perturb_propagate_days_from_epoch(
 );
 
 bool sgp4init(
-    enum perturb_GravityModel whichconst, char opsmode, const char satn[5], const double epoch,
-    const double xbstar, const double xndot, const double xnddot, const double xecco,
-    const double xargpo, const double xinclo, const double xmo, const double xno,
-    const double xnodeo, struct perturb_Satellite * satrec
+    enum perturb_GravityModel whichconst, char opsmode, const char satn[5], const perturb_real_t epoch,
+    const perturb_real_t xbstar, const perturb_real_t xndot, const perturb_real_t xnddot, const perturb_real_t xecco,
+    const perturb_real_t xargpo, const perturb_real_t xinclo, const perturb_real_t xmo, const perturb_real_t xno,
+    const perturb_real_t xnodeo, struct perturb_Satellite * satrec
 );
 
 bool sgp4(
     // no longer need gravconsttype whichconst, all data contained in satrec
-    struct perturb_Satellite * satrec, double tsince, double r[3], double v[3]
+    struct perturb_Satellite * satrec, perturb_real_t tsince, perturb_real_t r[3], perturb_real_t v[3]
 );
 
 void getgravconst(
-    enum perturb_GravityModel whichconst, double * tumin, double * mus, double * radiusearthkm,
-    double * xke, double * j2, double * j3, double * j4, double * j3oj2
+    enum perturb_GravityModel whichconst, perturb_real_t * tumin, perturb_real_t * mus, perturb_real_t * radiusearthkm,
+    perturb_real_t * xke, perturb_real_t * j2, perturb_real_t * j3, perturb_real_t * j4, perturb_real_t * j3oj2
 );
 
 #ifndef PERTURB_DISABLE_IO
 // older sgp4io methods
 void twoline2rv(
     char longstr1[130], char longstr2[130], char typerun, char typeinput, char opsmode,
-    enum perturb_GravityModel whichconst, double * startmfe, double * stopmfe, double * deltamin,
+    enum perturb_GravityModel whichconst, perturb_real_t * startmfe, perturb_real_t * stopmfe, perturb_real_t * deltamin,
     struct perturb_Satellite * satrec
 );
 #endif  // PERTURB_DISABLE_IO
 
-double gstime_SGP4(double jdut1);
+perturb_real_t gstime_SGP4(perturb_real_t jdut1);
 
-double sgn_SGP4(double x);
+perturb_real_t sgn_SGP4(perturb_real_t x);
 
-double mag_SGP4(double x[3]);
+perturb_real_t mag_SGP4(perturb_real_t x[3]);
 
-void cross_SGP4(double vec1[3], double vec2[3], double outvec[3]);
+void cross_SGP4(perturb_real_t vec1[3], perturb_real_t vec2[3], perturb_real_t outvec[3]);
 
-double dot_SGP4(double x[3], double y[3]);
+perturb_real_t dot_SGP4(perturb_real_t x[3], perturb_real_t y[3]);
 
-double angle_SGP4(double vec1[3], double vec2[3]);
+perturb_real_t angle_SGP4(perturb_real_t vec1[3], perturb_real_t vec2[3]);
 
-void newtonnu_SGP4(double ecc, double nu, double * e0, double * m);
+void newtonnu_SGP4(perturb_real_t ecc, perturb_real_t nu, perturb_real_t * e0, perturb_real_t * m);
 
-double asinh_SGP4(double xval);
+perturb_real_t asinh_SGP4(perturb_real_t xval);
 
 void rv2coe_SGP4(
-    const double r[3], const double v[3], double mus, double * p, double * a, double * ecc,
-    double * incl, double * omega, double * argp, double * nu, double * m, double * arglat,
-    double * truelon, double * lonper
+    const perturb_real_t r[3], const perturb_real_t v[3], perturb_real_t mus, perturb_real_t * p, perturb_real_t * a, perturb_real_t * ecc,
+    perturb_real_t * incl, perturb_real_t * omega, perturb_real_t * argp, perturb_real_t * nu, perturb_real_t * m, perturb_real_t * arglat,
+    perturb_real_t * truelon, perturb_real_t * lonper
 );
 
 void jday_SGP4(
-    uint16_t year, uint8_t mon, uint8_t day, uint8_t hr, uint8_t minute, double sec,
-    double * jd, double * jdFrac
+    uint16_t year, uint8_t mon, uint8_t day, uint8_t hr, uint8_t minute, perturb_real_t sec,
+    perturb_real_t * jd, perturb_real_t * jdFrac
 );
 
 void days2mdhms_SGP4(
-    uint16_t year, double days, uint8_t * mon, uint8_t * day, uint8_t * hr, uint8_t * minute, double * sec
+    uint16_t year, perturb_real_t days, uint8_t * mon, uint8_t * day, uint8_t * hr, uint8_t * minute, perturb_real_t * sec
 );
 
 void invjday_SGP4(
-    double jd, double jdFrac, uint16_t * year, uint8_t * mon, uint8_t * day, uint8_t * hr, uint8_t * minute,
-    double * sec
+    perturb_real_t jd, perturb_real_t jdFrac, uint16_t * year, uint8_t * mon, uint8_t * day, uint8_t * hr, uint8_t * minute,
+    perturb_real_t * sec
 );
 
 #ifdef __cplusplus

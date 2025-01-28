@@ -74,7 +74,7 @@ struct perturb_TwoLineElement {
     // clang-format off
 
     // Line 1 - Metadata
-    char  catalog_number[6];            ///< Satellite catalog number as a string
+    char  catalog_number[6];            ///< Satellite catalog number as an unparsed string
     char  classification;               ///< Classification {U: Unclassified, C: Classified, S: Secret}
 
     // Line 1 - Launch
@@ -83,11 +83,11 @@ struct perturb_TwoLineElement {
     char      launch_piece[4];          ///< International Designator - Piece of launch
 
     // Line 1 - Epoch Time
-    uint8_t         epoch_year;         ///< Epoch year (last two digits)
-    perturb_real_t  epoch_day_of_year;  ///< Epoch fractional day of year
+    uint8_t         epoch_year;         ///< Two-digit epoch year in [1957, 2056] [year]
+    perturb_real_t  epoch_day_of_year;  ///< Epoch fractional day of year in [0, 366] [day]
 
     // Line 1 - Trajectory
-    perturb_real_t  n_dot;              ///< First derivative of mean motion (ballistic coefficient) [rev/day^2]
+    perturb_real_t  n_dot;              ///< First derivative of mean motion (ballistic coefficient)
     perturb_real_t  n_ddot;             ///< Second derivative of mean motion [rev/day^3]
     perturb_real_t  b_star;             ///< B* radiation pressure coefficient [1 / (earth radii)]
 
