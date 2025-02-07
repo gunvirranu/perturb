@@ -539,12 +539,12 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         *snodm = sin(nodep);
         *cnodm = cos(nodep);
         *sinomm = sin(argpp);
-        (*cosomm) = cos(argpp);
-        (*sinim) = sin(inclp);
-        (*cosim) = cos(inclp);
+        *cosomm = cos(argpp);
+        *sinim = sin(inclp);
+        *cosim = cos(inclp);
         *emsq = (*em) * (*em);
         betasq = 1.0 - (*emsq);
-        rtemsq = sqrt(betasq);
+        *rtemsq = sqrt(betasq);
 
         /* ----------------- initialize lunar solar terms --------------- */
         peo = 0.0;
@@ -618,8 +618,8 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
             z2 = z2 + z2 + betasq * z32;
             z3 = z3 + z3 + betasq * z33;
             s3 = cc * xnoi;
-            s2 = -0.5 * s3 / rtemsq;
-            s4 = s3 * rtemsq;
+            s2 = -0.5 * s3 / (*rtemsq);
+            s4 = s3 * (*rtemsq);
             s1 = -15.0 * (*em) * s4;
             s5 = x1 * x3 + x2 * x4;
             s6 = x2 * x3 + x1 * x4;
