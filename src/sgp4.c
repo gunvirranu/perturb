@@ -376,7 +376,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
                 pgh = pgh - cosip * ph;
                 *argpp += pgh;
                 *nodep += ph;
-                mp = mp + pl;
+                *mp += pl;
             }
             else
             {
@@ -394,7 +394,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
                 // nodep used without a trigonometric function ahead
                 if ((*nodep < 0.0) && (opsmode == 'a'))
                     *nodep += twopi;
-                xls = mp + (*argpp) + cosip * (*nodep);
+                xls = (*mp) + (*argpp) + cosip * (*nodep);
                 dls = pl + pgh - pinc * (*nodep) * sinip;
                 xls = xls + dls;
                 xnoh = *nodep;
@@ -415,8 +415,8 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
                         *nodep -= twopi;
                     }
                 }
-                mp = mp + pl;
-                *argpp = xls - mp - cosip * (*nodep);
+                (*mp) += pl;
+                *argpp = xls - (*mp) - cosip * (*nodep);
             }
         }   // if init == 'n'
 
