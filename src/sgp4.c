@@ -1153,11 +1153,11 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
                 if (irez != 2)
                 {
                     xndt = del1 * sin(*xli - fasx2) + del2 * sin(2.0 * (*xli - fasx4)) +
-                        del3 * sin(3.0 * (xli - fasx6));
+                        del3 * sin(3.0 * (*xli - fasx6));
                     xldot = (*xni) + xfact;
-                    xnddt = del1 * cos(xli - fasx2) +
-                        2.0 * del2 * cos(2.0 * (xli - fasx4)) +
-                        3.0 * del3 * cos(3.0 * (xli - fasx6));
+                    xnddt = del1 * cos(*xli - fasx2) +
+                        2.0 * del2 * cos(2.0 * (*xli - fasx4)) +
+                        3.0 * del3 * cos(3.0 * (*xli - fasx6));
                     xnddt = xnddt * xldot;
                 }
                 else
@@ -1165,16 +1165,16 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
                     /* --------- near - half-day resonance terms -------- */
                     xomi = argpo + argpdot * (*atime);
                     x2omi = xomi + xomi;
-                    x2li = xli + xli;
-                    xndt = d2201 * sin(x2omi + xli - g22) + d2211 * sin(xli - g22) +
-                        d3210 * sin(xomi + xli - g32) + d3222 * sin(-xomi + xli - g32) +
+                    x2li = (*xli) + (*xli);
+                    xndt = d2201 * sin(x2omi + (*xli) - g22) + d2211 * sin((*xli) - g22) +
+                        d3210 * sin(xomi + (*xli) - g32) + d3222 * sin(-xomi + (*xli) - g32) +
                         d4410 * sin(x2omi + x2li - g44) + d4422 * sin(x2li - g44) +
-                        d5220 * sin(xomi + xli - g52) + d5232 * sin(-xomi + xli - g52) +
+                        d5220 * sin(xomi + (*xli) - g52) + d5232 * sin(-xomi + (*xli) - g52) +
                         d5421 * sin(xomi + x2li - g54) + d5433 * sin(-xomi + x2li - g54);
                     xldot = (*xni) + xfact;
-                    xnddt = d2201 * cos(x2omi + xli - g22) + d2211 * cos(xli - g22) +
-                        d3210 * cos(xomi + xli - g32) + d3222 * cos(-xomi + xli - g32) +
-                        d5220 * cos(xomi + xli - g52) + d5232 * cos(-xomi + xli - g52) +
+                    xnddt = d2201 * cos(x2omi + (*xli) - g22) + d2211 * cos((*xli) - g22) +
+                        d3210 * cos(xomi + (*xli) - g32) + d3222 * cos(-xomi + (*xli) - g32) +
+                        d5220 * cos(xomi + (*xli) - g52) + d5232 * cos(-xomi + (*xli) - g52) +
                         2.0 * (d4410 * cos(x2omi + x2li - g44) +
                         d4422 * cos(x2li - g44) + d5421 * cos(xomi + x2li - g54) +
                         d5433 * cos(-xomi + x2li - g54));
@@ -1204,7 +1204,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
             (void) iret;  // Probably some old variable not used anymore
 
             (*nm) = (*xni) + xndt * ft + xnddt * ft * ft * 0.5;
-            xl = xli + xldot * ft + xndt * ft * ft * 0.5;
+            xl = (*xli) + xldot * ft + xndt * ft * ft * 0.5;
             if (irez != 1)
             {
                 mm = xl - 2.0 * nodem + 2.0 * theta;
