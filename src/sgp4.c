@@ -536,7 +536,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
 
         *nm = np;
         *em = ep;
-        snodm = sin(nodep);
+        *snodm = sin(nodep);
         cnodm = cos(nodep);
         sinomm = sin(argpp);
         cosomm = cos(argpp);
@@ -574,7 +574,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         zcosi = zcosis;
         zsini = zsinis;
         zcosh = cnodm;
-        zsinh = snodm;
+        zsinh = *snodm;
         cc = c1ss;
         xnoi = 1.0 / (*nm);
 
@@ -651,8 +651,8 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
                 zsing = zsingl;
                 zcosi = zcosil;
                 zsini = zsinil;
-                zcosh = zcoshl * cnodm + zsinhl * snodm;
-                zsinh = snodm * zcoshl - cnodm * zsinhl;
+                zcosh = zcoshl * cnodm + zsinhl * (*snodm);
+                zsinh = (*snodm) * zcoshl - cnodm * zsinhl;
                 cc = c1l;
             }
         }
