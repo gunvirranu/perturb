@@ -375,48 +375,48 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
                 ph = ph / sinip;
                 pgh = pgh - cosip * ph;
                 *argpp += pgh;
-                nodep = nodep + ph;
+                *nodep += ph;
                 mp = mp + pl;
             }
             else
             {
                 /* ---- apply periodics with lyddane modification ---- */
-                sinop = sin(nodep);
-                cosop = cos(nodep);
+                sinop = sin(*nodep);
+                cosop = cos(*nodep);
                 alfdp = sinip * sinop;
                 betdp = sinip * cosop;
                 dalf = ph * cosop + pinc * cosip * sinop;
                 dbet = -ph * sinop + pinc * cosip * cosop;
                 alfdp = alfdp + dalf;
                 betdp = betdp + dbet;
-                nodep = fmod(nodep, twopi);
+                *nodep = fmod(*nodep, twopi);
                 //  sgp4fix for afspc written intrinsic functions
                 // nodep used without a trigonometric function ahead
-                if ((nodep < 0.0) && (opsmode == 'a'))
-                    nodep = nodep + twopi;
-                xls = mp + *argpp + cosip * nodep;
-                dls = pl + pgh - pinc * nodep * sinip;
+                if ((*nodep < 0.0) && (opsmode == 'a'))
+                    *nodep += twopi;
+                xls = mp + (*argpp) + cosip * (*nodep);
+                dls = pl + pgh - pinc * (*nodep) * sinip;
                 xls = xls + dls;
-                xnoh = nodep;
-                nodep = atan2(alfdp, betdp);
+                xnoh = *nodep;
+                *nodep = atan2(alfdp, betdp);
                 //  sgp4fix for afspc written intrinsic functions
                 // nodep used without a trigonometric function ahead
-                if ((nodep < 0.0) && (opsmode == 'a'))
+                if ((*nodep < 0.0) && (opsmode == 'a'))
                 {
-                    nodep = nodep + twopi;
+                    *nodep += twopi;
                 }
-                if (fabs(xnoh - nodep) > PI) {
-                    if (nodep < xnoh)
+                if (fabs(xnoh - *nodep) > PI) {
+                    if (*nodep < xnoh)
                     {
-                        nodep = nodep + twopi;
+                        *nodep += twopi;
                     }
                     else
                     {
-                        nodep = nodep - twopi;
+                        *nodep -= twopi;
                     }
                 }
                 mp = mp + pl;
-                *argpp = xls - mp - cosip * nodep;
+                *argpp = xls - mp - cosip * (*nodep);
             }
         }   // if init == 'n'
 
