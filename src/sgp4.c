@@ -560,11 +560,11 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         zsinil = sqrt(1.0 - zcosil * zcosil);
         zsinhl = 0.089683511 * stem / zsinil;
         zcoshl = sqrt(1.0 - zsinhl * zsinhl);
-        gam = 5.8351514 + 0.0019443680 * (*day);
+        *gam = 5.8351514 + 0.0019443680 * (*day);
         zx = 0.39785416 * stem / zsinil;
         zy = zcoshl * ctem + 0.91744867 * zsinhl * stem;
         zx = atan2(zx, zy);
-        zx = gam + zx - xnodce;
+        zx += *gam - xnodce;
         zcosgl = cos(zx);
         zsingl = sin(zx);
 
@@ -657,7 +657,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
             }
         }
 
-        zmol = fmod(4.7199672 + 0.22997150  * (*day) - gam, twopi);
+        zmol = fmod(4.7199672 + 0.22997150  * (*day) - (*gam), twopi);
         zmos = fmod(6.2565837 + 0.017201977 * (*day), twopi);
 
         /* ------------------------ do solar terms ---------------------- */
