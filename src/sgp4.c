@@ -549,18 +549,18 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         /* ----------------- initialize lunar solar terms --------------- */
         *peo = 0.0;
         *pinco = 0.0;
-        plo = 0.0;
-        pgho = 0.0;
-        pho = 0.0;
-        day = epoch + 18261.5 + tc / 1440.0;
-        xnodce = fmod(4.5236020 - 9.2422029e-4 * day, twopi);
+        *plo = 0.0;
+        *pgho = 0.0;
+        *pho = 0.0;
+        *day = epoch + 18261.5 + tc / 1440.0;
+        xnodce = fmod(4.5236020 - 9.2422029e-4 * (*day), twopi);
         stem = sin(xnodce);
         ctem = cos(xnodce);
         zcosil = 0.91375164 - 0.03568096 * ctem;
         zsinil = sqrt(1.0 - zcosil * zcosil);
         zsinhl = 0.089683511 * stem / zsinil;
         zcoshl = sqrt(1.0 - zsinhl * zsinhl);
-        gam = 5.8351514 + 0.0019443680 * day;
+        gam = 5.8351514 + 0.0019443680 * (*day);
         zx = 0.39785416 * stem / zsinil;
         zy = zcoshl * ctem + 0.91744867 * zsinhl * stem;
         zx = atan2(zx, zy);
@@ -657,8 +657,8 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
             }
         }
 
-        zmol = fmod(4.7199672 + 0.22997150  * day - gam, twopi);
-        zmos = fmod(6.2565837 + 0.017201977 * day, twopi);
+        zmol = fmod(4.7199672 + 0.22997150  * (*day) - gam, twopi);
+        zmos = fmod(6.2565837 + 0.017201977 * (*day), twopi);
 
         /* ------------------------ do solar terms ---------------------- */
         se2 = 2.0 * ss1 * ss6;
@@ -3162,7 +3162,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
             i++;
         }
         mon = i;
-        day = dayofyr - inttemp;
+        *day = dayofyr - inttemp;
 
         /* ----------------- find hours minutes and seconds ------------- */
         temp = (days - dayofyr) * 24.0;
