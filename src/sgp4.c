@@ -838,7 +838,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         sghs = ss4 * zns * (sz31 + sz33 - 6.0);
         shs = -zns * ss2 * (sz21 + sz23);
         // sgp4fix for 180 deg incl
-        if ((inclm < 5.2359877e-2) || (inclm > PI - 5.2359877e-2))
+        if ((*inclm < 5.2359877e-2) || (*inclm > PI - 5.2359877e-2))
             shs = 0.0;
         if (sinim != 0.0)
             shs = shs / sinim;
@@ -851,7 +851,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         sghl = s4 * znl * (z31 + z33 - 6.0);
         shll = -znl * s2 * (z21 + z23);
         // sgp4fix for 180 deg incl
-        if ((inclm < 5.2359877e-2) || (inclm > PI - 5.2359877e-2))
+        if ((*inclm < 5.2359877e-2) || (*inclm > PI - 5.2359877e-2))
             shll = 0.0;
         domdt = sgs + sghl;
         dnodt = shs;
@@ -865,15 +865,15 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         dndt = 0.0;
         theta = fmod(gsto + tc * rptim, twopi);
         (*em) += dedt * t;
-        inclm = inclm + didt * t;
-        argpm = argpm + domdt * t;
-        nodem = nodem + dnodt * t;
+        *inclm += *didt * t;
+        *argpm += *domdt * t;
+        *nodem += *dnodt * t;
         mm = mm + dmdt * t;
         //   sgp4fix for negative inclinations
         //   the following if statement should be commented out
-        //if (inclm < 0.0)
+        //if (*inclm < 0.0)
         //  {
-        //    inclm  = -inclm;
+        //    *inclm  = -*inclm;
         //    argpm  = argpm - PI;
         //    nodem = nodem + PI;
         //  }
@@ -1107,16 +1107,16 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         theta = fmod(gsto + tc * rptim, twopi);
         (*em) += dedt * t;
 
-        inclm = inclm + didt * t;
-        argpm = argpm + domdt * t;
-        nodem = nodem + dnodt * t;
-        mm = mm + dmdt * t;
+        *inclm += didt * t;
+        *argpm += domdt * t;
+        *nodem += dnodt * t;
+        *mm += dmdt * t;
 
         //   sgp4fix for negative inclinations
         //   the following if statement should be commented out
-        //  if (inclm < 0.0)
+        //  if (*inclm < 0.0)
         // {
-        //    inclm = -inclm;
+        //    *inclm = -*inclm;
         //    argpm = argpm - PI;
         //    nodem = nodem + PI;
         //  }
