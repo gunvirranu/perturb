@@ -845,30 +845,30 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         sgs = sghs - cosim * shs;
 
         /* ------------------------- do lunar terms ------------------ */
-        dedt = ses + s1 * znl * s5;
-        didt = sis + s2 * znl * (z11 + z13);
-        dmdt = sls - znl * s3 * (z1 + z3 - 14.0 - 6.0 * emsq);
+        *dedt = ses + s1 * znl * s5;
+        *didt = sis + s2 * znl * (z11 + z13);
+        *dmdt = sls - znl * s3 * (z1 + z3 - 14.0 - 6.0 * emsq);
         sghl = s4 * znl * (z31 + z33 - 6.0);
         shll = -znl * s2 * (z21 + z23);
         // sgp4fix for 180 deg incl
         if ((*inclm < 5.2359877e-2) || (*inclm > PI - 5.2359877e-2))
             shll = 0.0;
-        domdt = sgs + sghl;
-        dnodt = shs;
+        *domdt = sgs + sghl;
+        *dnodt = shs;
         if (sinim != 0.0)
         {
-            domdt = domdt - cosim / sinim * shll;
-            dnodt = dnodt + shll / sinim;
+            *domdt -= cosim / sinim * shll;
+            *dnodt += shll / sinim;
         }
 
         /* ----------- calculate deep space resonance effects -------- */
-        dndt = 0.0;
+        *dndt = 0.0;
         theta = fmod(gsto + tc * rptim, twopi);
-        (*em) += dedt * t;
+        *em += *dedt * t;
         *inclm += *didt * t;
         *argpm += *domdt * t;
         *nodem += *dnodt * t;
-        mm = mm + dmdt * t;
+        *mm += *dmdt * t;
         //   sgp4fix for negative inclinations
         //   the following if statement should be commented out
         //if (*inclm < 0.0)
@@ -947,26 +947,26 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
                 ainv2 = aonv * aonv;
                 temp1 = 3.0 * xno2 * ainv2;
                 temp = temp1 * root22;
-                d2201 = temp * f220 * g201;
-                d2211 = temp * f221 * g211;
+                *d2201 = temp * f220 * g201;
+                *d2211 = temp * f221 * g211;
                 temp1 = temp1 * aonv;
                 temp = temp1 * root32;
-                d3210 = temp * f321 * g310;
-                d3222 = temp * f322 * g322;
+                *d3210 = temp * f321 * g310;
+                *d3222 = temp * f322 * g322;
                 temp1 = temp1 * aonv;
                 temp = 2.0 * temp1 * root44;
-                d4410 = temp * f441 * g410;
-                d4422 = temp * f442 * g422;
+                *d4410 = temp * f441 * g410;
+                *d4422 = temp * f442 * g422;
                 temp1 = temp1 * aonv;
                 temp = temp1 * root52;
-                d5220 = temp * f522 * g520;
-                d5232 = temp * f523 * g532;
+                *d5220 = temp * f522 * g520;
+                *d5232 = temp * f523 * g532;
                 temp = 2.0 * temp1 * root54;
-                d5421 = temp * f542 * g521;
-                d5433 = temp * f543 * g533;
-                xlamo = fmod(mo + nodeo + nodeo - theta - theta, twopi);
-                xfact = mdot + dmdt + 2.0 * (nodedot + dnodt - rptim) - no;
-                (*em) = emo;
+                *d5421 = temp * f542 * g521;
+                *d5433 = temp * f543 * g533;
+                *xlamo = fmod(mo + nodeo + nodeo - theta - theta, twopi);
+                *xfact = mdot + (*dmdt) + 2.0 * (nodedot + (*dnodt) - rptim) - no;
+                *em = emo;
                 emsq = emsqo;
             }
 
@@ -980,19 +980,19 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
                 f311 = 0.9375 * sinim * sinim * (1.0 + 3.0 * cosim) - 0.75 * (1.0 + cosim);
                 f330 = 1.0 + cosim;
                 f330 = 1.875 * f330 * f330 * f330;
-                del1 = 3.0 * (*nm) * (*nm) * aonv * aonv;
-                del2 = 2.0 * del1 * f220 * g200 * q22;
-                del3 = 3.0 * del1 * f330 * g300 * q33 * aonv;
-                del1 = del1 * f311 * g310 * q31 * aonv;
-                xlamo = fmod(mo + nodeo + argpo - theta, twopi);
-                xfact = mdot + xpidot - rptim + dmdt + domdt + dnodt - no;
+                *del1 = 3.0 * (*nm) * (*nm) * aonv * aonv;
+                *del2 = 2.0 * (*del1) * f220 * g200 * q22;
+                *del3 = 3.0 * (*del1) * f330 * g300 * q33 * aonv;
+                *del1 = (*del1) * f311 * g310 * q31 * aonv;
+                *xlamo = fmod(mo + nodeo + argpo - theta, twopi);
+                *xfact = mdot + xpidot - rptim + (*dmdt) + (*domdt) + (*dnodt) - no;
             }
 
             /* ------------ for sgp4, initialize the integrator ---------- */
-            xli = xlamo;
-            xni = no;
+            *xli = *xlamo;
+            *xni = no;
             *atime = 0.0;
-            (*nm) = no + dndt;
+            *nm = no + (*dndt);
         }
 
         //#include "debug3.cpp"
@@ -1103,9 +1103,9 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         step2 = 259200.0;
 
         /* ----------- calculate deep space resonance effects ----------- */
-        dndt = 0.0;
+        *dndt = 0.0;
         theta = fmod(gsto + tc * rptim, twopi);
-        (*em) += dedt * t;
+        *em += dedt * t;
 
         *inclm += didt * t;
         *argpm += domdt * t;
@@ -1135,8 +1135,8 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
             if ((*atime == 0.0) || (t * (*atime) <= 0.0) || (fabs(t) < fabs(*atime)))
             {
                 *atime = 0.0;
-                xni = no;
-                xli = xlamo;
+                *xni = no;
+                *xli = xlamo;
             }
             // sgp4fix move check outside loop
             if (t > 0.0)
@@ -1152,9 +1152,9 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
                 /* ----------- near - synchronous resonance terms ------- */
                 if (irez != 2)
                 {
-                    xndt = del1 * sin(xli - fasx2) + del2 * sin(2.0 * (xli - fasx4)) +
+                    xndt = del1 * sin(*xli - fasx2) + del2 * sin(2.0 * (*xli - fasx4)) +
                         del3 * sin(3.0 * (xli - fasx6));
-                    xldot = xni + xfact;
+                    xldot = (*xni) + xfact;
                     xnddt = del1 * cos(xli - fasx2) +
                         2.0 * del2 * cos(2.0 * (xli - fasx4)) +
                         3.0 * del3 * cos(3.0 * (xli - fasx6));
@@ -1171,7 +1171,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
                         d4410 * sin(x2omi + x2li - g44) + d4422 * sin(x2li - g44) +
                         d5220 * sin(xomi + xli - g52) + d5232 * sin(-xomi + xli - g52) +
                         d5421 * sin(xomi + x2li - g54) + d5433 * sin(-xomi + x2li - g54);
-                    xldot = xni + xfact;
+                    xldot = (*xni) + xfact;
                     xnddt = d2201 * cos(x2omi + xli - g22) + d2211 * cos(xli - g22) +
                         d3210 * cos(xomi + xli - g32) + d3222 * cos(-xomi + xli - g32) +
                         d5220 * cos(xomi + xli - g52) + d5232 * cos(-xomi + xli - g52) +
@@ -1196,14 +1196,14 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
 
                 if (iretn == 381)
                 {
-                    xli = xli + xldot * delt + xndt * step2;
-                    xni = xni + xndt * delt + xnddt * step2;
+                    *xli += xldot * delt + xndt * step2;
+                    *xni += xndt * delt + xnddt * step2;
                     *atime += delt;
                 }
             }  // while iretn = 381
             (void) iret;  // Probably some old variable not used anymore
 
-            (*nm) = xni + xndt * ft + xnddt * ft * ft * 0.5;
+            (*nm) = (*xni) + xndt * ft + xnddt * ft * ft * 0.5;
             xl = xli + xldot * ft + xndt * ft * ft * 0.5;
             if (irez != 1)
             {
