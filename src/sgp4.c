@@ -122,7 +122,7 @@ enum perturb_Sgp4Error perturb_propagate_days_from_epoch(
     const bool err = sgp4(sat, mins_since_epoch, sv->position, sv->velocity);
 
     UNUSED(err);  // Not needed b/c it is consistent with error code
-    return (enum perturb_Sgp4Error) sat.error;
+    return (enum perturb_Sgp4Error) sat->error;
 }
 
 // clang-format on
@@ -1507,7 +1507,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
 
         //-------------------------------------------------------------------------
 
-        satrec.error = 0;
+        satrec->error = 0;
         satrec.operationmode = opsmode;
         // new alpha5 or 9-digit number
         // If `satn` is shorter than five, NUL appears earlier.
@@ -1555,7 +1555,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         satrec.a = pow(satrec.no_unkozai * satrec.tumin, (-2.0 / 3.0));
         satrec.alta = satrec.a * (1.0 + satrec.ecco) - 1.0;
         satrec.altp = satrec.a * (1.0 - satrec.ecco) - 1.0;
-        satrec.error = 0;
+        satrec->error = 0;
 
         // sgp4fix remove this check as it is unnecessary
         // the mrt check in sgp4 handles decaying satellite cases even if the starting
@@ -1563,7 +1563,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         //     if (rp < 1.0)
         //       {
         //         printf("# *** satn%d epoch elts sub-orbital ***\n", satn);
-        //         satrec.error = 5;
+        //         satrec->error = 5;
         //       }
 
         if ((omeosq >= 0.0) || (satrec.no_unkozai >= 0.0))
@@ -1725,13 +1725,13 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
 
         /* finally propogate to zero epoch to initialize all others. */
         // sgp4fix take out check to let satellites process until they are actually below earth surface
-        //       if(satrec.error == 0)
+        //       if(satrec->error == 0)
         sgp4(satrec, 0.0, r, v);
 
         satrec.init = 'n';
 
         //#include "debug6.cpp"
-        //sgp4fix return boolean. satrec.error contains any error codes
+        //sgp4fix return boolean. satrec->error contains any error codes
         return true;
     }  // sgp4init
 
@@ -1855,7 +1855,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
 
         /* --------------------- clear sgp4 error flag ----------------- */
         satrec.t = tsince;
-        satrec.error = 0;
+        satrec->error = 0;
 
         /* ------- update for secular gravity and atmospheric drag ----- */
         xmdf = satrec.mo + satrec.mdot * satrec.t;
@@ -1916,7 +1916,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         if (nm <= 0.0)
         {
             //         printf("# error nm %f\n", nm);
-            satrec.error = 2;
+            satrec->error = 2;
             // sgp4fix add return
             return false;
         }
@@ -1929,7 +1929,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         if ((em >= 1.0) || (em < -0.001)/* || (am < 0.95)*/)
         {
             //         printf("# error em %f\n", em);
-            satrec.error = 1;
+            satrec->error = 1;
             // sgp4fix to return if there is an error in eccentricity
             return false;
         }
@@ -1994,7 +1994,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
             if ((ep < 0.0) || (ep > 1.0))
             {
                 //            printf("# error ep %f\n", ep);
-                satrec.error = 3;
+                satrec->error = 3;
                 // sgp4fix add return
                 return false;
             }
@@ -2046,7 +2046,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         if (pl < 0.0)
         {
             //         printf("# error pl %f\n", pl);
-            satrec.error = 4;
+            satrec->error = 4;
             // sgp4fix add return
             return false;
         }
@@ -2112,7 +2112,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         if (mrt < 1.0)
         {
             //         printf("# decay condition %11.6f \n",mrt);
-            satrec.error = 6;
+            satrec->error = 6;
             return false;
         }
 
@@ -2280,7 +2280,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         // sgp4fix no longer needed
         // getgravconst( whichconst, tumin, mu, radiusearthkm, xke, j2, j3, j4, j3oj2 );
 
-        satrec.error = 0;
+        satrec->error = 0;
 
         // set the implied decimal points since doing a formated read
         // fixes for bad input data values (missing, ...)
