@@ -534,8 +534,8 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
             zcosi, zcosil, zsing, zsingl, zsinh, zsinhl, zsini,
             zsinil, zx, zy;
 
-        nm = np;
-        em = ep;
+        *nm = np;
+        *em = ep;
         snodm = sin(nodep);
         cnodm = cos(nodep);
         sinomm = sin(argpp);
@@ -576,7 +576,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         zcosh = cnodm;
         zsinh = snodm;
         cc = c1ss;
-        xnoi = 1.0 / nm;
+        xnoi = 1.0 / (*nm);
 
         for (lsflg = 1; lsflg <= 2; lsflg++)
         {
@@ -943,7 +943,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
                     (-12.0 + 8.0 * cosim + 10.0 * cosisq));
                 f543 = 29.53125 * sinim * (-2.0 - 8.0 * cosim + cosisq *
                     (12.0 + 8.0 * cosim - 10.0 * cosisq));
-                xno2 = nm * nm;
+                xno2 = (*nm) * (*nm);
                 ainv2 = aonv * aonv;
                 temp1 = 3.0 * xno2 * ainv2;
                 temp = temp1 * root22;
@@ -980,7 +980,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
                 f311 = 0.9375 * sinim * sinim * (1.0 + 3.0 * cosim) - 0.75 * (1.0 + cosim);
                 f330 = 1.0 + cosim;
                 f330 = 1.875 * f330 * f330 * f330;
-                del1 = 3.0 * nm * nm * aonv * aonv;
+                del1 = 3.0 * (*nm) * (*nm) * aonv * aonv;
                 del2 = 2.0 * del1 * f220 * g200 * q22;
                 del3 = 3.0 * del1 * f330 * g300 * q33 * aonv;
                 del1 = del1 * f311 * g310 * q31 * aonv;
@@ -992,7 +992,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
             xli = xlamo;
             xni = no;
             *atime = 0.0;
-            nm = no + dndt;
+            (*nm) = no + dndt;
         }
 
         //#include "debug3.cpp"
@@ -1203,19 +1203,19 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
             }  // while iretn = 381
             (void) iret;  // Probably some old variable not used anymore
 
-            nm = xni + xndt * ft + xnddt * ft * ft * 0.5;
+            (*nm) = xni + xndt * ft + xnddt * ft * ft * 0.5;
             xl = xli + xldot * ft + xndt * ft * ft * 0.5;
             if (irez != 1)
             {
                 mm = xl - 2.0 * nodem + 2.0 * theta;
-                dndt = nm - no;
+                dndt = (*nm) - no;
             }
             else
             {
                 mm = xl - nodem - argpm + theta;
-                dndt = nm - no;
+                dndt = (*nm) - no;
             }
-            nm = no + dndt;
+            (*nm) = no + dndt;
         }
 
         //#include "debug4.cpp"
