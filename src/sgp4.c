@@ -542,7 +542,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         (*cosomm) = cos(argpp);
         (*sinim) = sin(inclp);
         (*cosim) = cos(inclp);
-        emsq = em * em;
+        emsq = (*em) * (*em);
         betasq = 1.0 - emsq;
         rtemsq = sqrt(betasq);
 
@@ -620,7 +620,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
             s3 = cc * xnoi;
             s2 = -0.5 * s3 / rtemsq;
             s4 = s3 * rtemsq;
-            s1 = -15.0 * em * s4;
+            s1 = -15.0 * (*em) * s4;
             s5 = x1 * x3 + x2 * x4;
             s6 = x2 * x3 + x1 * x4;
             s7 = x2 * x4 - x1 * x3;
@@ -828,7 +828,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         irez = 0;
         if ((nm < 0.0052359877) && (nm > 0.0034906585))
             irez = 1;
-        if ((nm >= 8.26e-3) && (nm <= 9.24e-3) && (em >= 0.5))
+        if ((nm >= 8.26e-3) && (nm <= 9.24e-3) && (*em >= 0.5))
             irez = 2;
 
         /* ------------------------ do solar terms ------------------- */
@@ -864,7 +864,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         /* ----------- calculate deep space resonance effects -------- */
         dndt = 0.0;
         theta = fmod(gsto + tc * rptim, twopi);
-        em = em + dedt * t;
+        (*em) += dedt * t;
         inclm = inclm + didt * t;
         argpm = argpm + domdt * t;
         nodem = nodem + dnodt * t;
@@ -887,45 +887,45 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
             if (irez == 2)
             {
                 cosisq = cosim * cosim;
-                emo = em;
-                em = ecco;
+                emo = *em;
+                *em = ecco;
                 emsqo = emsq;
                 emsq = eccsq;
-                eoc = em * emsq;
-                g201 = -0.306 - (em - 0.64) * 0.440;
+                eoc = (*em) * emsq;
+                g201 = -0.306 - (*em - 0.64) * 0.440;
 
-                if (em <= 0.65)
+                if (*em <= 0.65)
                 {
-                    g211 = 3.616 - 13.2470 * em + 16.2900 * emsq;
-                    g310 = -19.302 + 117.3900 * em - 228.4190 * emsq + 156.5910 * eoc;
-                    g322 = -18.9068 + 109.7927 * em - 214.6334 * emsq + 146.5816 * eoc;
-                    g410 = -41.122 + 242.6940 * em - 471.0940 * emsq + 313.9530 * eoc;
-                    g422 = -146.407 + 841.8800 * em - 1629.014 * emsq + 1083.4350 * eoc;
-                    g520 = -532.114 + 3017.977 * em - 5740.032 * emsq + 3708.2760 * eoc;
+                    g211 = 3.616 - 13.2470 * (*em) + 16.2900 * emsq;
+                    g310 = -19.302 + 117.3900 * (*em) - 228.4190 * emsq + 156.5910 * eoc;
+                    g322 = -18.9068 + 109.7927 * (*em) - 214.6334 * emsq + 146.5816 * eoc;
+                    g410 = -41.122 + 242.6940 * (*em) - 471.0940 * emsq + 313.9530 * eoc;
+                    g422 = -146.407 + 841.8800 * (*em) - 1629.014 * emsq + 1083.4350 * eoc;
+                    g520 = -532.114 + 3017.977 * (*em) - 5740.032 * emsq + 3708.2760 * eoc;
                 }
                 else
                 {
-                    g211 = -72.099 + 331.819 * em - 508.738 * emsq + 266.724 * eoc;
-                    g310 = -346.844 + 1582.851 * em - 2415.925 * emsq + 1246.113 * eoc;
-                    g322 = -342.585 + 1554.908 * em - 2366.899 * emsq + 1215.972 * eoc;
-                    g410 = -1052.797 + 4758.686 * em - 7193.992 * emsq + 3651.957 * eoc;
-                    g422 = -3581.690 + 16178.110 * em - 24462.770 * emsq + 12422.520 * eoc;
-                    if (em > 0.715)
-                        g520 = -5149.66 + 29936.92 * em - 54087.36 * emsq + 31324.56 * eoc;
+                    g211 = -72.099 + 331.819 * (*em) - 508.738 * emsq + 266.724 * eoc;
+                    g310 = -346.844 + 1582.851 * (*em) - 2415.925 * emsq + 1246.113 * eoc;
+                    g322 = -342.585 + 1554.908 * (*em) - 2366.899 * emsq + 1215.972 * eoc;
+                    g410 = -1052.797 + 4758.686 * (*em) - 7193.992 * emsq + 3651.957 * eoc;
+                    g422 = -3581.690 + 16178.110 * (*em) - 24462.770 * emsq + 12422.520 * eoc;
+                    if (*em > 0.715)
+                        g520 = -5149.66 + 29936.92 * (*em) - 54087.36 * emsq + 31324.56 * eoc;
                     else
-                        g520 = 1464.74 - 4664.75 * em + 3763.64 * emsq;
+                        g520 = 1464.74 - 4664.75 * (*em) + 3763.64 * emsq;
                 }
-                if (em < 0.7)
+                if (*em < 0.7)
                 {
-                    g533 = -919.22770 + 4988.6100 * em - 9064.7700 * emsq + 5542.21  * eoc;
-                    g521 = -822.71072 + 4568.6173 * em - 8491.4146 * emsq + 5337.524 * eoc;
-                    g532 = -853.66600 + 4690.2500 * em - 8624.7700 * emsq + 5341.4  * eoc;
+                    g533 = -919.22770 + 4988.6100 * (*em) - 9064.7700 * emsq + 5542.21  * eoc;
+                    g521 = -822.71072 + 4568.6173 * (*em) - 8491.4146 * emsq + 5337.524 * eoc;
+                    g532 = -853.66600 + 4690.2500 * (*em) - 8624.7700 * emsq + 5341.4  * eoc;
                 }
                 else
                 {
-                    g533 = -37995.780 + 161616.52 * em - 229838.20 * emsq + 109377.94 * eoc;
-                    g521 = -51752.104 + 218913.95 * em - 309468.16 * emsq + 146349.42 * eoc;
-                    g532 = -40023.880 + 170470.89 * em - 242699.48 * emsq + 115605.82 * eoc;
+                    g533 = -37995.780 + 161616.52 * (*em) - 229838.20 * emsq + 109377.94 * eoc;
+                    g521 = -51752.104 + 218913.95 * (*em) - 309468.16 * emsq + 146349.42 * eoc;
+                    g532 = -40023.880 + 170470.89 * (*em) - 242699.48 * emsq + 115605.82 * eoc;
                 }
 
                 sini2 = sinim * sinim;
@@ -966,7 +966,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
                 d5433 = temp * f543 * g533;
                 xlamo = fmod(mo + nodeo + nodeo - theta - theta, twopi);
                 xfact = mdot + dmdt + 2.0 * (nodedot + dnodt - rptim) - no;
-                em = emo;
+                (*em) = emo;
                 emsq = emsqo;
             }
 
@@ -1105,7 +1105,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         /* ----------- calculate deep space resonance effects ----------- */
         dndt = 0.0;
         theta = fmod(gsto + tc * rptim, twopi);
-        em = em + dedt * t;
+        (*em) += dedt * t;
 
         inclm = inclm + didt * t;
         argpm = argpm + domdt * t;
@@ -1922,7 +1922,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         }
         am = pow((satrec.xke / nm), x2o3) * tempa * tempa;
         nm = satrec.xke / pow(am, 1.5);
-        em = em - tempe;
+        em -= tempe;
 
         // fix tolerance for error recognition
         // sgp4fix am is fixed from the previous nm check
