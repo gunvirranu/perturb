@@ -991,7 +991,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
             /* ------------ for sgp4, initialize the integrator ---------- */
             xli = xlamo;
             xni = no;
-            atime = 0.0;
+            *atime = 0.0;
             nm = no + dndt;
         }
 
@@ -1132,9 +1132,9 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         if (irez != 0)
         {
             // sgp4fix streamline check
-            if ((atime == 0.0) || (t * atime <= 0.0) || (fabs(t) < fabs(atime)))
+            if ((*atime == 0.0) || (t * (*atime) <= 0.0) || (fabs(t) < fabs(*atime)))
             {
-                atime = 0.0;
+                *atime = 0.0;
                 xni = no;
                 xli = xlamo;
             }
@@ -1163,7 +1163,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
                 else
                 {
                     /* --------- near - half-day resonance terms -------- */
-                    xomi = argpo + argpdot * atime;
+                    xomi = argpo + argpdot * (*atime);
                     x2omi = xomi + xomi;
                     x2li = xli + xli;
                     xndt = d2201 * sin(x2omi + xli - g22) + d2211 * sin(xli - g22) +
@@ -1183,14 +1183,14 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
 
                 /* ----------------------- integrator ------------------- */
                 // sgp4fix move end checks to end of routine
-                if (fabs(t - atime) >= stepp)
+                if (fabs(t - *atime) >= stepp)
                 {
                     iret = 0;
                     iretn = 381;
                 }
                 else // exit here
                 {
-                    ft = t - atime;
+                    ft = t - *atime;
                     iretn = 0;
                 }
 
@@ -1198,7 +1198,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
                 {
                     xli = xli + xldot * delt + xndt * step2;
                     xni = xni + xndt * delt + xnddt * step2;
-                    atime = atime + delt;
+                    *atime += delt;
                 }
             }  // while iretn = 381
             (void) iret;  // Probably some old variable not used anymore
