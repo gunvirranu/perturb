@@ -547,7 +547,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         *rtemsq = sqrt(betasq);
 
         /* ----------------- initialize lunar solar terms --------------- */
-        peo = 0.0;
+        *peo = 0.0;
         pinco = 0.0;
         plo = 0.0;
         pgho = 0.0;
