@@ -539,7 +539,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         *snodm = sin(nodep);
         *cnodm = cos(nodep);
         *sinomm = sin(argpp);
-        cosomm = cos(argpp);
+        (*cosomm) = cos(argpp);
         sinim = sin(inclp);
         cosim = cos(inclp);
         emsq = em * em;
@@ -591,14 +591,14 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
             a5 = -sinim * a7 + cosim * a8;
             a6 = -sinim * a9 + cosim * a10;
 
-            x1 = a1 * cosomm + a2 * (*sinomm);
-            x2 = a3 * cosomm + a4 * (*sinomm);
-            x3 = -a1 * (*sinomm) + a2 * cosomm;
-            x4 = -a3 * (*sinomm) + a4 * cosomm;
+            x1 = a1 * (*cosomm) + a2 * (*sinomm);
+            x2 = a3 * (*cosomm) + a4 * (*sinomm);
+            x3 = -a1 * (*sinomm) + a2 * (*cosomm);
+            x4 = -a3 * (*sinomm) + a4 * (*cosomm);
             x5 = a5 * (*sinomm);
             x6 = a6 * (*sinomm);
-            x7 = a5 * cosomm;
-            x8 = a6 * cosomm;
+            x7 = a5 * (*cosomm);
+            x8 = a6 * (*cosomm);
 
             z31 = 12.0 * x1 * x1 - 3.0 * x3 * x3;
             z32 = 24.0 * x1 * x2 - 6.0 * x3 * x4;
