@@ -356,10 +356,10 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
             pl = pl - plo;
             pgh = pgh - pgho;
             ph = ph - pho;
-            inclp = inclp + pinc;
+            (*inclp) = (*inclp) + pinc;
             ep = ep + pe;
-            sinip = sin(inclp);
-            cosip = cos(inclp);
+            sinip = sin((*inclp));
+            cosip = cos((*inclp));
 
             /* ----------------- apply periodics directly ------------ */
             //  sgp4fix for lyddane choice
@@ -370,7 +370,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
             //  use next line for original strn3 approach and original inclination
             //  if (inclo >= 0.2)
             //  use next line for gsfc version and perturbed inclination
-            if (inclp >= 0.2)
+            if ((*inclp) >= 0.2)
             {
                 ph = ph / sinip;
                 pgh = pgh - cosip * ph;
