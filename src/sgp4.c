@@ -357,7 +357,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
             pgh = pgh - pgho;
             ph = ph - pho;
             (*inclp) = (*inclp) + pinc;
-            ep = ep + pe;
+            (*ep) = (*ep) + pe;
             sinip = sin((*inclp));
             cosip = cos((*inclp));
 
