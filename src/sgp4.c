@@ -542,8 +542,8 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         (*cosomm) = cos(argpp);
         (*sinim) = sin(inclp);
         (*cosim) = cos(inclp);
-        emsq = (*em) * (*em);
-        betasq = 1.0 - emsq;
+        *emsq = (*em) * (*em);
+        betasq = 1.0 - (*emsq);
         rtemsq = sqrt(betasq);
 
         /* ----------------- initialize lunar solar terms --------------- */
@@ -603,17 +603,17 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
             z31 = 12.0 * x1 * x1 - 3.0 * x3 * x3;
             z32 = 24.0 * x1 * x2 - 6.0 * x3 * x4;
             z33 = 12.0 * x2 * x2 - 3.0 * x4 * x4;
-            z1 = 3.0 *  (a1 * a1 + a2 * a2) + z31 * emsq;
-            z2 = 6.0 *  (a1 * a3 + a2 * a4) + z32 * emsq;
-            z3 = 3.0 *  (a3 * a3 + a4 * a4) + z33 * emsq;
-            z11 = -6.0 * a1 * a5 + emsq *  (-24.0 * x1 * x7 - 6.0 * x3 * x5);
-            z12 = -6.0 *  (a1 * a6 + a3 * a5) + emsq *
+            z1 = 3.0 *  (a1 * a1 + a2 * a2) + z31 * (*emsq);
+            z2 = 6.0 *  (a1 * a3 + a2 * a4) + z32 * (*emsq);
+            z3 = 3.0 *  (a3 * a3 + a4 * a4) + z33 * (*emsq);
+            z11 = -6.0 * a1 * a5 + (*emsq) *  (-24.0 * x1 * x7 - 6.0 * x3 * x5);
+            z12 = -6.0 *  (a1 * a6 + a3 * a5) + (*emsq) *
                 (-24.0 * (x2 * x7 + x1 * x8) - 6.0 * (x3 * x6 + x4 * x5));
-            z13 = -6.0 * a3 * a6 + emsq * (-24.0 * x2 * x8 - 6.0 * x4 * x6);
-            z21 = 6.0 * a2 * a5 + emsq * (24.0 * x1 * x5 - 6.0 * x3 * x7);
-            z22 = 6.0 *  (a4 * a5 + a2 * a6) + emsq *
+            z13 = -6.0 * a3 * a6 + (*emsq) * (-24.0 * x2 * x8 - 6.0 * x4 * x6);
+            z21 = 6.0 * a2 * a5 + (*emsq) * (24.0 * x1 * x5 - 6.0 * x3 * x7);
+            z22 = 6.0 *  (a4 * a5 + a2 * a6) + (*emsq) *
                 (24.0 * (x2 * x5 + x1 * x6) - 6.0 * (x4 * x7 + x3 * x8));
-            z23 = 6.0 * a4 * a6 + emsq * (24.0 * x2 * x6 - 6.0 * x4 * x8);
+            z23 = 6.0 * a4 * a6 + (*emsq) * (24.0 * x2 * x6 - 6.0 * x4 * x8);
             z1 = z1 + z1 + betasq * z31;
             z2 = z2 + z2 + betasq * z32;
             z3 = z3 + z3 + betasq * z33;
@@ -667,7 +667,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         si3 = 2.0 * ss2 * (sz13 - sz11);
         sl2 = -2.0 * ss3 * sz2;
         sl3 = -2.0 * ss3 * (sz3 - sz1);
-        sl4 = -2.0 * ss3 * (-21.0 - 9.0 * emsq) * zes;
+        sl4 = -2.0 * ss3 * (-21.0 - 9.0 * (*emsq)) * zes;
         sgh2 = 2.0 * ss4 * sz32;
         sgh3 = 2.0 * ss4 * (sz33 - sz31);
         sgh4 = -18.0 * ss4 * zes;
@@ -681,7 +681,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         xi3 = 2.0 * s2 * (z13 - z11);
         xl2 = -2.0 * s3 * z2;
         xl3 = -2.0 * s3 * (z3 - z1);
-        xl4 = -2.0 * s3 * (-21.0 - 9.0 * emsq) * zel;
+        xl4 = -2.0 * s3 * (-21.0 - 9.0 * (*emsq)) * zel;
         xgh2 = 2.0 * s4 * z32;
         xgh3 = 2.0 * s4 * (z33 - z31);
         xgh4 = -18.0 * s4 * zel;
