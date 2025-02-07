@@ -138,7 +138,7 @@ real_t xgh2, real_t xgh3, real_t xgh4, real_t xh2, real_t xh3,
 real_t xi2, real_t xi3, real_t xl2, real_t xl3, real_t xl4,
 real_t zmol, real_t zmos, real_t inclo,
 char init,
-real_t& ep, real_t& inclp, real_t& nodep, real_t& argpp, real_t& mp,
+real_t * ep, real_t * inclp, real_t * nodep, real_t * argpp, real_t * mp,
 char opsmode
 );
 
@@ -146,23 +146,23 @@ static void dscom
 (
 real_t epoch, real_t ep, real_t argpp, real_t tc, real_t inclp,
 real_t nodep, real_t np,
-real_t& snodm, real_t& cnodm, real_t& sinim, real_t& cosim, real_t& sinomm,
-real_t& cosomm, real_t& day, real_t& e3, real_t& ee2, real_t& em,
-real_t& emsq, real_t& gam, real_t& peo, real_t& pgho, real_t& pho,
-real_t& pinco, real_t& plo, real_t& rtemsq, real_t& se2, real_t& se3,
-real_t& sgh2, real_t& sgh3, real_t& sgh4, real_t& sh2, real_t& sh3,
-real_t& si2, real_t& si3, real_t& sl2, real_t& sl3, real_t& sl4,
-real_t& s1, real_t& s2, real_t& s3, real_t& s4, real_t& s5,
-real_t& s6, real_t& s7, real_t& ss1, real_t& ss2, real_t& ss3,
-real_t& ss4, real_t& ss5, real_t& ss6, real_t& ss7, real_t& sz1,
-real_t& sz2, real_t& sz3, real_t& sz11, real_t& sz12, real_t& sz13,
-real_t& sz21, real_t& sz22, real_t& sz23, real_t& sz31, real_t& sz32,
-real_t& sz33, real_t& xgh2, real_t& xgh3, real_t& xgh4, real_t& xh2,
-real_t& xh3, real_t& xi2, real_t& xi3, real_t& xl2, real_t& xl3,
-real_t& xl4, real_t& nm, real_t& z1, real_t& z2, real_t& z3,
-real_t& z11, real_t& z12, real_t& z13, real_t& z21, real_t& z22,
-real_t& z23, real_t& z31, real_t& z32, real_t& z33, real_t& zmol,
-real_t& zmos
+real_t * snodm, real_t * cnodm, real_t * sinim, real_t * cosim, real_t * sinomm,
+real_t * cosomm, real_t * day, real_t * e3, real_t * ee2, real_t * em,
+real_t * emsq, real_t * gam, real_t * peo, real_t * pgho, real_t * pho,
+real_t * pinco, real_t * plo, real_t * rtemsq, real_t * se2, real_t * se3,
+real_t * sgh2, real_t * sgh3, real_t * sgh4, real_t * sh2, real_t * sh3,
+real_t * si2, real_t * si3, real_t * sl2, real_t * sl3, real_t * sl4,
+real_t * s1, real_t * s2, real_t * s3, real_t * s4, real_t * s5,
+real_t * s6, real_t * s7, real_t * ss1, real_t * ss2, real_t * ss3,
+real_t * ss4, real_t * ss5, real_t * ss6, real_t * ss7, real_t * sz1,
+real_t * sz2, real_t * sz3, real_t * sz11, real_t * sz12, real_t * sz13,
+real_t * sz21, real_t * sz22, real_t * sz23, real_t * sz31, real_t * sz32,
+real_t * sz33, real_t * xgh2, real_t * xgh3, real_t * xgh4, real_t * xh2,
+real_t * xh3, real_t * xi2, real_t * xi3, real_t * xl2, real_t * xl3,
+real_t * xl4, real_t * nm, real_t * z1, real_t * z2, real_t * z3,
+real_t * z11, real_t * z12, real_t * z13, real_t * z21, real_t * z22,
+real_t * z23, real_t * z31, real_t * z32, real_t * z33, real_t * zmol,
+real_t * zmos
 );
 
 static void dsinit
@@ -178,14 +178,14 @@ real_t sz31, real_t sz33, real_t t, real_t tc, real_t gsto,
 real_t mo, real_t mdot, real_t no, real_t nodeo, real_t nodedot,
 real_t xpidot, real_t z1, real_t z3, real_t z11, real_t z13,
 real_t z21, real_t z23, real_t z31, real_t z33, real_t ecco,
-real_t eccsq, real_t& em, real_t& argpm, real_t& inclm, real_t& mm,
-real_t& nm, real_t& nodem,
-int& irez,
-real_t& atime, real_t& d2201, real_t& d2211, real_t& d3210, real_t& d3222,
-real_t& d4410, real_t& d4422, real_t& d5220, real_t& d5232, real_t& d5421,
-real_t& d5433, real_t& dedt, real_t& didt, real_t& dmdt, real_t& dndt,
-real_t& dnodt, real_t& domdt, real_t& del1, real_t& del2, real_t& del3,
-real_t& xfact, real_t& xlamo, real_t& xli, real_t& xni
+real_t eccsq, real_t * em, real_t * argpm, real_t * inclm, real_t * mm,
+real_t * nm, real_t * nodem,
+int * irez,
+real_t * atime, real_t * d2201, real_t * d2211, real_t * d3210, real_t * d3222,
+real_t * d4410, real_t * d4422, real_t * d5220, real_t * d5232, real_t * d5421,
+real_t * d5433, real_t * dedt, real_t * didt, real_t * dmdt, real_t * dndt,
+real_t * dnodt, real_t * domdt, real_t * del1, real_t * del2, real_t * del3,
+real_t * xfact, real_t * xlamo, real_t * xli, real_t * xni
 );
 
 static void dspace
@@ -197,8 +197,8 @@ real_t dedt, real_t del1, real_t del2, real_t del3, real_t didt,
 real_t dmdt, real_t dnodt, real_t domdt, real_t argpo, real_t argpdot,
 real_t t, real_t tc, real_t gsto, real_t xfact, real_t xlamo,
 real_t no,
-real_t& atime, real_t& em, real_t& argpm, real_t& inclm, real_t& xli,
-real_t& mm, real_t& xni, real_t& nodem, real_t& dndt, real_t& nm
+real_t * atime, real_t * em, real_t * argpm, real_t * inclm, real_t * xli,
+real_t * mm, real_t * xni, real_t * nodem, real_t * dndt, real_t * nm
 );
 
 // Unused
@@ -210,11 +210,11 @@ static void initl
 // sgp4fix assin xke and j2
 // gravconsttype whichconst,
 real_t xke, real_t j2,
-real_t ecco, real_t epoch, real_t inclo, real_t& no,
+real_t ecco, real_t epoch, real_t inclo, real_t * no,
 char& method,
-real_t& ainv, real_t& ao, real_t& con41, real_t& con42, real_t& cosio,
-real_t& cosio2, real_t& eccsq, real_t& omeosq, real_t& posq,
-real_t& rp, real_t& rteosq, real_t& sinio, real_t& gsto, char opsmode
+real_t * ainv, real_t * ao, real_t * con41, real_t * con42, real_t * cosio,
+real_t * cosio2, real_t * eccsq, real_t * omeosq, real_t * posq,
+real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
 );
 #endif
 
@@ -298,7 +298,7 @@ real_t& rp, real_t& rteosq, real_t& sinio, real_t& gsto, char opsmode
         real_t xi2, real_t xi3, real_t xl2, real_t xl3, real_t xl4,
         real_t zmol, real_t zmos, real_t inclo,
         char init,
-        real_t& ep, real_t& inclp, real_t& nodep, real_t& argpp, real_t& mp,
+        real_t * ep, real_t * inclp, real_t * nodep, real_t * argpp, real_t * mp,
         char opsmode
         )
     {
@@ -495,23 +495,23 @@ real_t& rp, real_t& rteosq, real_t& sinio, real_t& gsto, char opsmode
         (
         real_t epoch, real_t ep, real_t argpp, real_t tc, real_t inclp,
         real_t nodep, real_t np,
-        real_t& snodm, real_t& cnodm, real_t& sinim, real_t& cosim, real_t& sinomm,
-        real_t& cosomm, real_t& day, real_t& e3, real_t& ee2, real_t& em,
-        real_t& emsq, real_t& gam, real_t& peo, real_t& pgho, real_t& pho,
-        real_t& pinco, real_t& plo, real_t& rtemsq, real_t& se2, real_t& se3,
-        real_t& sgh2, real_t& sgh3, real_t& sgh4, real_t& sh2, real_t& sh3,
-        real_t& si2, real_t& si3, real_t& sl2, real_t& sl3, real_t& sl4,
-        real_t& s1, real_t& s2, real_t& s3, real_t& s4, real_t& s5,
-        real_t& s6, real_t& s7, real_t& ss1, real_t& ss2, real_t& ss3,
-        real_t& ss4, real_t& ss5, real_t& ss6, real_t& ss7, real_t& sz1,
-        real_t& sz2, real_t& sz3, real_t& sz11, real_t& sz12, real_t& sz13,
-        real_t& sz21, real_t& sz22, real_t& sz23, real_t& sz31, real_t& sz32,
-        real_t& sz33, real_t& xgh2, real_t& xgh3, real_t& xgh4, real_t& xh2,
-        real_t& xh3, real_t& xi2, real_t& xi3, real_t& xl2, real_t& xl3,
-        real_t& xl4, real_t& nm, real_t& z1, real_t& z2, real_t& z3,
-        real_t& z11, real_t& z12, real_t& z13, real_t& z21, real_t& z22,
-        real_t& z23, real_t& z31, real_t& z32, real_t& z33, real_t& zmol,
-        real_t& zmos
+        real_t * snodm, real_t * cnodm, real_t * sinim, real_t * cosim, real_t * sinomm,
+        real_t * cosomm, real_t * day, real_t * e3, real_t * ee2, real_t * em,
+        real_t * emsq, real_t * gam, real_t * peo, real_t * pgho, real_t * pho,
+        real_t * pinco, real_t * plo, real_t * rtemsq, real_t * se2, real_t * se3,
+        real_t * sgh2, real_t * sgh3, real_t * sgh4, real_t * sh2, real_t * sh3,
+        real_t * si2, real_t * si3, real_t * sl2, real_t * sl3, real_t * sl4,
+        real_t * s1, real_t * s2, real_t * s3, real_t * s4, real_t * s5,
+        real_t * s6, real_t * s7, real_t * ss1, real_t * ss2, real_t * ss3,
+        real_t * ss4, real_t * ss5, real_t * ss6, real_t * ss7, real_t * sz1,
+        real_t * sz2, real_t * sz3, real_t * sz11, real_t * sz12, real_t * sz13,
+        real_t * sz21, real_t * sz22, real_t * sz23, real_t * sz31, real_t * sz32,
+        real_t * sz33, real_t * xgh2, real_t * xgh3, real_t * xgh4, real_t * xh2,
+        real_t * xh3, real_t * xi2, real_t * xi3, real_t * xl2, real_t * xl3,
+        real_t * xl4, real_t * nm, real_t * z1, real_t * z2, real_t * z3,
+        real_t * z11, real_t * z12, real_t * z13, real_t * z21, real_t * z22,
+        real_t * z23, real_t * z31, real_t * z32, real_t * z33, real_t * zmol,
+        real_t * zmos
         )
     {
         /* -------------------------- constants ------------------------- */
@@ -785,14 +785,14 @@ real_t& rp, real_t& rteosq, real_t& sinio, real_t& gsto, char opsmode
         real_t mo, real_t mdot, real_t no, real_t nodeo, real_t nodedot,
         real_t xpidot, real_t z1, real_t z3, real_t z11, real_t z13,
         real_t z21, real_t z23, real_t z31, real_t z33, real_t ecco,
-        real_t eccsq, real_t& em, real_t& argpm, real_t& inclm, real_t& mm,
-        real_t& nm, real_t& nodem,
-        int& irez,
-        real_t& atime, real_t& d2201, real_t& d2211, real_t& d3210, real_t& d3222,
-        real_t& d4410, real_t& d4422, real_t& d5220, real_t& d5232, real_t& d5421,
-        real_t& d5433, real_t& dedt, real_t& didt, real_t& dmdt, real_t& dndt,
-        real_t& dnodt, real_t& domdt, real_t& del1, real_t& del2, real_t& del3,
-        real_t& xfact, real_t& xlamo, real_t& xli, real_t& xni
+        real_t eccsq, real_t * em, real_t * argpm, real_t * inclm, real_t * mm,
+        real_t * nm, real_t * nodem,
+        int * irez,
+        real_t * atime, real_t * d2201, real_t * d2211, real_t * d3210, real_t * d3222,
+        real_t * d4410, real_t * d4422, real_t * d5220, real_t * d5232, real_t * d5421,
+        real_t * d5433, real_t * dedt, real_t * didt, real_t * dmdt, real_t * dndt,
+        real_t * dnodt, real_t * domdt, real_t * del1, real_t * del2, real_t * del3,
+        real_t * xfact, real_t * xlamo, real_t * xli, real_t * xni
         )
     {
         /* --------------------- local variables ------------------------ */
@@ -1080,8 +1080,8 @@ real_t& rp, real_t& rteosq, real_t& sinio, real_t& gsto, char opsmode
         real_t dmdt, real_t dnodt, real_t domdt, real_t argpo, real_t argpdot,
         real_t t, real_t tc, real_t gsto, real_t xfact, real_t xlamo,
         real_t no,
-        real_t& atime, real_t& em, real_t& argpm, real_t& inclm, real_t& xli,
-        real_t& mm, real_t& xni, real_t& nodem, real_t& dndt, real_t& nm
+        real_t * atime, real_t * em, real_t * argpm, real_t * inclm, real_t * xli,
+        real_t * mm, real_t * xni, real_t * nodem, real_t * dndt, real_t * nm
         )
     {
         const real_t twopi = 2.0 * pi;
@@ -1282,9 +1282,9 @@ real_t& rp, real_t& rteosq, real_t& sinio, real_t& gsto, char opsmode
         // gravconsttype whichconst,
         real_t xke, real_t j2,
         real_t ecco, real_t epoch, real_t inclo, real_t no_kozai, char opsmode,
-        char& method, real_t& ainv, real_t& ao, real_t& con41, real_t& con42, real_t& cosio,
-        real_t& cosio2, real_t& eccsq, real_t& omeosq, real_t& posq,
-        real_t& rp, real_t& rteosq, real_t& sinio, real_t& gsto, real_t& no_unkozai
+        char * method, real_t * ainv, real_t * ao, real_t * con41, real_t * con42, real_t * cosio,
+        real_t * cosio2, real_t * eccsq, real_t * omeosq, real_t * posq,
+        real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, real_t * no_unkozai
         )
     {
         (void) opsmode;
@@ -1441,7 +1441,7 @@ real_t& rp, real_t& rteosq, real_t& sinio, real_t& gsto, char opsmode
         gravconsttype whichconst, char opsmode, const char satn[5], const real_t epoch,
         const real_t xbstar, const real_t xndot, const real_t xnddot, const real_t xecco, const real_t xargpo,
         const real_t xinclo, const real_t xmo, const real_t xno_kozai,
-        const real_t xnodeo, elsetrec& satrec
+        const real_t xnodeo, elsetrec * satrec
         )
     {
         /* --------------------- local variables ------------------------ */
@@ -1824,7 +1824,7 @@ real_t& rp, real_t& rteosq, real_t& sinio, real_t& gsto, char opsmode
 
     bool sgp4
         (
-        elsetrec& satrec, real_t tsince,
+        elsetrec * satrec, real_t tsince,
         real_t r[3], real_t v[3]
         )
     {
@@ -2157,14 +2157,14 @@ real_t& rp, real_t& rteosq, real_t& sinio, real_t& gsto, char opsmode
     void getgravconst
         (
         gravconsttype whichconst,
-        real_t& tumin,
-        real_t& mus,
-        real_t& radiusearthkm,
-        real_t& xke,
-        real_t& j2,
-        real_t& j3,
-        real_t& j4,
-        real_t& j3oj2
+        real_t * tumin,
+        real_t * mus,
+        real_t * radiusearthkm,
+        real_t * xke,
+        real_t * j2,
+        real_t * j3,
+        real_t * j4,
+        real_t * j3oj2
         )
     {
 
@@ -2259,8 +2259,8 @@ real_t& rp, real_t& rteosq, real_t& sinio, real_t& gsto, char opsmode
         char longstr1[130], char longstr2[130],
         char typerun, char typeinput, char opsmode,
         gravconsttype whichconst,
-        real_t& startmfe, real_t& stopmfe, real_t& deltamin,
-        elsetrec& satrec
+        real_t * startmfe, real_t * stopmfe, real_t * deltamin,
+        elsetrec * satrec
         )
     {
         const real_t deg2rad = pi / 180.0;         //   0.0174532925199433
@@ -2746,7 +2746,7 @@ real_t& rp, real_t& rteosq, real_t& sinio, real_t& gsto, char opsmode
     void newtonnu_SGP4
         (
         real_t ecc, real_t nu,
-        real_t& e0, real_t& m
+        real_t * e0, real_t * m
         )
     {
         real_t small, sine, cose;
@@ -2860,8 +2860,8 @@ real_t& rp, real_t& rteosq, real_t& sinio, real_t& gsto, char opsmode
     void rv2coe_SGP4
         (
         real_t r[3], real_t v[3], real_t mus,
-        real_t& p, real_t& a, real_t& ecc, real_t& incl, real_t& omega, real_t& argp,
-        real_t& nu, real_t& m, real_t& arglat, real_t& truelon, real_t& lonper
+        real_t * p, real_t * a, real_t * ecc, real_t * incl, real_t * omega, real_t * argp,
+        real_t * nu, real_t * m, real_t * arglat, real_t * truelon, real_t * lonper
         )
     {
         real_t undefined, small, hbar[3], nbar[3], magr, magv, magn, ebar[3], sme,
