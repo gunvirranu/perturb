@@ -825,11 +825,11 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         // getgravconst( whichconst, tumin, mu, radiusearthkm, xke, j2, j3, j4, j3oj2 );
 
         /* -------------------- deep space initialization ------------ */
-        irez = 0;
+        *irez = 0;
         if ((*nm < 0.0052359877) && (*nm > 0.0034906585))
-            irez = 1;
+            *irez = 1;
         if ((*nm >= 8.26e-3) && (*nm <= 9.24e-3) && (*em >= 0.5))
-            irez = 2;
+            *irez = 2;
 
         /* ------------------------ do solar terms ------------------- */
         ses = ss1 * zns * ss5;
@@ -879,12 +879,12 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         //  }
 
         /* -------------- initialize the resonance terms ------------- */
-        if (irez != 0)
+        if (*irez != 0)
         {
             aonv = pow((*nm) / xke, x2o3);
 
             /* ---------- geopotential resonance for 12 hour orbits ------ */
-            if (irez == 2)
+            if (*irez == 2)
             {
                 cosisq = cosim * cosim;
                 emo = *em;
@@ -971,7 +971,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
             }
 
             /* ---------------- synchronous resonance terms -------------- */
-            if (irez == 1)
+            if (*irez == 1)
             {
                 g200 = 1.0 + emsq * (-2.5 + 0.8125 * emsq);
                 g310 = 1.0 + 2.0 * emsq;
