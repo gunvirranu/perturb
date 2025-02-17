@@ -1305,13 +1305,13 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         /* ------------- calculate auxillary epoch quantities ---------- */
         *eccsq = ecco * ecco;
         *omeosq = 1.0 - (*eccsq);
-        rteosq = sqrt(*omeosq);
+        *rteosq = sqrt(*omeosq);
         cosio = cos(inclo);
         cosio2 = cosio * cosio;
 
         /* ------------------ un-kozai the mean motion ----------------- */
         ak = pow(xke / no_kozai, x2o3);
-        d1 = 0.75 * j2 * (3.0 * cosio2 - 1.0) / (rteosq * (*omeosq));
+        d1 = 0.75 * j2 * (3.0 * cosio2 - 1.0) / ((*rteosq) * (*omeosq));
         del = d1 / (ak * ak);
         adel = ak * (1.0 - del * del - del *
             (1.0 / 3.0 + 134.0 * del * del / 81.0));
@@ -1551,7 +1551,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         initl
             (satrec.xke, satrec.j2, satrec.ecco, epoch, satrec.inclo, satrec.no_kozai, satrec.operationmode,
             satrec.method, ainv, ao, satrec.con41, con42, cosio, cosio2, eccsq, &omeosq,
-            posq, rp, rteosq, sinio, satrec.gsto, satrec.no_unkozai);
+            posq, rp, &rteosq, sinio, satrec.gsto, satrec.no_unkozai);
         satrec.a = pow(satrec.no_unkozai * satrec.tumin, (-2.0 / 3.0));
         satrec.alta = satrec.a * (1.0 + satrec.ecco) - 1.0;
         satrec.altp = satrec.a * (1.0 - satrec.ecco) - 1.0;
