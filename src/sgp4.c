@@ -1207,12 +1207,12 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
             xl = (*xli) + xldot * ft + xndt * ft * ft * 0.5;
             if (irez != 1)
             {
-                mm = xl - 2.0 * (*nodem) + 2.0 * theta;
+                *mm = xl - 2.0 * (*nodem) + 2.0 * theta;
                 dndt = (*nm) - no;
             }
             else
             {
-                mm = xl - (*nodem) - argpm + theta;
+                *mm = xl - (*nodem) - argpm + theta;
                 dndt = (*nm) - no;
             }
             (*nm) = no + dndt;
