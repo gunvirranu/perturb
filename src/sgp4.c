@@ -1322,7 +1322,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         *sinio = sin(inclo);
         po = (*ao) * (*omeosq);
         *con42 = 1.0 - 5.0 * (*cosio2);
-        con41 = -(*con42) - (*cosio2) - (*cosio2);
+        *con41 = -(*con42) - (*cosio2) - (*cosio2);
         ainv = 1.0 / (*ao);
         posq = po * po;
         rp = (*ao) * (1.0 - ecco);
