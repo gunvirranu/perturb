@@ -1326,7 +1326,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         *ainv = 1.0 / (*ao);
         *posq = po * po;
         *rp = (*ao) * (1.0 - ecco);
-        method = 'n';
+        *method = 'n';
 
         // sgp4fix modern approach to finding sidereal time
         //   if (opsmode == 'a')
