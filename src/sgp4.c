@@ -1208,14 +1208,14 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
             if (irez != 1)
             {
                 *mm = xl - 2.0 * (*nodem) + 2.0 * theta;
-                dndt = (*nm) - no;
+                *dndt = (*nm) - no;
             }
             else
             {
                 *mm = xl - (*nodem) - argpm + theta;
-                dndt = (*nm) - no;
+                *dndt = (*nm) - no;
             }
-            (*nm) = no + dndt;
+            (*nm) = no + (*dndt);
         }
 
         //#include "debug4.cpp"
