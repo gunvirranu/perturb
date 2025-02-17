@@ -1438,7 +1438,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
 
     bool sgp4init
         (
-        gravconsttype whichconst, char opsmode, const char satn[5], const real_t epoch,
+        const enum perturb_GravityModel whichconst, char opsmode, const char satn[5], const real_t epoch,
         const real_t xbstar, const real_t xndot, const real_t xnddot, const real_t xecco, const real_t xargpo,
         const real_t xinclo, const real_t xmo, const real_t xno_kozai,
         const real_t xnodeo, elsetrec * satrec
@@ -2156,7 +2156,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
 
     void getgravconst
         (
-        gravconsttype whichconst,
+        const enum perturb_GravityModel whichconst,
         real_t * tumin,
         real_t * mus,
         real_t * radiusearthkm,
@@ -2171,43 +2171,51 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         switch (whichconst)
         {
             // -- wgs-72 low precision str#3 constants --
-        case wgs72old:
-            mus = 398600.79964;        // in km3 / s2
-            radiusearthkm = 6378.135;     // km
-            xke = 0.0743669161;        // reciprocal of tumin
-            tumin = 1.0 / xke;
-            j2 = 0.001082616;
-            j3 = -0.00000253881;
-            j4 = -0.00000165597;
-            j3oj2 = j3 / j2;
-            break;
+            case PERTURB_GRAVITY_MODEL_WGS72_OLD:
+                mus = 398600.79964;        // in km3 / s2
+                radiusearthkm = 6378.135;     // km
+                xke = 0.0743669161;        // reciprocal of tumin
+                tumin = 1.0 / xke;
+                j2 = 0.001082616;
+                j3 = -0.00000253881;
+                j4 = -0.00000165597;
+                j3oj2 = j3 / j2;
+                break;
+
             // ------------ wgs-72 constants ------------
-        case wgs72:
-            mus = 398600.8;            // in km3 / s2
-            radiusearthkm = 6378.135;     // km
-            xke = 60.0 / sqrt(radiusearthkm*radiusearthkm*radiusearthkm / mus);
-            tumin = 1.0 / xke;
-            j2 = 0.001082616;
-            j3 = -0.00000253881;
-            j4 = -0.00000165597;
-            j3oj2 = j3 / j2;
-            break;
-        case wgs84:
+            case PERTURB_GRAVITY_MODEL_WGS72:
+            {
+                mus = 398600.8;            // in km3 / s2
+                radiusearthkm = 6378.135;     // km
+                xke = 60.0 / sqrt(radiusearthkm*radiusearthkm*radiusearthkm / mus);
+                tumin = 1.0 / xke;
+                j2 = 0.001082616;
+                j3 = -0.00000253881;
+                j4 = -0.00000165597;
+                j3oj2 = j3 / j2;
+                break;
+            }
+
             // ------------ wgs-84 constants ------------
-            mus = 398600.5;            // in km3 / s2
-            radiusearthkm = 6378.137;     // km
-            xke = 60.0 / sqrt(radiusearthkm*radiusearthkm*radiusearthkm / mus);
-            tumin = 1.0 / xke;
-            j2 = 0.00108262998905;
-            j3 = -0.00000253215306;
-            j4 = -0.00000161098761;
-            j3oj2 = j3 / j2;
-            break;
-        default:
-            #ifdef PERTURB_SGP4_ENABLE_DEBUG
-            fprintf(stderr, "unknown gravity option (%d)\n", whichconst);
-            #endif
-            break;
+            case PERTURB_GRAVITY_MODEL_WGS84:
+            {
+                mus = 398600.5;            // in km3 / s2
+                radiusearthkm = 6378.137;     // km
+                xke = 60.0 / sqrt(radiusearthkm*radiusearthkm*radiusearthkm / mus);
+                tumin = 1.0 / xke;
+                j2 = 0.00108262998905;
+                j3 = -0.00000253215306;
+                j4 = -0.00000161098761;
+                j3oj2 = j3 / j2;
+                break;
+            }
+
+            default:
+#ifdef PERTURB_SGP4_ENABLE_DEBUG
+                fprintf(stderr, "unknown gravity option (%d)\n", whichconst);
+#endif
+                break;
+
         }
 
     }   // getgravconst
@@ -2258,7 +2266,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         (
         char longstr1[130], char longstr2[130],
         char typerun, char typeinput, char opsmode,
-        gravconsttype whichconst,
+        const enum perturb_GravityModel whichconst,
         real_t * startmfe, real_t * stopmfe, real_t * deltamin,
         elsetrec * satrec
         )
