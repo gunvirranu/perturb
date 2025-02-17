@@ -1316,9 +1316,9 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         adel = ak * (1.0 - del * del - del *
             (1.0 / 3.0 + 134.0 * del * del / 81.0));
         del = d1 / (adel * adel);
-        no_unkozai = no_kozai / (1.0 + del);
+        *no_unkozai = no_kozai / (1.0 + del);
 
-        ao = pow(xke / (no_unkozai), x2o3);
+        ao = pow(xke / (*no_unkozai), x2o3);
         sinio = sin(inclo);
         po = ao * (*omeosq);
         con42 = 1.0 - 5.0 * (*cosio2);
