@@ -1303,8 +1303,8 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         x2o3 = 2.0 / 3.0;
 
         /* ------------- calculate auxillary epoch quantities ---------- */
-        eccsq = ecco * ecco;
-        omeosq = 1.0 - eccsq;
+        *eccsq = ecco * ecco;
+        omeosq = 1.0 - (*eccsq);
         rteosq = sqrt(omeosq);
         cosio = cos(inclo);
         cosio2 = cosio * cosio;
