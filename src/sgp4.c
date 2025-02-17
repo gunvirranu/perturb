@@ -1212,7 +1212,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
             }
             else
             {
-                *mm = xl - (*nodem) - argpm + theta;
+                *mm = xl - (*nodem) - (*argpm) + theta;
                 *dndt = (*nm) - no;
             }
             (*nm) = no + (*dndt);
