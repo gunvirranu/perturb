@@ -1325,7 +1325,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         *con41 = -(*con42) - (*cosio2) - (*cosio2);
         *ainv = 1.0 / (*ao);
         *posq = po * po;
-        rp = (*ao) * (1.0 - ecco);
+        *rp = (*ao) * (1.0 - ecco);
         method = 'n';
 
         // sgp4fix modern approach to finding sidereal time
@@ -1551,7 +1551,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         initl
             (satrec.xke, satrec.j2, satrec.ecco, epoch, satrec.inclo, satrec.no_kozai, satrec.operationmode,
             satrec.method, &ainv, &ao, satrec.con41, &con42, &cosio, &cosio2, eccsq, &omeosq,
-            &posq, rp, &rteosq, &sinio, satrec.gsto, satrec.no_unkozai);
+            &posq, &rp, &rteosq, &sinio, satrec.gsto, satrec.no_unkozai);
         satrec.a = pow(satrec.no_unkozai * satrec.tumin, (-2.0 / 3.0));
         satrec.alta = satrec.a * (1.0 + satrec.ecco) - 1.0;
         satrec.altp = satrec.a * (1.0 - satrec.ecco) - 1.0;
