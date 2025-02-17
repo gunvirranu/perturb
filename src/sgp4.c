@@ -1349,7 +1349,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         (void) gsto1;  // Seems like most of the above isn't even used lol
         //    }
         //    else
-        gsto = gstime_SGP4(epoch + 2433281.5);
+        *gsto = gstime_SGP4(epoch + 2433281.5);
 
         //#include "debug5.cpp"
     }  // initl
