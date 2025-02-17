@@ -1319,7 +1319,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         *no_unkozai = no_kozai / (1.0 + del);
 
         *ao = pow(xke / (*no_unkozai), x2o3);
-        sinio = sin(inclo);
+        *sinio = sin(inclo);
         po = (*ao) * (*omeosq);
         con42 = 1.0 - 5.0 * (*cosio2);
         con41 = -con42 - (*cosio2) - (*cosio2);
@@ -1551,7 +1551,7 @@ real_t * rp, real_t * rteosq, real_t * sinio, real_t * gsto, char opsmode
         initl
             (satrec.xke, satrec.j2, satrec.ecco, epoch, satrec.inclo, satrec.no_kozai, satrec.operationmode,
             satrec.method, ainv, &ao, satrec.con41, con42, &cosio, &cosio2, eccsq, &omeosq,
-            posq, rp, &rteosq, sinio, satrec.gsto, satrec.no_unkozai);
+            posq, rp, &rteosq, &sinio, satrec.gsto, satrec.no_unkozai);
         satrec.a = pow(satrec.no_unkozai * satrec.tumin, (-2.0 / 3.0));
         satrec.alta = satrec.a * (1.0 + satrec.ecco) - 1.0;
         satrec.altp = satrec.a * (1.0 - satrec.ecco) - 1.0;
