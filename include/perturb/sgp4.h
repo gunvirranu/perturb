@@ -126,7 +126,7 @@ struct perturb_Satellite {
 
     bool operationmode;  ///< True if improved (i), False if AFSPC (a)
     bool init;           ///< True if initialised
-    bool method;         ///< True if deep space (d) or not (n)
+    char method;         ///< SGP4 algorith method: deep space (d) or not (n)
 
     /* Near Earth */
     bool isimp;
