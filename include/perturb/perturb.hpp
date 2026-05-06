@@ -22,6 +22,7 @@
 #include "perturb/tle.hpp"
 
 #include <array>
+#include <chrono>
 #ifndef PERTURB_DISABLE_IO
 #  include <string>
 #endif
@@ -330,16 +331,30 @@ public:
     /// Propagate the SGP4 model based on time around the epoch.
     ///
     /// @param mins_from_epoch Offset number of minutes around the epoch
-    /// @param posvel Returned state vector in the TEME frame
+    /// @param sv OUTPUT: The state vector of the satellite at the provided time
     /// @return Issues during propagation, should usually be `Sgp4Error::NONE`
     Sgp4Error propagate_from_epoch(double mins_from_epoch, StateVector &sv);
+
+    /// Propagate the SGP4 model based on the time around the epoch.
+    ///
+    /// @param time_epoch The time from the epoch in the native system clock
+    /// @param sv OUTPUT: The state vector of the satellite at the provided time
+    ///@return Issues during propagation, should usually be `Sgp4Error::NONE`
+    Sgp4Error propagate_from_epoch(std::chrono::system_clock::duration time_epoch, StateVector &sv);
 
     /// Propagate the SGP4 model to a specific time point.
     ///
     /// @param jd Time point in UTC or UT1
-    /// @param posvel Returned state vector in the TEME frame
+    /// @param sv OUTPUT: The state vector of the satellite at the provided time
     /// @return Issues during propagation, should usually be `Sgp4Error::NONE`
     Sgp4Error propagate(JulianDate jd, StateVector &sv);
+
+    /// Propagate the SGP4 model to a specific time point.
+    ///
+    /// @param time The system clocks time
+    /// @param sv OUTPUT: The state vector of the satellite at the provided time
+    /// @return Issues during propagation, should usually be `Sgp4Error::NONE`
+    Sgp4Error propagate(std::chrono::system_clock::time_point time, StateVector &sv);
 };
 }  // namespace perturb
 

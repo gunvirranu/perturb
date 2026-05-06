@@ -13,6 +13,7 @@
 
 #include <cmath>
 #include <cstring>
+#include <cstdint>
 
 #include "perturb/sgp4.hpp"
 
@@ -252,6 +253,12 @@ Sgp4Error Satellite::propagate_from_epoch(double mins_from_epoch, StateVector &s
     return last_error();
 }
 
+Sgp4Error Satellite::propagate_from_epoch(std::chrono::system_clock::duration time_epoch, StateVector &sv){
+    using float_minutes = std::chrono::duration<double, std::ratio<60>>;
+    const double mins_from_epoch = std::chrono::duration_cast<float_minutes>(time_epoch).count();
+    return this->propagate_from_epoch(mins_from_epoch, sv);
+}
+
 Sgp4Error Satellite::propagate(const JulianDate jd, StateVector &sv) {
     const double delta_jd = jd - epoch();
     const double mins_from_epoch = delta_jd * MINS_PER_DAY;
@@ -259,4 +266,43 @@ Sgp4Error Satellite::propagate(const JulianDate jd, StateVector &sv) {
     sv.epoch = jd;  // Can save some math, ignore value from `propagate_from_epoch`
     return err;
 }
+
+Sgp4Error Satellite::propagate(std::chrono::system_clock::time_point time, StateVector &sv){
+    using int_days = std::chrono::duration<std::int64_t, std::ratio<86400>>;
+    using float_days = std::chrono::duration<double, std::ratio<86400>>;
+
+    // convert in system clock integers to mitigate information loss during conversion
+    const std::chrono::system_clock::duration since_epoch = time.time_since_epoch();
+    int_days days_since_unix_epoch = std::chrono::duration_cast<int_days>(since_epoch);
+    std::chrono::system_clock::duration residual_day_since_unix_epoch = since_epoch - std::chrono::duration_cast<std::chrono::system_clock::duration>(days_since_unix_epoch);
+
+    // fix rounding so that duration cast behaves like floor
+    if(residual_day_since_unix_epoch < std::chrono::system_clock::duration(0)){
+        days_since_unix_epoch -= int_days(1);
+        residual_day_since_unix_epoch += int_days(1);
+    }
+
+    // convert days to julian
+    // Unix epoch:
+    // 1970-01-01 00:00:00 UTC = JD 2440587.5
+    int_days julian_days = days_since_unix_epoch + int_days(2440587);
+
+    // convert residual to julian residual
+    std::chrono::system_clock::duration residual = residual_day_since_unix_epoch + std::chrono::hours(12);
+    
+    // Normalize JD fraction into [0, 1).
+    if(residual >= int_days(1)){
+        julian_days += int_days(1);
+        residual -= int_days(1);
+    }
+
+    // convert from integers to double
+    const double jd_days = static_cast<double>(julian_days.count());
+    const double jd_fraction = std::chrono::duration_cast<float_days>(residual).count();
+
+    const JulianDate jd(jd_days, jd_fraction);
+
+    return this->propagate(jd, sv);
+}
+
 }  // namespace perturb
