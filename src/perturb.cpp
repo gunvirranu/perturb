@@ -186,34 +186,53 @@ Satellite::Satellite(const TwoLineElement &tle, GravModel grav_model) : sat_rec(
 }
 
 #ifndef PERTURB_DISABLE_IO
-Satellite Satellite::from_tle(char *line_1, char *line_2, GravModel grav_model) {
-    sgp4::elsetrec sat_rec {};
-    const bool bad_ptrs = !line_1 || !line_2;
-    // FIXME: Remove `strlen` and just check last byte
-    if (bad_ptrs || std::strlen(line_1) < TLE_LINE_LEN
-        || std::strlen(line_2) < TLE_LINE_LEN) {
-        sat_rec.error = static_cast<int>(Sgp4Error::INVALID_TLE);
-    } else {
-        // FIXME: Change default TLE to own parser, check downstream usage for assumptions
+    Satellite Satellite::from_tle(const char* line_1, size_t line_1_len, const char* line_2, size_t line_2_len, GravModel grav_model){
+        sgp4::elsetrec sat_rec {};
+        if((line_1_len < TLE_LINE_LEN) || (line_2_len < TLE_LINE_LEN)){
+            sat_rec.error = static_cast<int>(Sgp4Error::INVALID_TLE);
+            return Satellite(sat_rec);
+        }
+
+        // copy into buffers to:
+        //   1) not have side effects on the input data
+        //   2) make sure the line strings are null terminated strings and not snippets out of a larger file
+        char line_1_buffer[130];
+        const size_t n1 = (129 < line_1_len) ? 129 : line_1_len;
+        std::strncpy(line_1_buffer, line_1, n1);
+        line_1_buffer[n1] = '\0';
+
+        char line_2_buffer[130];
+        const size_t n2 = (129 < line_2_len) ? 129 : line_2_len;
+        std::strncpy(line_2_buffer, line_2, n2);
+        line_2_buffer[n2] = '\0';
+
         double _startmfe, _stopmfe, _deltamin;
         sgp4::twoline2rv(
-            line_1, line_2, ' ', ' ', 'i', convert_grav_model(grav_model), _startmfe,
+            line_1_buffer, line_2_buffer, ' ', ' ', 'i', convert_grav_model(grav_model), _startmfe,
             _stopmfe, _deltamin, sat_rec
         );
+
+        return Satellite(sat_rec);
     }
-    return Satellite(sat_rec);
+#endif  // PERTURB_DISABLE_IO
+
+#ifndef PERTURB_DISABLE_IO
+Satellite Satellite::from_tle(const char *line_1, const char *line_2, GravModel grav_model) {
+    sgp4::elsetrec sat_rec {};
+    const bool bad_ptrs = !line_1 || !line_2;
+    
+    // keep strlen because we cannot assume the length of the strings and don't want to access out of bounds memory
+    const size_t line_1_len = std::strlen(line_1);
+    const size_t line_2_len = std::strlen(line_2);
+    return from_tle(line_1, line_1_len, line_2, line_2_len, grav_model);
 }
 #endif  // PERTURB_DISABLE_IO
 
 #ifndef PERTURB_DISABLE_IO
 Satellite Satellite::from_tle(
-    std::string &line_1, std::string &line_2, GravModel grav_model
+    const std::string &line_1, const std::string &line_2, GravModel grav_model
 ) {
-    if (line_1.length() < TLE_LINE_LEN || line_2.length() < TLE_LINE_LEN) {
-        return from_tle(nullptr, nullptr);
-    }
-    // FIXME: Find a way to remove usage of &str[0]
-    return from_tle(&line_1[0], &line_2[0], grav_model);
+    return from_tle(line_1.data(), line_1.size(), line_2.data(), line_2.size(), grav_model);
 }
 #endif  // PERTURB_DISABLE_IO
 

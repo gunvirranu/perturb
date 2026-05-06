@@ -279,12 +279,33 @@ public:
     /// Left as mutable instead of internally copying for efficiency reasons as
     /// this may be okay for the caller.
     ///
+    /// @param line_1 First line of TLE as C-string
+    /// @param line_1 Size of the first line
+    /// @param line_2 Second line of TLE as C-string
+    /// @param line_2 Size of the first line
+    /// @param grav_model Gravity constants to use (default `GravModel::WGS72`)
+    /// @return An initialized `Satellite`
+    static Satellite from_tle(
+        const char* line_1, size_t line_1_len, 
+        const char* line_2, size_t line_2_len, 
+        GravModel grav_model
+    );
+#endif  // PERTURB_DISABLE_IO
+
+#ifndef PERTURB_DISABLE_IO
+    /// Construct and initialize a `Satellite` from a TLE record.
+    ///
+    /// The strings are mutable because the underlying implementation in
+    /// `perturb::sgp4::twoline2rv` may modify the string during parsing.
+    /// Left as mutable instead of internally copying for efficiency reasons as
+    /// this may be okay for the caller.
+    ///
     /// @param line_1 First line of TLE as C-string of length `perturb::TLE_LINE_LEN`
     /// @param line_2 Second line of TLE as C-string of length `perturb::TLE_LINE_LEN`
     /// @param grav_model Gravity constants to use (default `GravModel::WGS72`)
     /// @return An initialized `Satellite`
     static Satellite from_tle(
-        char *line_1, char *line_2, GravModel grav_model = GravModel::WGS72
+        const char *line_1, const char *line_2, GravModel grav_model = GravModel::WGS72
     );
 #endif  // PERTURB_DISABLE_IO
 
@@ -296,7 +317,7 @@ public:
     /// @param grav_model Gravity constants to use (default `GravModel::WGS72`)
     /// @return An initialized `Satellite`
     static Satellite from_tle(
-        std::string &line_1, std::string &line_2, GravModel grav_model = GravModel::WGS72
+        const std::string &line_1, const std::string &line_2, GravModel grav_model = GravModel::WGS72
     );
 #endif  // PERTURB_DISABLE_IO
 
