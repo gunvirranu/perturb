@@ -189,6 +189,12 @@ Satellite::Satellite(const TwoLineElement &tle, GravModel grav_model) : sat_rec(
 #ifndef PERTURB_DISABLE_IO
     Satellite Satellite::from_tle(const char* line_1, size_t line_1_len, const char* line_2, size_t line_2_len, GravModel grav_model){
         sgp4::elsetrec sat_rec {};
+
+        if(line_1 == nullptr || line_2 == nullptr){
+            sat_rec.error = static_cast<int>(Sgp4Error::UNKNOWN);
+            return Satellite(sat_rec);
+        }
+
         if((line_1_len < TLE_LINE_LEN) || (line_2_len < TLE_LINE_LEN)){
             sat_rec.error = static_cast<int>(Sgp4Error::INVALID_TLE);
             return Satellite(sat_rec);
@@ -220,7 +226,11 @@ Satellite::Satellite(const TwoLineElement &tle, GravModel grav_model) : sat_rec(
 #ifndef PERTURB_DISABLE_IO
 Satellite Satellite::from_tle(const char *line_1, const char *line_2, GravModel grav_model) {
     sgp4::elsetrec sat_rec {};
-    const bool bad_ptrs = !line_1 || !line_2;
+    
+    if(line_1 == nullptr || line_2 == nullptr){
+        sat_rec.error = static_cast<int>(Sgp4Error::UNKNOWN);
+        return Satellite(sat_rec);
+    }
     
     // keep strlen because we cannot assume the length of the strings and don't want to access out of bounds memory
     const size_t line_1_len = std::strlen(line_1);

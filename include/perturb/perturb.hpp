@@ -275,17 +275,14 @@ public:
 #ifndef PERTURB_DISABLE_IO
     /// Construct and initialize a `Satellite` from a TLE record.
     ///
-    /// The strings are mutable because the underlying implementation in
-    /// `perturb::sgp4::twoline2rv` may modify the string during parsing.
-    /// Left as mutable instead of internally copying for efficiency reasons as
-    /// this may be okay for the caller.
-    ///
     /// @param line_1 First line of TLE as C-string
     /// @param line_1 Size of the first line
     /// @param line_2 Second line of TLE as C-string
     /// @param line_2 Size of the first line
     /// @param grav_model Gravity constants to use (default `GravModel::WGS72`)
-    /// @return An initialized `Satellite`
+    /// @return An initialized `Satellite` or:
+    ///   - `Sgp4Error::UNKNOWN` if `line_1` or `line_2` are `nullptr`
+    ///   - `Sgp4Error::INVALID_TLE` if `line_1_len` or `line_2_len` are not long enough for a TLE file
     static Satellite from_tle(
         const char* line_1, size_t line_1_len, 
         const char* line_2, size_t line_2_len, 
@@ -296,15 +293,12 @@ public:
 #ifndef PERTURB_DISABLE_IO
     /// Construct and initialize a `Satellite` from a TLE record.
     ///
-    /// The strings are mutable because the underlying implementation in
-    /// `perturb::sgp4::twoline2rv` may modify the string during parsing.
-    /// Left as mutable instead of internally copying for efficiency reasons as
-    /// this may be okay for the caller.
-    ///
-    /// @param line_1 First line of TLE as C-string of length `perturb::TLE_LINE_LEN`
-    /// @param line_2 Second line of TLE as C-string of length `perturb::TLE_LINE_LEN`
+    /// @param line_1 First line of TLE as C-string (null-terminated) of length `perturb::TLE_LINE_LEN`
+    /// @param line_2 Second line of TLE as C-string of length (null-terminated) `perturb::TLE_LINE_LEN`
     /// @param grav_model Gravity constants to use (default `GravModel::WGS72`)
     /// @return An initialized `Satellite`
+    ///   - `Sgp4Error::UNKNOWN` if `line_1` or `line_2` are `nullptr`
+    ///   - `Sgp4Error::INVALID_TLE` if `line_1` or `line_2` are not long enough for a TLE file
     static Satellite from_tle(
         const char *line_1, const char *line_2, GravModel grav_model = GravModel::WGS72
     );
@@ -338,7 +332,7 @@ public:
     /// Propagate the SGP4 model based on the time around the epoch.
     ///
     /// @param time_epoch The time from the epoch in the native system clock
-    /// @param sv OUTPUT: The state vector of the satellite at the provided time
+    /// @param sv OUTPUT: The state vector of the satellite at the provided time in the TEME frame
     ///@return Issues during propagation, should usually be `Sgp4Error::NONE`
     Sgp4Error propagate_from_epoch(std::chrono::system_clock::duration time_epoch, StateVector &sv);
 
