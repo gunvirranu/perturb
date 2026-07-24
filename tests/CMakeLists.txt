@@ -21,7 +21,13 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(doctest)
 
 add_executable(test_perturb test_perturb.cpp)
-target_link_libraries(test_perturb PRIVATE perturb doctest)
+target_link_libraries(test_perturb PRIVATE perturb doctest::doctest)
+
+# register test for ctest
+add_test(NAME test_perturb COMMAND test_perturb)
+set_tests_properties(test_perturb PROPERTIES
+    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/tests"
+)
 
 # Restore previous
 if(DEFINED CMAKE_CXX_CLANG_TIDY_save)

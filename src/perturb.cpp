@@ -13,6 +13,7 @@
 
 #include <cmath>
 #include <cstring>
+#include <cstdint>
 
 #include "perturb/sgp4.hpp"
 
@@ -49,6 +50,8 @@ JulianDate::JulianDate(DateTime t) {
     jd = tmp_jd;
     jd_frac = tmp_jd_frac;
 }
+
+JulianDate::JulianDate(std::chrono::system_clock::time_point t) : JulianDate(to_julian(t)) {}
 
 DateTime JulianDate::to_datetime() const {
     DateTime t {};
@@ -114,6 +117,44 @@ bool JulianDate::operator<=(const JulianDate &rhs) const {
 
 bool JulianDate::operator>=(const JulianDate &rhs) const {
     return (*this - rhs) >= 0;
+}
+
+JulianDate to_julian(std::chrono::system_clock::time_point time){
+    using int_days = std::chrono::duration<std::int64_t, std::ratio<86400>>;
+    using float_days = std::chrono::duration<double, std::ratio<86400>>;
+
+    // convert in system clock integers to mitigate information loss during conversion
+    const std::chrono::system_clock::duration since_epoch = time.time_since_epoch();
+    int_days days_since_unix_epoch = std::chrono::duration_cast<int_days>(since_epoch);
+    std::chrono::system_clock::duration residual_day_since_unix_epoch = since_epoch - std::chrono::duration_cast<std::chrono::system_clock::duration>(days_since_unix_epoch);
+
+    // fix rounding so that duration cast behaves like floor
+    if(residual_day_since_unix_epoch < std::chrono::system_clock::duration(0)){
+        days_since_unix_epoch -= int_days(1);
+        residual_day_since_unix_epoch += int_days(1);
+    }
+
+    // convert days to julian
+    // Unix epoch:
+    // 1970-01-01 00:00:00 UTC = JD 2440587.5
+    int_days julian_days = days_since_unix_epoch + int_days(2440587);
+
+    // convert residual to julian residual
+    std::chrono::system_clock::duration residual = residual_day_since_unix_epoch + std::chrono::hours(12);
+    
+    // Normalize JD fraction into [0, 1).
+    if(residual >= int_days(1)){
+        julian_days += int_days(1);
+        residual -= int_days(1);
+    }
+
+    // convert from integers to double
+    const double jd_days = static_cast<double>(julian_days.count());
+    const double jd_fraction = std::chrono::duration_cast<float_days>(residual).count();
+
+    // construct julian
+    const JulianDate jd(jd_days, jd_fraction);
+    return jd;
 }
 
 ClassicalOrbitalElements::ClassicalOrbitalElements(
@@ -186,34 +227,63 @@ Satellite::Satellite(const TwoLineElement &tle, GravModel grav_model) : sat_rec(
 }
 
 #ifndef PERTURB_DISABLE_IO
-Satellite Satellite::from_tle(char *line_1, char *line_2, GravModel grav_model) {
-    sgp4::elsetrec sat_rec {};
-    const bool bad_ptrs = !line_1 || !line_2;
-    // FIXME: Remove `strlen` and just check last byte
-    if (bad_ptrs || std::strlen(line_1) < TLE_LINE_LEN
-        || std::strlen(line_2) < TLE_LINE_LEN) {
-        sat_rec.error = static_cast<int>(Sgp4Error::INVALID_TLE);
-    } else {
-        // FIXME: Change default TLE to own parser, check downstream usage for assumptions
+    Satellite Satellite::from_tle(const char* line_1, size_t line_1_len, const char* line_2, size_t line_2_len, GravModel grav_model){
+        sgp4::elsetrec sat_rec {};
+
+        if(line_1 == nullptr || line_2 == nullptr){
+            sat_rec.error = static_cast<int>(Sgp4Error::UNKNOWN);
+            return Satellite(sat_rec);
+        }
+
+        if((line_1_len < TLE_LINE_LEN) || (line_2_len < TLE_LINE_LEN)){
+            sat_rec.error = static_cast<int>(Sgp4Error::INVALID_TLE);
+            return Satellite(sat_rec);
+        }
+
+        // copy into buffers to:
+        //   1) not have side effects on the input data
+        //   2) make sure the line strings are null terminated strings and not snippets out of a larger file
+        char line_1_buffer[130];
+        const size_t n1 = (129 < line_1_len) ? 129 : line_1_len;
+        std::strncpy(line_1_buffer, line_1, n1);
+        line_1_buffer[n1] = '\0';
+
+        char line_2_buffer[130];
+        const size_t n2 = (129 < line_2_len) ? 129 : line_2_len;
+        std::strncpy(line_2_buffer, line_2, n2);
+        line_2_buffer[n2] = '\0';
+
         double _startmfe, _stopmfe, _deltamin;
         sgp4::twoline2rv(
-            line_1, line_2, ' ', ' ', 'i', convert_grav_model(grav_model), _startmfe,
+            line_1_buffer, line_2_buffer, ' ', ' ', 'i', convert_grav_model(grav_model), _startmfe,
             _stopmfe, _deltamin, sat_rec
         );
+
+        return Satellite(sat_rec);
     }
-    return Satellite(sat_rec);
+#endif  // PERTURB_DISABLE_IO
+
+#ifndef PERTURB_DISABLE_IO
+Satellite Satellite::from_tle(const char *line_1, const char *line_2, GravModel grav_model) {
+    sgp4::elsetrec sat_rec {};
+    
+    if(line_1 == nullptr || line_2 == nullptr){
+        sat_rec.error = static_cast<int>(Sgp4Error::UNKNOWN);
+        return Satellite(sat_rec);
+    }
+    
+    // keep strlen because we cannot assume the length of the strings and don't want to access out of bounds memory
+    const size_t line_1_len = std::strlen(line_1);
+    const size_t line_2_len = std::strlen(line_2);
+    return from_tle(line_1, line_1_len, line_2, line_2_len, grav_model);
 }
 #endif  // PERTURB_DISABLE_IO
 
 #ifndef PERTURB_DISABLE_IO
 Satellite Satellite::from_tle(
-    std::string &line_1, std::string &line_2, GravModel grav_model
+    const std::string &line_1, const std::string &line_2, GravModel grav_model
 ) {
-    if (line_1.length() < TLE_LINE_LEN || line_2.length() < TLE_LINE_LEN) {
-        return from_tle(nullptr, nullptr);
-    }
-    // FIXME: Find a way to remove usage of &str[0]
-    return from_tle(&line_1[0], &line_2[0], grav_model);
+    return from_tle(line_1.data(), line_1.size(), line_2.data(), line_2.size(), grav_model);
 }
 #endif  // PERTURB_DISABLE_IO
 
@@ -233,6 +303,12 @@ Sgp4Error Satellite::propagate_from_epoch(double mins_from_epoch, StateVector &s
     return last_error();
 }
 
+Sgp4Error Satellite::propagate_from_epoch(std::chrono::system_clock::duration time_epoch, StateVector &sv){
+    using float_minutes = std::chrono::duration<double, std::ratio<60>>;
+    const double mins_from_epoch = std::chrono::duration_cast<float_minutes>(time_epoch).count();
+    return this->propagate_from_epoch(mins_from_epoch, sv);
+}
+
 Sgp4Error Satellite::propagate(const JulianDate jd, StateVector &sv) {
     const double delta_jd = jd - epoch();
     const double mins_from_epoch = delta_jd * MINS_PER_DAY;
@@ -240,4 +316,9 @@ Sgp4Error Satellite::propagate(const JulianDate jd, StateVector &sv) {
     sv.epoch = jd;  // Can save some math, ignore value from `propagate_from_epoch`
     return err;
 }
+
+Sgp4Error Satellite::propagate(std::chrono::system_clock::time_point time, StateVector &sv){
+    return this->propagate(JulianDate(time), sv);
+}
+
 }  // namespace perturb

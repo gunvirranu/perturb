@@ -22,6 +22,7 @@
 #include "perturb/tle.hpp"
 
 #include <array>
+#include <chrono>
 #ifndef PERTURB_DISABLE_IO
 #  include <string>
 #endif
@@ -143,6 +144,11 @@ struct JulianDate {
     /// @param t Time point, must be from 1900 to 2100
     explicit JulianDate(DateTime t);
 
+    /// Construct from a system clock time point (unix time).
+    ///
+    /// @param t system clock time
+    explicit JulianDate(std::chrono::system_clock::time_point t);
+
     /// Convert to a `DateTime` representing the same time point.
     ///
     /// @return Same time point converted to a human readable representation
@@ -189,6 +195,11 @@ struct JulianDate {
     /// Compare if after than or same as another time point
     bool operator>=(const JulianDate &rhs) const;
 };
+
+/// Converts a system (unix) time to julian time
+///
+/// @param time system clock time point (unix time)
+JulianDate to_julian(std::chrono::system_clock::time_point time);
 
 /// Represents the output prediction from SGP4.
 ///
@@ -274,17 +285,32 @@ public:
 #ifndef PERTURB_DISABLE_IO
     /// Construct and initialize a `Satellite` from a TLE record.
     ///
-    /// The strings are mutable because the underlying implementation in
-    /// `perturb::sgp4::twoline2rv` may modify the string during parsing.
-    /// Left as mutable instead of internally copying for efficiency reasons as
-    /// this may be okay for the caller.
+    /// @param line_1 First line of TLE as C-string
+    /// @param line_1 Size of the first line
+    /// @param line_2 Second line of TLE as C-string
+    /// @param line_2 Size of the first line
+    /// @param grav_model Gravity constants to use (default `GravModel::WGS72`)
+    /// @return An initialized `Satellite` or:
+    ///   - `Sgp4Error::UNKNOWN` if `line_1` or `line_2` are `nullptr`
+    ///   - `Sgp4Error::INVALID_TLE` if `line_1_len` or `line_2_len` are not long enough for a TLE file
+    static Satellite from_tle(
+        const char* line_1, size_t line_1_len, 
+        const char* line_2, size_t line_2_len, 
+        GravModel grav_model
+    );
+#endif  // PERTURB_DISABLE_IO
+
+#ifndef PERTURB_DISABLE_IO
+    /// Construct and initialize a `Satellite` from a TLE record.
     ///
-    /// @param line_1 First line of TLE as C-string of length `perturb::TLE_LINE_LEN`
-    /// @param line_2 Second line of TLE as C-string of length `perturb::TLE_LINE_LEN`
+    /// @param line_1 First line of TLE as C-string (null-terminated) of length `perturb::TLE_LINE_LEN`
+    /// @param line_2 Second line of TLE as C-string of length (null-terminated) `perturb::TLE_LINE_LEN`
     /// @param grav_model Gravity constants to use (default `GravModel::WGS72`)
     /// @return An initialized `Satellite`
+    ///   - `Sgp4Error::UNKNOWN` if `line_1` or `line_2` are `nullptr`
+    ///   - `Sgp4Error::INVALID_TLE` if `line_1` or `line_2` are not long enough for a TLE file
     static Satellite from_tle(
-        char *line_1, char *line_2, GravModel grav_model = GravModel::WGS72
+        const char *line_1, const char *line_2, GravModel grav_model = GravModel::WGS72
     );
 #endif  // PERTURB_DISABLE_IO
 
@@ -296,7 +322,7 @@ public:
     /// @param grav_model Gravity constants to use (default `GravModel::WGS72`)
     /// @return An initialized `Satellite`
     static Satellite from_tle(
-        std::string &line_1, std::string &line_2, GravModel grav_model = GravModel::WGS72
+        const std::string &line_1, const std::string &line_2, GravModel grav_model = GravModel::WGS72
     );
 #endif  // PERTURB_DISABLE_IO
 
@@ -309,16 +335,30 @@ public:
     /// Propagate the SGP4 model based on time around the epoch.
     ///
     /// @param mins_from_epoch Offset number of minutes around the epoch
-    /// @param posvel Returned state vector in the TEME frame
+    /// @param sv OUTPUT: The state vector of the satellite at the provided time
     /// @return Issues during propagation, should usually be `Sgp4Error::NONE`
     Sgp4Error propagate_from_epoch(double mins_from_epoch, StateVector &sv);
+
+    /// Propagate the SGP4 model based on the time around the epoch.
+    ///
+    /// @param time_epoch The time from the epoch in the native system clock
+    /// @param sv OUTPUT: The state vector of the satellite at the provided time in the TEME frame
+    ///@return Issues during propagation, should usually be `Sgp4Error::NONE`
+    Sgp4Error propagate_from_epoch(std::chrono::system_clock::duration time_epoch, StateVector &sv);
 
     /// Propagate the SGP4 model to a specific time point.
     ///
     /// @param jd Time point in UTC or UT1
-    /// @param posvel Returned state vector in the TEME frame
+    /// @param sv OUTPUT: The state vector of the satellite at the provided time
     /// @return Issues during propagation, should usually be `Sgp4Error::NONE`
     Sgp4Error propagate(JulianDate jd, StateVector &sv);
+
+    /// Propagate the SGP4 model to a specific time point.
+    ///
+    /// @param time The system clocks time
+    /// @param sv OUTPUT: The state vector of the satellite at the provided time
+    /// @return Issues during propagation, should usually be `Sgp4Error::NONE`
+    Sgp4Error propagate(std::chrono::system_clock::time_point time, StateVector &sv);
 };
 }  // namespace perturb
 
