@@ -144,6 +144,11 @@ struct JulianDate {
     /// @param t Time point, must be from 1900 to 2100
     explicit JulianDate(DateTime t);
 
+    /// Construct from a system clock time point (unix time).
+    ///
+    /// @param t system clock time
+    explicit JulianDate(std::chrono::system_clock::time_point t);
+
     /// Convert to a `DateTime` representing the same time point.
     ///
     /// @return Same time point converted to a human readable representation
@@ -190,6 +195,11 @@ struct JulianDate {
     /// Compare if after than or same as another time point
     bool operator>=(const JulianDate &rhs) const;
 };
+
+/// Converts a system (unix) time to julian time
+///
+/// @param time system clock time point (unix time)
+JulianDate to_julian(std::chrono::system_clock::time_point time);
 
 /// Represents the output prediction from SGP4.
 ///
